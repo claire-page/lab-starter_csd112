@@ -4,10 +4,13 @@ This is a new line of text.
 
 This is a simple MarkDown file for practicing Git merging
 
-Enter your name here: Claire
+Enter your name here: ___________
 
 ## The best animals
 
 1. Cat
 2. Pine Marten
-3. Platypus
+3. Capybara
+4. Axlotl
+5. Bonobo
+6. Three-toed Sloth
