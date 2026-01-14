@@ -4,7 +4,7 @@ This is a new line of text.
 
 This is a simple MarkDown file for practicing Git merging
 
-Enter your name here: ___________
+Enter your name here: Claire Acton
 
 ## The best animals
 
