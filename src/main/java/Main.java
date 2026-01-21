@@ -5,8 +5,7 @@ import java.util.Random;
 import java.util.regex.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
-import java.io.IOException;
+import java.io.File.*;
 
 Scanner scanner = new Scanner(System.in);
 Random random = new Random();
@@ -58,7 +57,7 @@ void printSituation(String[] current_hangman, String[] current_word_array, Array
     for(String item : current_word_array) {
         System.out.print(item);
     }
-    System.out.println("\n" + current_word_array.length + "-LETTER WORD\nALREADY GUESSED: " + ("" + (already_guessed)));
+    System.out.println("\nALREADY GUESSED: " + ("" + (already_guessed)));
 }
 
 /**
@@ -125,92 +124,115 @@ String prompt_for_guess (String[] current_word_array, String secret_word, ArrayL
         System.out.println("Invalid input :(");
         return(prompt_for_guess(current_word_array,secret_word,already_guessed));
     }
-    if (already_guessed.contains(guess)||(Arrays.asList(current_word_array).contains(guess))){ /// is it in the word already? is it in the already guessed?
+    if (already_guessed.contains(guess)||(Arrays.asList(current_word_array).contains(guess))){ // is it in the word already? is it in the already guessed?
         System.out.println("You already guessed that.");
         return(prompt_for_guess(current_word_array, secret_word, already_guessed));
     }
-
         return(guess);
 }
 
+int count_alpha_chars (String secret_word) {
 
-//WRITE TO FILE! IMPORTANT!!!!!!!!! DO NOT FORGET TO DO THIS!!!!!
-
-void writeResultToFile (boolean did_they_win, int total_guesses, String secret_word) {
-    try{
-   File file = new File("file.txt");
-   Files.writeString(Paths.get()) //append. fml fml fml fml
+    int alphacount = 0 ;
+    for (int k = 0; k < secret_word.length(); k++) {
+        if(Pattern.matches("^[a-zA-Z]$",Character.toString(secret_word.charAt(k)))) {
+            alphacount +=1;
+        }
     }
-    catch(IOException e) {
-
-
-    }
-
+    return alphacount;
 }
 
-void main(String[] args) {
-        String[] hangman = {"---+", "|  |   ", "|         ", "|         ", "|         ", "|        ", "|         ", "======="};
+
+void writeResultToFile (String result) {
+    try {
+        BufferedWriter writer = new BufferedWriter(
+                new FileWriter("hall_of_fame.txt"));
+                writer.newLine();
+                writer.write(result);
+                writer.close();
+                System.out.println(
+                "Check out your awesome record file.");
+    }
+    catch (IOException e) {
+        System.out.println("An error occurred: "
+                + e.getMessage());
+    }
+}
+
+
+String main_game_loop() {
+
+    String[] hangman = {"---+", "|  |   ", "|         ", "|         ", "|         ", "|        ", "|         ", "======="};
     System.out.println("H A N G M A N\n to pick a word or phrase for your friend to guess, enter it now. It must be at least 2 letters. Otherwise, enter anything else to begin selecting                           your random word. ");
 
-    String secretword = "word";
+    String secretword;
 
     String usrinput = scanner.nextLine();
-    if(Pattern.matches("^[a-zA-Z ]{2,25}$", usrinput)){
+    if(Pattern.matches("^[a-zA-Z !?/=+(),'.]{2,25}$", usrinput)){
         secretword = usrinput.toLowerCase();
         System.out.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n"); //hides the input from user, assuming standard zoom on screen.
     } else {
         secretword = pickRandomWord(chooseDifficulty());
     }
 
+  int alphacount = count_alpha_chars(secretword);
     ArrayList<String> already_guessed = new ArrayList<>();
 
     String[] visible_word = new String[secretword.length()];//creates array used to display the results to player.
-    System.out.println("THE SECRET WORD HAS "+ (""+ secretword.length())+ " LETTERS");
+
     for(int j=0; j < secretword.length(); j++) {
         String c = String.valueOf(secretword.charAt(j));
 
-        if(Pattern.matches("^[azAZ]$", c)){
-        visible_word[j] ="_";
-    }
+        if(Pattern.matches("^[a-zA-Z]$", c)){
+            visible_word[j] ="_";
+        }
         else{visible_word[j]=c;
         }
     }
     int total_guesses = 0;
     int faults = 0;
 
+    printSituation((update_hangman(faults, hangman)), visible_word, already_guessed);
+
     while((faults<7) && !(String.join("", visible_word)).equals(secretword)) {
         String guess = prompt_for_guess(visible_word, secretword, already_guessed);
         total_guesses += 1;
         if (guess.length() == secretword.length()) {
             if (guess.equals(secretword)) {
-            break;
-        }
-        faults +=1;
-        continue;
+                break;
+            }
+            faults +=1;
+            continue;
         }
 
         String pre_fill = String.join("",visible_word);
 
         String post_fill = (String.join("", (fillTheBlanks(visible_word, guess, secretword))));
 
-       if(pre_fill.equals(post_fill)){ //if the two strings are equal, then guess was not present.
-        already_guessed.add(guess);
-        faults +=1;
-       }
+        if(pre_fill.equals(post_fill)){ //if the two strings are equal, then guess was not present.
+            already_guessed.add(guess);
+            faults +=1;
+        }
 
-    else {
-        int index = secretword.indexOf(guess);
-        visible_word[index] = guess;
-       }
-    printSituation((update_hangman(faults, hangman)), visible_word, already_guessed); ;
+        else {
+            int index = secretword.indexOf(guess);
+            visible_word[index] = guess;
+        }
+        printSituation((update_hangman(faults, hangman)), visible_word, already_guessed);
 
     }
+    String messagetowrite = "";
     if (already_guessed.size() < 7){
-    System.out.println("You won! Wow! You guessed the word/phrase in "+ (""+ total_guesses)+ " guesses");
+        System.out.println("You won and correctly guessed the word/phrase! Nice!");
+        messagetowrite = "You won and guessed the word in " + ("" + total_guesses) + " guesses";
     }
     else {
-        System.out.println("YOU LOST. better luck next time!");
+        System.out.println("You lost. Better luck next time?");
+        messagetowrite = "You lost...The word/phrase was" + secretword;
     }
-
-
+    return(messagetowrite);
 }
+
+void main() {
+    writeResultToFile(main_game_loop());
+        }
