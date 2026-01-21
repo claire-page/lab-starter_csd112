@@ -1,4 +1,4 @@
-/// NO AI WAS USED!
+
 
 import java.util.Scanner;
 import java.util.Random;
@@ -10,55 +10,7 @@ import java.io.File.*;
 Scanner scanner = new Scanner(System.in);
 Random random = new Random();
 
-/**
- * updates hangman String array and returns it
- * @param faults number of incorrect guesses user has made.
- * @param current_hangman latest version of hangman array.
- * @return The updated hangman array of strings
- */
-String[] update_hangman(int faults, String [] current_hangman) {
-
-    switch(faults){
-        case 0:
-            break;
-        case 1:
-            current_hangman[2] = current_hangman[2].substring(0, 3) + "O";
-            break;
-        case 2:
-            current_hangman[3] = current_hangman[3].substring(0, 3) + "|";
-            break;
-        case 3:
-            current_hangman[4] = current_hangman[4].substring(0, 3) + "|";
-            break;
-        case 4:
-            current_hangman[5] = current_hangman[5].substring(0, 2) + "/ ";
-            break;
-        case 5:
-            current_hangman[5] = current_hangman[5].substring(0, 3) + " \\";
-            break;
-        case 6:
-            current_hangman[3] = current_hangman[3].substring(0, 1) + "/" + current_hangman[3].substring(2); //i realize the substring is maybe not the "best" method here for such a small range. but it works.
-            break;
-        case 7:
-            current_hangman[3] = current_hangman[3].substring(0, 4) + " \\";
-            break;
-    }
-return(current_hangman);
-}
-
-/**
- * Prints hangman graphics and information
- * @param current_word_array current array of guessed/unguessed character strings.
- * @param current_hangman latest version of hangman array.
- * @param already_guessed array of characters incorrectly guessed
- */
-void printSituation(String[] current_hangman, String[] current_word_array, ArrayList<String> already_guessed) {
-    System.out.println(String.join("\n", current_hangman));
-    for(String item : current_word_array) {
-        System.out.print(item);
-    }
-    System.out.println("\nALREADY GUESSED: " + ("" + (already_guessed)));
-}
+// functions related to getting input and array/string manipulation //
 
 /**
  * prompts for input
@@ -92,23 +44,6 @@ String pickRandomWord(int choice) {
     }
 
 /**
- * Inserts guess letter into correct index of
- * user-viewed word(if the guess is present in secret word).
- *
- * @param current_word_array current array of guessed/unguessed character strings.
- * @param guess user's guessed letter or word
- * @param secret_word word hidden from user
- * @return the updated word array.
- */
-String[] fillTheBlanks(String[] current_word_array, String guess, String secret_word){
-    for(int i= 0; i< secret_word.length(); i++){
-        if((""+ secret_word.charAt(i)).equals(guess.toLowerCase())){
-            current_word_array[i]=guess;}
-    }
-    return(current_word_array);
-}
-
-/**
  * Prompts user for guess,
  * @param secret_word word hidden from user
  * @param already_guessed arraylist of strings (single characters)
@@ -129,8 +64,88 @@ String prompt_for_guess (String[] current_word_array, String secret_word, ArrayL
         System.out.println("You already guessed that.");
         return(prompt_for_guess(current_word_array, secret_word, already_guessed));
     }
-        return(guess);
+    return(guess);
 }
+
+/**
+ * Inserts guess letter into correct index of
+ * user-viewed word(if the guess is present in secret word).
+ *
+ * @param current_word_array current array of guessed/unguessed character strings.
+ * @param guess user's guessed letter or word
+ * @param secret_word word hidden from user
+ * @return the updated visible word array.
+ */
+String[] fillTheBlanks(String[] current_word_array, String guess, String secret_word){
+    for(int i= 0; i< secret_word.length(); i++){
+        if((""+ secret_word.charAt(i)).equals(guess.toLowerCase())){
+            current_word_array[i]=guess;}
+    }
+    return(current_word_array);
+}
+
+
+
+
+
+
+// functions related to the graphical output //
+
+/**
+ * updates hangman String array and returns it
+ * @param faults number of incorrect guesses user has made.
+ * @param current_hangman latest version of hangman array.
+ * @return The updated hangman array of strings
+ */
+
+String[] update_hangman(int faults, String [] current_hangman) {
+
+    switch(faults){
+        case 0:
+            break;
+        case 1:
+            current_hangman[2] = current_hangman[2].substring(0, 3) + "O";
+            break;
+        case 2:
+            current_hangman[3] = current_hangman[3].substring(0, 3) + "|";
+            break;
+        case 3:
+            current_hangman[4] = current_hangman[4].substring(0, 3) + "|";
+            break;
+        case 4:
+            current_hangman[5] = current_hangman[5].substring(0, 2) + "/ ";
+            break;
+        case 5:
+            current_hangman[5] = current_hangman[5].substring(0, 3) + " \\";
+            break;
+        case 6:
+            current_hangman[3] = current_hangman[3].substring(0, 1) + "/" + current_hangman[3].substring(2); //i realize the substring is maybe not the "best" method here for such a small range. but it works.
+            break;
+        case 7:
+            current_hangman[3] = current_hangman[3].substring(0, 4) + " \\";
+            break;
+    }
+    return(current_hangman);
+}
+
+/**
+ * Prints hangman graphics and information
+ * @param current_word_array current array of guessed/unguessed character strings.
+ * @param current_hangman latest version of hangman array.
+ * @param already_guessed array of characters incorrectly guessed
+ */
+void printSituation(String[] current_hangman, String[] current_word_array, ArrayList<String> already_guessed) {
+    System.out.println(String.join("\n", current_hangman));
+    for(String item : current_word_array) {
+        System.out.print(item);
+    }
+    System.out.println("\nALREADY GUESSED: " + ("" + (already_guessed)));
+}
+
+
+
+
+// functions to put it all together/file writing //
 
 /**
  * Inserts provided string into new file using a BufferedWriter.
@@ -151,7 +166,6 @@ void writeResultToFile (String result) {
                 + exception.getMessage());
     }
 }
-
 
 /**
  * Contains above-declared functions and uses them to play
@@ -229,6 +243,10 @@ String main_game_loop() {
     }
     return(messagetowrite);
 }
+
+
+
+
 
 void main() {
     writeResultToFile(main_game_loop());
