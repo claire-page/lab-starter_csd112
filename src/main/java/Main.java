@@ -31,16 +31,16 @@ String[] update_hangman(int faults, String [] current_hangman) {
             current_hangman[4] = current_hangman[4].substring(0, 3) + "|";
             break;
         case 4:
-            current_hangman[5] = current_hangman[5].substring(0, 2) + "/";
+            current_hangman[5] = current_hangman[5].substring(0, 2) + "/ ";
             break;
         case 5:
-            current_hangman[5] = current_hangman[5].substring(0, 3) + "\\";
+            current_hangman[5] = current_hangman[5].substring(0, 3) + " \\";
             break;
         case 6:
-            current_hangman[3] = current_hangman[3].substring(0, 2) + "/";
+            current_hangman[3] = current_hangman[3].substring(0, 1) + "/" + current_hangman[3].substring(2); //i realize the substring is maybe not the "best" method here for such a small range. but it works.
             break;
         case 7:
-            current_hangman[3] = current_hangman[3].substring(0, 3) + " \\";
+            current_hangman[3] = current_hangman[3].substring(0, 4) + " \\";
             break;
     }
 return(current_hangman);
@@ -73,14 +73,13 @@ int chooseDifficulty(){
     return(Integer.parseInt(input_difficulty));
 }
 
-
 /**
  * @param choice represents selected difficulty, 1 being easy, 2 being harder
  * @return word at randomly-generated index (between 1 and 9)
  */
 String pickRandomWord(int choice) {
 
-    List<String> default_words_easy = List.of("apple", "daisy", "table", "mint", "wish", "tea", "pine", "horse", "taxes", "slick");
+    List<String> default_words_easy = List.of("apple", "daisy", "table", "mint", "wish", "tea", "pine", "horse", "taxes", "stick");
     List<String> default_words_harder = List.of("ternary", "dynamite", "variable", "somersault", "periwinkle", "benzene", "carousel", "malicious", "acerbic", "erythromycin");
     int random_int = random.nextInt(10); //generates a number from 0-9.
     String random_word ;
@@ -112,7 +111,9 @@ String[] fillTheBlanks(String[] current_word_array, String guess, String secret_
 /**
  * Prompts user for guess,
  * @param secret_word word hidden from user
- * @return the updated word array.
+ * @param already_guessed arraylist of strings (single characters)
+ *For the purpose of this program it represents letters the user has incorrectly guessed.
+ * @return the updated word array, OR keeps calling itself until the guess meets the constraints.
  */
 
 String prompt_for_guess (String[] current_word_array, String secret_word, ArrayList<String> already_guessed){
@@ -131,18 +132,10 @@ String prompt_for_guess (String[] current_word_array, String secret_word, ArrayL
         return(guess);
 }
 
-int count_alpha_chars (String secret_word) {
-
-    int alphacount = 0 ;
-    for (int k = 0; k < secret_word.length(); k++) {
-        if(Pattern.matches("^[a-zA-Z]$",Character.toString(secret_word.charAt(k)))) {
-            alphacount +=1;
-        }
-    }
-    return alphacount;
-}
-
-
+/**
+ * Inserts provided string into new file using a BufferedWriter.
+ * @param result any string with appropriate encoding, but in this case the win/loss info string.
+ */
 void writeResultToFile (String result) {
     try {
         BufferedWriter writer = new BufferedWriter(
@@ -151,31 +144,35 @@ void writeResultToFile (String result) {
                 writer.write(result);
                 writer.close();
                 System.out.println(
-                "Check out your awesome record file.");
+                "Check out your awesome record file! Send it to all your friends!");
     }
-    catch (IOException e) {
-        System.out.println("An error occurred: "
-                + e.getMessage());
+    catch (IOException exception) {
+        System.out.println("An error occurred in writing to the file :((("
+                + exception.getMessage());
     }
 }
 
 
+/**
+ * Contains above-declared functions and uses them to play
+ * the hangman game.
+ * @return string containing information on game outcome (win, loss, guesses)
+ */
 String main_game_loop() {
 
-    String[] hangman = {"---+", "|  |   ", "|         ", "|         ", "|         ", "|        ", "|         ", "======="};
+    String[] hangman = {"---+", "|  |   ", "|         ", "|          ", "|         ", "|        ", "|         ", "======="};
     System.out.println("H A N G M A N\n to pick a word or phrase for your friend to guess, enter it now. It must be at least 2 letters. Otherwise, enter anything else to begin selecting                           your random word. ");
 
     String secretword;
 
     String usrinput = scanner.nextLine();
-    if(Pattern.matches("^[a-zA-Z !?/=+(),'.]{2,25}$", usrinput)){
+    if(Pattern.matches("^[a-zA-Z !?/=+(),'.]{3,25}$", usrinput)){
         secretword = usrinput.toLowerCase();
         System.out.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n"); //hides the input from user, assuming standard zoom on screen.
     } else {
         secretword = pickRandomWord(chooseDifficulty());
     }
 
-  int alphacount = count_alpha_chars(secretword);
     ArrayList<String> already_guessed = new ArrayList<>();
 
     String[] visible_word = new String[secretword.length()];//creates array used to display the results to player.
@@ -219,16 +216,16 @@ String main_game_loop() {
             visible_word[index] = guess;
         }
         printSituation((update_hangman(faults, hangman)), visible_word, already_guessed);
-
     }
-    String messagetowrite = "";
+
+    String messagetowrite ;
     if (already_guessed.size() < 7){
         System.out.println("You won and correctly guessed the word/phrase! Nice!");
-        messagetowrite = "You won and guessed the word in " + ("" + total_guesses) + " guesses";
+        messagetowrite = "You won and guessed the word '" + secretword+ "'in " + ("" + total_guesses) + " guesses";
     }
     else {
         System.out.println("You lost. Better luck next time?");
-        messagetowrite = "You lost...The word/phrase was" + secretword;
+        messagetowrite = "You lost...The word/phrase was '" + secretword + "'." ;
     }
     return(messagetowrite);
 }
