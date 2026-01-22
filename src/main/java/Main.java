@@ -12,17 +12,19 @@ Random random = new Random();
 // functions related to getting input and array/string manipulation //
 
 /**
- * prompts for input
- * @return integer representing difficulty choice
+ * prompts for input to choose mode until it is "1" or 2",
+ * prompts again for a word (and continues to do so until input meets
+ * constraints according to which mode was selected)
+ * @return a valid word String
  */
 
 String chooseWord(){
     System.out.println("To pick a word or phrase for your friend to enter, enter 1. To have a random word selected, enter 2.");
     String decision = scanner.nextLine();
-    String valid_word ="";
+    String valid_word ;
     switch(decision){
                 case "1":
-                    System.out.println("Enter your word or phrase. It may not contain numbers or anything other than alphabetical characters or punctuation.");
+                    System.out.println("Enter your word or phrase. It must contain a minimum of two characters, and a max of 24. \nIt may not contain numbers or anything other than alphabetical characters or punctuation.");
                     String usrinput = scanner.nextLine();
                     if((Pattern.matches("^[a-z,A-Z (\\p{P})?]{3,25}?$", usrinput))&&!(Pattern.matches("^[!$,/?'+=:;-]{3,25}$", usrinput))){
                     valid_word = (usrinput);
@@ -42,6 +44,11 @@ String chooseWord(){
     return(valid_word);
 
 }
+
+/**
+ *prompts for input, continues until input is "1" or "2".
+ * @return an integer value, either 1 or 2
+ */
 int chooseDifficulty(){
     System.out.println("PICK ONE OF THE FOLLOWING OPTIONS:\n -Difficulty Low: 1\n -Difficulty Medium: Enter 2" );
     String input_difficulty = scanner.nextLine();
@@ -51,7 +58,7 @@ int chooseDifficulty(){
     return(Integer.parseInt(input_difficulty));
 }
 
-/**
+/**Selects a random word from one of two lists of words
  * @param choice represents selected difficulty, 1 being easy, 2 being harder
  * @return word at randomly-generated index (between 1 and 9)
  */
@@ -70,7 +77,8 @@ String pickRandomWord(int choice) {
     }
 
 /**
- * Prompts user for guess,
+ * Prompts user for guess until it meets the requirements of a valid guess
+ * @param current_word_array the current word as the user sees it.
  * @param secret_word word hidden from user
  * @param already_guessed arraylist of strings (single characters)
  *For the purpose of this program it represents letters the user has incorrectly guessed.
@@ -81,7 +89,7 @@ String prompt_for_guess (String[] current_word_array, String secret_word, ArrayL
     System.out.println("Enter a letter, or-if you're feeling lucky-enter a word guess.\nNote: your guess must be as long as the secret word.\nIf it's a phrase, please include punctuation in your guess.");
     String guess = scanner.nextLine();
 
-    String regex_for_full_word = "[a-zA-Z(\\p{P})?]{" + ("" + secret_word.length()) + "}"; //regex for full word of A-Z, optional punctuation,size is however long the length of the secret word array is.
+    String regex_for_full_word = "[a-zA-Z(\\p{P})?]{" + ("" + secret_word.length()) + "}"; //regex for full word of A-Z, optional punctuation, size is however long the length of the secret word array is.
     if((!(Pattern.matches("^[a-zA-Z]$", guess))&&(!(Pattern.matches(regex_for_full_word, guess))))){
         System.out.println("Invalid input :(");
         return(prompt_for_guess(current_word_array,secret_word,already_guessed));
