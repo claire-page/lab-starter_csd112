@@ -16,6 +16,33 @@ Random random = new Random();
  * prompts for input
  * @return integer representing difficulty choice
  */
+
+String chooseWord(){
+    System.out.println("To pick a word or phrase for your friend to enter, enter 1. To have a random word selected, enter 2.");
+    String decision = scanner.nextLine();
+    String valid_word ="";
+    switch(decision){
+                case "1":
+                    System.out.println("Enter your word or phrase. It may not contain numbers or anything other than alphabetical characters or punctuation.");
+                    String usrinput = scanner.nextLine();
+                    if((Pattern.matches("^[a-z,A-Z (\\p{P})?]{3,25}?$", usrinput))&&!(Pattern.matches("^[!$,/?'+=:;-]{3,25}$", usrinput))){
+                    valid_word = (usrinput);
+                    break;}
+                    else{
+                        valid_word = (chooseWord());
+                        break;
+                    }
+                case "2":
+                    valid_word = (pickRandomWord(chooseDifficulty()));
+                    break;
+               default:
+                   System.out.println("?????? As per my last message:");
+                   valid_word = chooseWord();
+                break;}
+
+    return(valid_word);
+
+}
 int chooseDifficulty(){
     System.out.println("PICK ONE OF THE FOLLOWING OPTIONS:\n -Difficulty Low: 1\n -Difficulty Medium: Enter 2" );
     String input_difficulty = scanner.nextLine();
@@ -52,10 +79,10 @@ String pickRandomWord(int choice) {
  */
 
 String prompt_for_guess (String[] current_word_array, String secret_word, ArrayList<String> already_guessed){
-    System.out.println("Enter a letter, or-if you're feeling lucky-enter a word guess. Note: your guess must be as long as the secret word.");
+    System.out.println("Enter a letter, or-if you're feeling lucky-enter a word guess.\nNote: your guess must be as long as the secret word.\nIf it's a phrase, please include punctuation in your guess.");
     String guess = scanner.nextLine();
 
-    String regex_for_full_word = "[a-zA-Z]{" + ("" + secret_word.length()) + "}"; //regex for full word of A-Z, size is however long the length of the secret word array is.
+    String regex_for_full_word = "[a-zA-Z(\\p{P})?]{" + ("" + secret_word.length()) + "}"; //regex for full word of A-Z, optional punctuation,size is however long the length of the secret word array is.
     if((!(Pattern.matches("^[a-zA-Z]$", guess))&&(!(Pattern.matches(regex_for_full_word, guess))))){
         System.out.println("Invalid input :(");
         return(prompt_for_guess(current_word_array,secret_word,already_guessed));
@@ -175,17 +202,9 @@ void writeResultToFile (String result) {
 String main_game_loop() {
 
     String[] hangman = {"---+", "|  |   ", "|         ", "|          ", "|         ", "|        ", "|         ", "======="};
-    System.out.println("H A N G M A N\n to pick a word or phrase for your friend to guess, enter it now. It must be at least 2 letters. Otherwise, enter anything else to begin selecting                           your random word. ");
+    System.out.println("H A N G M A N\n");
 
-    String secretword;
-
-    String usrinput = scanner.nextLine();
-    if(Pattern.matches("^[a-zA-Z !?/=+(),'.]{3,25}$", usrinput)){
-        secretword = usrinput.toLowerCase();
-        System.out.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n"); //hides the input from user, assuming standard zoom on screen.
-    } else {
-        secretword = pickRandomWord(chooseDifficulty());
-    }
+   String secretword = chooseWord();
 
     ArrayList<String> already_guessed = new ArrayList<>();
 
@@ -235,7 +254,7 @@ String main_game_loop() {
     String messagetowrite ;
     if (already_guessed.size() < 7){
         System.out.println("You won and correctly guessed the word/phrase! Nice!");
-        messagetowrite = "You won and guessed the word '" + secretword+ "'in " + ("" + total_guesses) + " guesses";
+        messagetowrite = "You won and guessed the word '" + secretword+ "' in " + ("" + total_guesses) + " guesses";
     }
     else {
         System.out.println("You lost. Better luck next time?");
@@ -243,10 +262,6 @@ String main_game_loop() {
     }
     return(messagetowrite);
 }
-
-
-
-
 
 void main() {
     writeResultToFile(main_game_loop());
