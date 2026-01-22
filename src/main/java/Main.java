@@ -1,5 +1,4 @@
 
-
 import java.util.Scanner;
 import java.util.Random;
 import java.util.regex.*;
@@ -253,7 +252,7 @@ String main_game_loop() {
 
     String messagetowrite ;
     if (already_guessed.size() < 7){
-        System.out.println("You won and correctly guessed the word/phrase! Nice!");
+        System.out.println("You won and correctly guessed the word/phrase! Nice.");
         messagetowrite = "You won and guessed the word '" + secretword+ "' in " + ("" + total_guesses) + " guesses";
     }
     else {
