@@ -19,7 +19,7 @@ Random random = new Random();
  */
 
 String chooseWord(){
-    System.out.println("To pick a word or phrase for your friend to enter, enter 1. To have a random word selected, enter 2.");
+    System.out.println("To pick a word or phrase for your friend to guess, enter 1. To have a random word selected, enter 2.");
     String decision = scanner.nextLine();
     String valid_word ;
     switch(decision){
@@ -28,6 +28,7 @@ String chooseWord(){
                     String usrinput = scanner.nextLine();
                     if((Pattern.matches("^[a-z,A-Z (\\p{P})?]{3,25}?$", usrinput))&&!(Pattern.matches("^[!$,/?'+=:;-]{3,25}$", usrinput))){
                     valid_word = (usrinput);
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                     break;}
                     else{
                         valid_word = (chooseWord());
