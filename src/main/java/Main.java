@@ -17,7 +17,7 @@ type, state...
 4.2. A brief description of the purpose of that type.
 Types used in this code:
 
-InputStream belongs to the .io package, and deals with a raw stream of bytes.
+InputStream belongs to the .io package, and deals with a raw stream of bytes from a source.
 IOException belongs to the .io package, deals with known exceptions that may occur within the input process.
 JOptionpane belongs to the .javex.swing package, and is used to pop up a dialog box containing options.
 InterruptedException belongs to the java.lang package, and is thrown when a 'thread' is interrupted in some way
@@ -37,6 +37,35 @@ JLabel belongs to .javex.swing.JLabel package and is used for displaying images
 ImageIcon belongs to .javex.swing.ImageIcon
 BorderLayout belongs to .java.awt package, and is used for altering the border of a graphical component.
 
+6- PACKAGES USED IN CODE
+
+For each package used in the code, give a brief description of the purpose of that package and the kinds of classes
+that are defined in it
+.imageio: contains classes and interfaces for accessing i/o API.
+Classes defined in this package:
+ImageReader, ImageWriter, ImageTranscoder
+
+.ImageIO: contains static 'convenience' methods and interfaces for encoding/decoding image input and output.
+Classes defined in this package:
+
+.io: used for handling data input and output operations. Includes methods relating to file handling and data streams.
+Classes defined in this package:
+
+.javax.swing: contains components used to create GUIs.
+Classes defined in this package:
+JFrame, JLabel, and ImageIcon
+
+.java.awt:  Abstract Window Toolkit which is also used to create GUIs.
+Classes defined in this package:
+Frame, Button, Label
+
+.java.net: used for implementing networking applications and performing API calls.
+Classes defined in this package:
+URI, HTTP (Client, Requests, Response)
+
+.java.net.http: specific package used to recieve and send HTTP requests.
+contains the classes HTTPCLient, HTTPRequests, HTTPResponse
+
  */
 
 void main() {
@@ -49,8 +78,11 @@ void main() {
 }
     //METHOD CALL TO GETRANDOMAVATARSTREAM(): picks random number, calls API using random number, returns body of the API response as an InputStream
     //METHOD CALL TO SHOWAVATAR: instantiates a Jframe object, populates it with the PNG from the API response, displays it. no return value.
-    //CALL TO SHOWMESSAGEDIALOG: displays a message.
-    // CALL TO .GETMESSAGE(): returns a message associated with the particular error e.
+    //METHOD CALL TO SHOWMESSAGEDIALOG: displays a message.
+    //METHOD CALL TO .GETMESSAGE(): returns a message associated with the particular error e.
+
+    //variable avatarStream: type: InputStream, reference to particular instance of InputStream
+
 
 InputStream getRandomAvatarStream() throws IOException, InterruptedException {
     // Pick a random style
@@ -61,16 +93,22 @@ InputStream getRandomAvatarStream() throws IOException, InterruptedException {
     // Generate a random seed
     var seed = (int)(Math.random() * 10000); //.random() is a call to an class method
 
+    //variable styles: type: Array (of Strings), variable is reference to areas in memory containing the array's bytes.
+    //variable style: type: String, reference to an index range within the styles Array which contains a particular String object.
+    //variable seed: type: integer, which is a primitive data type.
+
     //CALL TO .RANDOM (): returns another random double.
 
-    // Create an HTTP request for a random avatar
     var uri = URI.create("https://api.dicebear.com/9.x/%s/png?seed=%d".formatted(style, seed)); //.create is a class method .formatted is an instance method.
     var request = HttpRequest.newBuilder(uri).build(); //.newbuilder is a class method, build() is an instance method
 
     //METHOD CALL TO .CREATE(): Creates a URI, or string of characters used to ID a resource in this case the avatar
     //METHOD CALL TO .FORMATTED(): formats the request string as per the args passed.
-    //METHOD CALL TO .NEWBUILDER(): creates an HTTPS builder object, using the uri created,
-    // .BUILD(): builds and returns HTTPS request obj
+    //METHOD CALL TO .NEWBUILDER(): creates an HTTP builder object, using the URI created,
+    // .BUILD(): builds and returns HTTP request object
+
+    //variable uri: type: URI - object
+    //variable request: type: HTTPrequest - object
 
     try (var client = HttpClient.newHttpClient()) { //.newHttpClient() is a class method
         var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream()); //send is an instance method, .bodyhandlers (??) is a class variable. .ofinput steam is a class method.
@@ -80,6 +118,9 @@ InputStream getRandomAvatarStream() throws IOException, InterruptedException {
     //METHOD CALL TO .NEW HTTPCLIENT(): returns HTTP client- this is the component that recieves the HTTP response.
     //METHOD CALL TO .SEND(): sends the formatted request using the client.
     //METHOD CALL TO .OFINPUTSTREAM : returns ('a streaming body handler').
+
+    //variable client = HTTPClient - instance of HTTPClient object
+    //variable response = instance of HTTPResponse as an InputStream object, so reference.
 
 void showAvatar(InputStream imageStream) {
     JFrame frame = new JFrame("PNG Viewer");
@@ -95,6 +136,9 @@ void showAvatar(InputStream imageStream) {
     //CALL TO GETCONTENTPANE : returns content pane for Jframe
     //CALL TO SETBACKGROUNDCOLOUR: sets background colour of Pane to black.
 
+    //variable frame = type: JFrame, reference to new Jframe object.
+
+
     try {
         // Load the PNG image
         Image image = ImageIO.read(imageStream); //.read is class metgod
@@ -102,7 +146,6 @@ void showAvatar(InputStream imageStream) {
         // Create a JLabel to display the image
         JLabel imageLabel = new JLabel(new ImageIcon(image));
         frame.add(imageLabel, BorderLayout.CENTER); //instance method, class variable/constant?
-
     } catch (IOException e) {
         JOptionPane.showMessageDialog(frame, "Failed to load image: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);  //class method, instance method, class var
     }
@@ -116,3 +159,21 @@ void showAvatar(InputStream imageStream) {
     //CALL TO .SHOWMESSAGEDIALOG() : shows dialog (in this case error message that occurs if img was not successfully loaded)
     //CALL TO .GETMESSAGE() : returns msg associated with error.
     //CALL TO .SETVISIBLE: makes the frame visible!!!
+
+    //variable image: as the name implies, it is a reference to an instance of an Image object. Its class/type is Image!
+    //variable imageLabel: type: Jlabel, object instance.
+    //variable e : reference to specific IOException instance.
+
+    //ARGUMENTS USED TO CALL SHOWAVATAR
+    //ShowAvatar is only called once, using the argument AvatarStream which is a reference to an InputStream of bytes.
+    // But I think maybe you were meaning the arguments passed to the functions within the ShowAvatar function definition:
+    // 1) setDefaultCloseOperation : constant integer EXIT_ON_CLOSE (value of 3). This is a primitive data type.
+    // 2) setResizable : false, a boolean (primitive).
+    // 3) setSize : the Jframe with two integer arguments - two primitives.
+    // 4) setBackgroundCOlour: reference to a Colour object.
+    // 5) .read : reference to an ImageStream.
+    // 6) Jlabel constructor : ImageIcon (object reference) created by the..
+    // 7) ImageIcon constructor : Image object, reference
+    // 8) .add : reference to Jlabel imageLabel, constant string object (via reference) Borderlayout.center
+    // 9) .showMessageDialog : reference to Jframe object, raw string object, result of function call which return a String object, constant integer of error message (0 in this case) which is a primitive.
+    // 10) .setVisible: boolean true, primitive.
