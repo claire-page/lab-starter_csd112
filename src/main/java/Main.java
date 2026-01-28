@@ -8,24 +8,43 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-
 /*
+Add to the “Types used in this code” comment a note for every type
+(class/record/enum/interface) referred to in the code. For each
+type, state...
 
+4.1. Which package that type/class belongs to.
+4.2. A brief description of the purpose of that type.
 Types used in this code:
 
-(Add your answers to lab instruction #4 here)
+InputStream belongs to the .io package, and deals with a raw stream of bytes.
+IOException belongs to the .io package, deals with known exceptions that may occur within the input process.
+JOptionpane belongs to the .javex.swing package, and is used to pop up a dialog box containing options.
+InterruptedException belongs to the java.lang package, and
+String belongs to the java.lang package. It is used to display strings of characters.
+Math belongs to java.lang package, it contains methods related to mathematical operations.
+URI belongs to java.net package.URI, it's used to create and parse Uniform Resource Identifiers
+HTTPRequest belongs to java.net.http package, used to format http requests.
+HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
+recieved via HTTP.
+BodyHandlers belongs to java.net.http package, and are used specifically in dealing with the body of an HTTPResponse.
+Jframe also belongs to the .javex.swing package and is used to display content in a frame.
+Colour belongs to the java.awt package and is used to change the colour and opacity of graphical components.
+Image belongs to the java.awt package and is an "abstract superclass" representing images.
+IMageIO belongs to javex.imageio package and contains methods for encoding/decoding images and locating image readers and writers.
+JLabel belongs to .javex.swing.JLabel package and is used for displaying images
+ImageIcon belongs to .javex.swing.ImageIcon
+BorderLayout belongs to .java.awt package, and is used for altering the border of a graphical component.
 
  */
 
 void main() {
-
     try {
         var avatarStream = getRandomAvatarStream();
         showAvatar(avatarStream); //the argument passed is a reference
     } catch (IOException | InterruptedException e) {
         JOptionPane.showMessageDialog(null, "Failed to load avatar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); //.showmessagedialog is a class method. .getmessage is an instance method. //error message is a class variable
     }
-
 }
     //METHOD CALL TO GETRANDOMAVATARSTREAM(): picks random number, calls API using random number, returns body of the API response as an InputStream
     //METHOD CALL TO SHOWAVATAR: instantiates a Jframe object, populates it with the PNG from the API response, displays it. no return value.
@@ -54,7 +73,7 @@ InputStream getRandomAvatarStream() throws IOException, InterruptedException {
 
     try (var client = HttpClient.newHttpClient()) { //.newHttpClient() is a class method
         var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream()); //send is an instance method, .bodyhandlers (??) is a class variable. .ofinput steam is a class method.
-        return response.body(); //.body is a instance variable.
+        return response.body(); //.body is an  instance variable.
     }
 }
     //METHOD CALL TO .NEW HTTPCLIENT(): returns HTTP client- this is the component that recieves the HTTP response.
@@ -87,7 +106,7 @@ void showAvatar(InputStream imageStream) {
         JOptionPane.showMessageDialog(frame, "Failed to load image: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);  //class method, instance method, class var
     }
 
-    frame.setVisible(true); //instance method :)))))))
+    frame.setVisible(true); //instance method
 }
     //CALL TO READ : interprets the InputStream recieved to create the avatar image.
     //CALL TO JLABEL() : constructs new JLabel
