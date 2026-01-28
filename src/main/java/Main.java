@@ -20,11 +20,12 @@ Types used in this code:
 InputStream belongs to the .io package, and deals with a raw stream of bytes.
 IOException belongs to the .io package, deals with known exceptions that may occur within the input process.
 JOptionpane belongs to the .javex.swing package, and is used to pop up a dialog box containing options.
-InterruptedException belongs to the java.lang package, and
+InterruptedException belongs to the java.lang package, and is thrown when a 'thread' is interrupted in some way
 String belongs to the java.lang package. It is used to display strings of characters.
 Math belongs to java.lang package, it contains methods related to mathematical operations.
 URI belongs to java.net package.URI, it's used to create and parse Uniform Resource Identifiers
 HTTPRequest belongs to java.net.http package, used to format http requests.
+HTTPClient belongs java.net.http package, it provides a starting point from which HTTP responses may be sent and and corresponding requests, recieved.
 HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
 recieved via HTTP.
 BodyHandlers belongs to java.net.http package, and are used specifically in dealing with the body of an HTTPResponse.
