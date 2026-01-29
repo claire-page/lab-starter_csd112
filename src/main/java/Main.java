@@ -36,6 +36,7 @@ interfaces:
     WindowConstants, from javax.swing, which contains integer constants, is accessed, it sets the default close behaviour of a window.
      HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
         recieved via HTTP.
+
 6- PACKAGES USED IN CODE
 
 For each package used in the code, give a brief description of the purpose of that package and the kinds of classes
@@ -179,6 +180,7 @@ void showAvatar(InputStream imageStream) {
     //CALL TO SETBACKGROUNDCOLOUR: sets background colour of Pane to black.
     //CALL TO READ : interprets the InputStream recieved to create the avatar image.
     //CALL TO IMAGEICON(): constructs new ImageIcon using the avatar image
+    //CALL TO JFRAME() constructs new Jframe object
     //CALL TO .ADD(): adds the jlabel with image icon to the Frame)
     //CALL TO .SHOWMESSAGEDIALOG() : shows dialogue (in this case error message that occurs if img was not successfully loaded)
     //CALL TO .GETMESSAGE() : returns msg associated with error.
