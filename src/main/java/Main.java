@@ -21,8 +21,7 @@ classes:
     URI belongs to java.net package.URI, it's used to create and parse Uniform Resource Identifiers
     HTTPRequest belongs to java.net.http package, used to format http requests.
     HTTPClient belongs java.net.http package, it provides a starting point from which HTTP requests may be sent and corresponding responses, recieved.
-    HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
-    recieved via HTTP.
+
     BodyHandlers belongs to java.net.http package, and are used to create Body Subscriber which was confusing but as far as I could determine they are
     used to determine how the body of a request will be interpreted/passed to program (ex: String, InputStream.)
     Jframe belongs to the .javax.swing package and is used to create square window/frame pop-ups.
@@ -35,7 +34,8 @@ classes:
 
 interfaces:
     WindowConstants, from javax.swing, which contains integer constants, is accessed, it sets the default close behaviour of a window.
-
+     HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
+        recieved via HTTP.
 6- PACKAGES USED IN CODE
 
 For each package used in the code, give a brief description of the purpose of that package and the kinds of classes
