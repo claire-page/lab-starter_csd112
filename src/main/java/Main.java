@@ -9,32 +9,30 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 /*
-Add to the “Types used in this code” comment a note for every type
-(class/record/enum/interface) referred to in the code. For each
-
+types used in this code.
 classes:
     InputStream belongs to the .io package, and deals with a raw stream of bytes from a source.
     IOException belongs to the .io package, deals with known exceptions that may occur within the input process.
-    JOptionpane belongs to the .javex.swing package, and is used to pop up a dialog box containing options.
+    JOptionpane belongs to the .javax.swing package, and is used to pop up a dialog box containing options.
     InterruptedException belongs to the java.lang package, and is thrown when a 'thread' is interrupted in some way
     String belongs to the java.lang package. It is used to display strings of characters.
-    Math belongs to java.lang package, it contains methods related to mathematical operations.
+    Math belongs to java.lang package, it contains methods related to mathematical operations ie trig, logarithmic things, et cetera
     URI belongs to java.net package.URI, it's used to create and parse Uniform Resource Identifiers
     HTTPRequest belongs to java.net.http package, used to format http requests.
     HTTPClient belongs java.net.http package, it provides a starting point from which HTTP responses may be sent and and corresponding requests, recieved.
     HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
     recieved via HTTP.
     BodyHandlers belongs to java.net.http package, and are used specifically in dealing with the body of an HTTPResponse.
-    Jframe also belongs to the .javex.swing package and is used to display content in a frame.
+    Jframe also belongs to the .javax.swing package and is used to display content in a frame.
     Colour belongs to the java.awt package and is used to change the colour and opacity of graphical components.
     Image belongs to the java.awt package and is an "abstract superclass" representing images.
-    IMageIO belongs to javex.imageio package and contains methods for encoding/decoding images and locating image readers and writers.
-    JLabel belongs to .javex.swing.JLabel package and is used for displaying images
-    ImageIcon belongs to .javex.swing.ImageIcon
+    IMageIO belongs to javax.imageio package and contains methods for encoding/decoding images and locating image readers and writers.
+    JLabel belongs to .javax.swing.JLabel package and is used for displaying images
+    ImageIcon belongs to .javax.swing.ImageIcon
     BorderLayout belongs to .java.awt package, and is used for altering the border of a graphical component.
 
 interfaces:
-    WindowConstants, which contains integer constants, is accessed, it sets the default close behaviour of a window.
+    WindowConstants, from javax.swing, which contains integer constants, is accessed, it sets the default close behaviour of a window.
 
 
 6- PACKAGES USED IN CODE
@@ -127,7 +125,7 @@ InputStream getRandomAvatarStream() throws IOException, InterruptedException {
     //METHOD CALL TO .FORMATTED(): formats the request string as per the args passed.
     //METHOD CALL TO .NEWBUILDER(): creates an HTTP builder object, using the URI created,
     // .BUILD(): builds and returns HTTP request object
-    //METHOD CALL TO .NEW HTTPCLIENT(): returns HTTP client object- this is the component that recieves the HTTP response.
+    //METHOD CALL TO .NEW HTTPCLIENT(): returns new HTTP client object- this is the component that recieves the HTTP response.
     //METHOD CALL TO .SEND(): sends the formatted request using the created client.
     //METHOD CALL TO .OFINPUTSTREAM : returns ('a streaming body handler').
 
@@ -137,7 +135,7 @@ InputStream getRandomAvatarStream() throws IOException, InterruptedException {
 //variable seed: type: integer, which is a primitive data type.
 //variable uri: type: URI - object
 //variable request: type: HTTPrequest - object
-//variable response: body of response as InputStream
+//variable response: body of response as InputStream, object.
 
 void showAvatar(InputStream imageStream) {
     JFrame frame = new JFrame("PNG Viewer");
