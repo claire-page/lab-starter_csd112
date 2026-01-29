@@ -211,6 +211,6 @@ void showAvatar(InputStream imageStream) {
     // 4) setBackgroundCOlour: reference to a Colour object.
     // 5) .read : reference to an ImageStream.
 
-    // 8) .add : reference to Jlabel imageLabel, constant string object (via reference) Borderlayout.center
-    // 9) .showMessageDialog : reference to Jframe object, raw string object, result of function call on specific error which return a String object, constant integer of error message (0 in this case) which is a primitive.
-    // 10) .setVisible: boolean true, primitive.
+    // 6) .add : reference to Jlabel imageLabel, constant string object (via reference) Borderlayout.center
+    // 7) .showMessageDialog : reference to Jframe object, raw string object, result of function call on specific error which return a String object, constant integer of error message (0 in this case) which is a primitive.
+    // 8) .setVisible: boolean true, primitive.
