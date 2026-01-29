@@ -10,6 +10,7 @@ import java.net.http.HttpResponse;
 
 /*
 types used in this code.
+
 classes:
     InputStream belongs to the .io package, and deals with a raw stream of bytes from a source.
     IOException belongs to the .io package, deals with known exceptions that may occur within the input process.
@@ -19,21 +20,21 @@ classes:
     Math belongs to java.lang package, it contains methods related to mathematical operations ie trig, logarithmic things, et cetera
     URI belongs to java.net package.URI, it's used to create and parse Uniform Resource Identifiers
     HTTPRequest belongs to java.net.http package, used to format http requests.
-    HTTPClient belongs java.net.http package, it provides a starting point from which HTTP responses may be sent and and corresponding requests, recieved.
+    HTTPClient belongs java.net.http package, it provides a starting point from which HTTP requests may be sent and corresponding responses, recieved.
     HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
     recieved via HTTP.
-    BodyHandlers belongs to java.net.http package, and are used specifically in dealing with the body of an HTTPResponse.
-    Jframe also belongs to the .javax.swing package and is used to display content in a frame.
+    BodyHandlers belongs to java.net.http package, and are used to create Body Subscriber which was confusing but as far as I could determine they are
+    used to determine how the body of a request will be interpreted/passed to program (ex: String, InputStream.)
+    Jframe belongs to the .javax.swing package and is used to create square window/frame pop-ups.
     Colour belongs to the java.awt package and is used to change the colour and opacity of graphical components.
-    Image belongs to the java.awt package and is an "abstract superclass" representing images.
+    Image belongs to the java.awt package and is an "abstract" superclass representing images.
     IMageIO belongs to javax.imageio package and contains methods for encoding/decoding images and locating image readers and writers.
-    JLabel belongs to .javax.swing.JLabel package and is used for displaying images
-    ImageIcon belongs to .javax.swing.ImageIcon
+    JLabel belongs to .javax.swing.JLabel package and is used for displaying images or text or a combo of both.
+    ImageIcon belongs to .javax.swing.ImageIcon used to add images to GUI components.
     BorderLayout belongs to .java.awt package, and is used for altering the border of a graphical component.
 
 interfaces:
     WindowConstants, from javax.swing, which contains integer constants, is accessed, it sets the default close behaviour of a window.
-
 
 6- PACKAGES USED IN CODE
 
@@ -103,7 +104,7 @@ InputStream getRandomAvatarStream() throws IOException, InterruptedException {
 
     try (var client = HttpClient.newHttpClient()) {
         var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-        return response.body(); //.body is an  instance variable.
+        return response.body();
     }
 }
 
@@ -116,18 +117,20 @@ InputStream getRandomAvatarStream() throws IOException, InterruptedException {
     // build() is an instance method
     //.newHttpClient() is a class method
     //send is an instance method,
-    // .bodyhandlers (??) is a class variable.
+    // .bodyhandlers is a class variable.
     // .ofinput steam is a class method.
+    // ..body() is instance method
 
 //METHOD CALLS
-    //CALL TO .RANDOM (): returns a random double.
-    //METHOD CALL TO .CREATE(): Creates a URI, or string of characters used to ID a resource in this case the avatar
-    //METHOD CALL TO .FORMATTED(): formats the request string as per the args passed.
-    //METHOD CALL TO .NEWBUILDER(): creates an HTTP builder object, using the URI created,
+    //.RANDOM (): returns a random double.
+    //.CREATE(): Creates a URI, or string of characters used to ID a resource of a website, in this case the avatar
+    //.FORMATTED(): formats the request string as per the args passed.
+    //.NEWBUILDER(): creates an HTTP builder object, using the URI created,
     // .BUILD(): builds and returns HTTP request object
-    //METHOD CALL TO .NEW HTTPCLIENT(): returns new HTTP client object- this is the component that recieves the HTTP response.
-    //METHOD CALL TO .SEND(): sends the formatted request using the created client.
-    //METHOD CALL TO .OFINPUTSTREAM : returns ('a streaming body handler').
+    //.NEW HTTPCLIENT(): returns new HTTP client object- this is the component that sends and recieves the HTTP response
+    //.SEND(): sends the formatted request using the created client.
+    //.OFINPUTSTREAM : returns a streaming body handler which is used to parse the response incrementally, specifies to bodyhandler that body should be parsed as inputstream. i think
+    //.BODY() returns the body of the HTTP Response in the form of an InputStream
 
 //VARIABLES
 //variable styles: type: Array (of Strings), variable is reference to areas in memory containing the array's bytes.
