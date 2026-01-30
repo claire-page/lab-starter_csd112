@@ -34,8 +34,8 @@ classes:
 
 interfaces:
     WindowConstants, from javax.swing, which contains integer constants, is accessed, it sets the default close behaviour of a window.
-     HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
-        recieved via HTTP.
+    HTTPResponse belongs to java.net.http package, contains methods pertaining to the header/body/status/HTTPRequest of a response
+      recieved via HTTP.
 
 6- PACKAGES USED IN CODE
 
