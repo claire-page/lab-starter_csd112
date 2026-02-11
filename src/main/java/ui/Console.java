@@ -8,11 +8,12 @@ public class Console {
 
     // Prevent instantiation (no instances of this class should ever be created)
     // because it is just a holder for static methods
-    private Console() {}
+    private Console() {} //unusable.
 
     // The first two methods here are simple wrappers around IO methods
     // to make it so that all console interaction goes through this class
     // instead of a mix of IO and Console classes
+
     /**
      * Display a message to the user
      * @param message The message to display
