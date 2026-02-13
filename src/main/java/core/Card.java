@@ -75,19 +75,7 @@ public record Card(Suit suit, Rank rank) {
     public boolean isGreaterRank(Card c2) {
         return (this.getCardValue() > c2.getCardValue());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
+//
 
 }
 

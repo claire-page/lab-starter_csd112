@@ -8,48 +8,42 @@
  */
 package core;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HighCardGame {
 
     public int roundsPlayed;
-    public CardStack drawPool; //wanted to get around making a class for rounds.
-    private int numberOfPlayers;
-    private Player [] startingPlayers;
-    private ArrayList<Player> currentPlayers;
+    public Player [] startingPlayers;
+    public ArrayList<Player> currentPlayers;
 
-    //initializing a game from list of players,
+    //initializing a game from list of players.
 
     public HighCardGame(List<String> initPlayers) {
 
         this.roundsPlayed = 0;
-        this.drawPool = new CardStack();
         this.currentPlayers = new ArrayList<Player>();
-        this.startingPlayers = new Player[initPlayers.size()];
-        numberOfPlayers = initPlayers.size();
-
+        this.startingPlayers = new Player[initPlayers.size()]; //
 
         //init empty array.
         for (String s : initPlayers) {
             this.currentPlayers.add(Player.makeNewPlayer(s));
         }
 
-        for(int i = 0; i< numberOfPlayers; i++){
+        for(int i = 0; i< initPlayers.size(); i++){
             this.startingPlayers[i] = this.currentPlayers.get(i);
         }
     }
 
     public void dealToAllPlayers() {
         //players should be guaranteed to be only 1-4.
-        int numberOfDecks = switch (numberOfPlayers) {
-            case 1, 2 -> 1;
-
+        int numberOfDecks = switch (this.startingPlayers.length) {
+            case 2 -> 1;
             case 3, 4 -> 2;
+            case 5, 6 -> 3;
 
-            //the default should never happen but intellijJ was displeased with me for not including it.
-            //you never know, ig
-            default -> throw new IllegalStateException("Unexpected value: " + numberOfPlayers);
+            default -> throw new IllegalStateException("Unexpected value, must be between 1-4 players.");
         };
 
         CardStack gameDeck = new CardStack();
@@ -64,83 +58,38 @@ public class HighCardGame {
     }
 
 
-    public class GroupDraw {
-
-        public ArrayList<Draw> allDraws;
-
-        //allows you to call whoever. this is used to
-        private GroupDraw(Player[] players) {
-            this.allDraws = new ArrayList<>();
-            for (Player p : players) {
-                allDraws.add(new Draw(p, p.drawsOneCard()));
-            }
+    public CardStack everybodyDraws(ArrayList<Player> players){
+        CardStack draws = new CardStack();
+        for (Player p: currentPlayers){
+            draws.addToStack(p.drawsOneCard());
         }
-
-
-        private GroupDraw() {
-            this.allDraws = new ArrayList<>();
-            for (Player p : currentPlayers) {
-                allDraws.add(new Draw(p, p.drawsOneCard()));
-            }
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder retString = new StringBuilder();
-            for (Draw d : allDraws) {
-                retString.append(d.toString()).append("\n");
-            }
-            return (retString.toString());
-        }
-
-
+        return(draws); //this is the drawpool.
     }
 
-    public Player[] whoWinsRound(GroupDraw groupDraw) {
+    //the reason i am returning players is so i can award them a point or if there's a tie, start war between the two.
+    public ArrayList<Player> whoWinsRound(CardStack drawPool) { //drawpool is cards TAKEN.
 
-        ArrayList<Draw> winningdraws = new ArrayList<>(groupDraw.allDraws.size());
+        CardStack winningdraws = drawPool.highestCardsinStack(); //if two players, that's one card
+        ArrayList<Player> roundwinners = new ArrayList<>();
 
-        winningdraws.add(groupDraw.allDraws.getFirst());
-
-        for (int j = 1; j < groupDraw.allDraws.size(); j++) {
-
-            Card current = groupDraw.allDraws.get(j).getCard();
-            Card currentHighest = winningdraws.getFirst().getCard();
-
-            //if it's the same, add it to the list.
-            if ((current.isEqualRank(currentHighest))) {
-                winningdraws.add(groupDraw.allDraws.get(j));
-            }
-            //if you find something bigger, drop and replace.
-            else if ((current.isGreaterRank(currentHighest))) {
-                winningdraws.clear();
-                winningdraws.add(groupDraw.allDraws.get(j));
+        for(int i = 0; i < winningdraws.getNumberOfCards(); i++){ //will only run once.
+            for(Card c: drawPool.getCards()){
+                if(winningdraws.getCardAt(i) == c){
+                    roundwinners.add(currentPlayers.get(drawPool.indexOf(c)));
+                    currentPlayers.get(drawPool.indexOf(c)).incScore();
+                }
             }
         }
-        //new array containing players that won.
-        Player[] winners = new Player[winningdraws.size()];
-        for (int k = 0; k < winningdraws.size(); k++) {
-            winners[k] = winningdraws.get(k).getPlayer();
-        }
-        return (winners);
+        return(roundwinners);
     }
 
-
-    public GroupDraw createGroupDraw() {
-        return (new GroupDraw());
+    //this should always just be a one-item array
+    public void giveWinnerCards(ArrayList<Player> winningplayer , CardStack drawPool){
+        winningplayer.getFirst().addToHand(drawPool);
     }
 
-    public void giveWinnerCardsandPoint (GroupDraw groupdraw, Player[] winners) {
-        Player winner = winners[0];
-        for(Draw d: groupdraw.allDraws){
-            winner.addToHand(d.getCard());
-
-        }
-        winner.incScore();
-    }
-
-    //determines whether a tie occurred depending on length of array representing holders of round's highest cards.
-
+    //determines whether a tie occurred depending on length of array
+    // representing holders of round's highest cards.
     public boolean isTie(Player[] roundwinners) {
         return ((roundwinners.length) > 1);
     }
@@ -160,11 +109,9 @@ public class HighCardGame {
     }
 
 
-//want to call on an array but like. hm.
-// public Player[] War (){
-
 //this is just for my testing purposes!
 public void printEveryonesHand(){
+
         for(Player p: currentPlayers){
             System.out.println(p.toString()+ " -> " + p.hand);
         }
@@ -172,6 +119,7 @@ public void printEveryonesHand(){
 
 
     public String getStatusMsg(){
+
         StringBuilder stringBuilder = new StringBuilder();
         for(Player p: startingPlayers){
             stringBuilder.append(p.toString())
@@ -183,6 +131,49 @@ public void printEveryonesHand(){
         }
         return(stringBuilder.toString());
     }
+
+    public boolean somebodyWonTheGame(){
+
+        for(Player p: currentPlayers){
+            if( p.hand.getNumberOfCards() == startingPlayers.length*26 ){
+                break;
+            }
+
+            else{return(false);
+            }
+    }
+        return(true);
+}
+
+
+public boolean everyoneHasCards(ArrayList<Player> players) {
+
+        for(Player p: players){
+            if (!(p.hasCards())){
+                return(false);
+            }
+        }
+        return(true);
+}
+
+public void War(CardStack pool, ArrayList<Player> players) {
+
+        if (everyoneHasCards(players))  {
+            var newpool = (everybodyDraws(players));
+            var winners = whoWinsRound(newpool);
+            pool.addToStack(newpool);
+            if (winners.size()>1) {
+                System.out.println("more than one winner.");
+                War(pool,players);
+            }
+            else {
+                giveWinnerCards(winners, pool);
+                printEveryonesHand();
+
+            }
+        }
+    System.out.println("AAAAAAAAAAAAAAAAh");
+}
 
 }
 

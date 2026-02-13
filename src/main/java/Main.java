@@ -7,69 +7,63 @@ import java.util.List;
 public class Main {
     public String header = "     +-+-+-+-+\n H I G H - C A R D\n   java version\n      W-2026\n     +-+-+-+-+\n";
 
-     void main(){
+    void main() {
 
-         ui.Console.println(header);
-
-         String [] players = {"A", "B", "C"}; //get input hereeee. limit to 4. idgaf.
-
-         var g = new HighCardGame(getPlayers()); //new game with players.
+        ui.Console.println(header);
+        var game = new HighCardGame(getPlayers()); //new game with players.
         //while answers are yes...
-         g.dealToAllPlayers();
 
-         //...round....//
+        game.dealToAllPlayers();
 
-             while (goodToGo()){
-                 g.printEveryonesHand();
-                 var draw = g.createGroupDraw();
-                 ui.Console.println(draw.toString());
-                 var winners = g.whoWinsRound(draw);
-                 System.out.println(Arrays.toString(winners));
-                 g.giveWinnerCardsandPoint(draw, winners);
-                 g.printEveryonesHand();
-                 printStatus(g);
+        //...round....//
+        while (goodToGo()) {
 
-         }
-         ui.Console.println("alrighty, farewell.");
-         System.exit(0);
+            var drawPool = game.everybodyDraws(game.currentPlayers);
+            ui.Console.println(Arrays.toString(game.startingPlayers));
+            ui.Console.println(drawPool.toString());
+            var winners = game.whoWinsRound(drawPool);
+
+            System.out.println(winners);
+            if (winners.size() > 1) {
+                game.War(drawPool, winners);
+                printStatus(game);
+            } else {
+                game.giveWinnerCards(winners, drawPool);
+                if (game.somebodyWonTheGame()) {
+                    ui.Console.println((winners.getFirst() + "WINS!"));
+                } else {
+                    game.printEveryonesHand();
+                    printStatus(game);
+                }
+            }
+        }
+
+            ui.Console.println("alrighty, farewell.");
+            System.exit(0);
+        }
+
+
+
+        public boolean goodToGo () {
+            return (Console.promptForOption
+                    ("Would you like to play a round?", new String[]{"y", "n"}).equals("y"));
+        }
+
+
+        public List<String> getPlayers () {
+
+            int numberOfPlayers = Integer.parseInt(
+                    (Console.promptForOption("How many ppl are playing?", new String[]{"2", "3", "4", "5"})));
+
+
+            return (Console.promptForNInputs("Enter your name! -> \n", numberOfPlayers));
+        }
+
+        public void printStatus (HighCardGame game){
+            ui.Console.println(game.getStatusMsg()); // TEAM CANADA WINS 5-0!
+        }
+
+
     }
-
-    public boolean goodToGo(){
-        return(Console.promptForOption("Would you like to play a round?", new String[]{"y", "n"}).equals("y"));
-    }
-
-    public List<String> getPlayers(){
-
-         int numberOfPlayers = Integer.parseInt(
-                 (Console.promptForOption("How many ppl are playing?", new String[]{"1", "2", "3", "4"})));
-
-
-         return(Console.promptForNInputs("Enter your name! -> \n", numberOfPlayers));
-    }
-
-
-
-    public void printStatus(HighCardGame game ){
-         ui.Console.println(game.getStatusMsg());
-    }
-}
-
-
-
-
-//adding to hand works. now.
-//for war.
-        /*
-             Place your main game logic here.
-             This is the ONLY code file that should have any reference to the Console class.
-
-             The basic flow of the game is as follows:
-
-             1. Prompt for player names
-             2. Deal a shuffled deck evenly to each of the players
-             3. While the players have cards and wish to continue:
-                 b. All players draw one card and reveal them
-                 c. The player with the higher card wins the round (or it's a tie)
-         */
 
 
