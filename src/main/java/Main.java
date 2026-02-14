@@ -72,10 +72,10 @@ public class Main {
             System.exit(0);
         }
 
-        ///*
+        ///*helper function
         ///prompts all players to confirm they'd like to play
         ///(as per lab instructions).
-        ///@returns boolean -> false if anyone responds "n" or "N" to the prompt, true otherwise.
+        ///@return boolean -> false if anyone responds "n" or "N" to the prompt, true otherwise.
 
         public boolean allPlayersGoodToGo (ArrayList<Player> currentPlayers) {
         for (Player p: currentPlayers){
@@ -87,7 +87,7 @@ public class Main {
         return(true);
         }
 
-    /**
+    /**helper function
      * when called, prompts for an integer for number of players (using promptforoption).
      * then prompts for n (numberofPlayers) amount of inputs.
      *
@@ -102,7 +102,7 @@ public class Main {
         }
 
 
-    /**
+    /**helper function
      * prints status msg retrieved from game status.
      * @param game = instance of a HighCard game.
      */
@@ -111,11 +111,9 @@ public class Main {
         }
 
 
-        /**
+        /**helper function used to announce war between players.
          * @param tiedPlayers = ArrayList of players that "tied" (all in winners list).
-         * @return = void.
         //prints msg to let user know a tie has occured, and informs of players involved in war.*/
-
         public void announceWar(ArrayList<Player> tiedPlayers ) {
             StringBuilder stringBuilder = new StringBuilder("Tie between players ");
             stringBuilder.append(tiedPlayers.toString());

@@ -26,7 +26,6 @@ public record Card(Suit suit, Rank rank) {
         }
     }
 
-    //these are public because i would like to access them in the package at least.
     public enum Rank {
 
         One("1"),
@@ -57,25 +56,38 @@ public record Card(Suit suit, Rank rank) {
         return (rank.stringrank + suit.stringsuit);
     }
 
+    /**determines rank value of card
+     * based off of its position in
+     * the rank enum which corresponds to its value.
+     * @return the numeric value of the card as per high card rules
+     */
     public int getCardValue() {
-        return (rank.ordinal() + 1);
+        return (this.rank.ordinal() + 1);
     }
 
-    public Card copy(){
+
+    public Card copy(){ //never used this, maybe should have.
       return(new Card(this.suit, this.rank));
     }
 
-    //should these be doing the thing where they check the object?
-
+    /**determines whether c2 is equal in value to the card this is called on.
+     *
+     * @param c2 another Card
+     * @return boolean value of "is c2 equal in value to the card this is called on."
+     */
     public boolean isEqualRank(Card c2) {
         return (this.getCardValue() == c2.getCardValue());
     }
 
-
+    /**determines whether c2 is greater in value to the card this is called on.
+     *
+     * @param c2 another Card
+     * @return boolean value of "is c2 greater in value to the card this is called on."
+     */
     public boolean isGreaterRank(Card c2) {
         return (this.getCardValue() > c2.getCardValue());
     }
-//
+
 
 }
 
