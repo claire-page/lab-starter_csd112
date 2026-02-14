@@ -13,7 +13,7 @@ public class Player {
     //these are i-vars.
     private int score;
     private String name;
-    public CardStack hand;
+    private CardStack hand;
 
     private Player (String inputname){
         this.name = inputname;
@@ -43,9 +43,11 @@ public class Player {
         return(this.hand.drawOneCard());
     }
 
+    /**increments score of player by 1.*/
     public void incScore (){
         this.score++;
     }
+
 
     public void addToHand (Card c) {
         this.hand.addToStack(c);
@@ -54,6 +56,12 @@ public class Player {
     public void addToHand (CardStack cStack) {
         this.hand.addToStack(cStack);
     }
+
+    public void setHandto(CardStack cStack) {
+        this.hand = cStack;
+    }
+
+
 
     public boolean hasCards (){
         return(this.hand.getNumberOfCards()>0);

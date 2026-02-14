@@ -8,21 +8,19 @@
  */
 package core;
 
-import java.lang.reflect.Array;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HighCardGame {
 
-    public int roundsPlayed;
-    public Player [] startingPlayers;
-    public ArrayList<Player> currentPlayers;
+    private Player [] startingPlayers;
+    private ArrayList<Player> currentPlayers;
 
     //initializing a game from list of players.
 
     public HighCardGame(List<String> initPlayers) {
 
-        this.roundsPlayed = 0;
         this.currentPlayers = new ArrayList<Player>();
         this.startingPlayers = new Player[initPlayers.size()]; //
 
@@ -36,7 +34,11 @@ public class HighCardGame {
         }
     }
 
-    public void dealToAllPlayers() {
+
+    /**creates appropriate amount of decks and deals 26 cards
+     * to each player.
+     */
+    public void makeDeckandDealToAllPlayers() {
         //players should be guaranteed to be only 1-4.
         int numberOfDecks = switch (this.startingPlayers.length) {
             case 2 -> 1;
@@ -52,22 +54,35 @@ public class HighCardGame {
         }
 
         for (Player p: currentPlayers){
-            p.hand = gameDeck.dealHand(26);
+            p.setHandto(gameDeck.dealHand(26));
         }
 
     }
 
-
+    /**
+     *
+     * @param players : arraylist of players involved.
+     * @return a cardstack containing a card from each player's hand
+     */
     public CardStack everybodyDraws(ArrayList<Player> players){
         CardStack draws = new CardStack();
-        for (Player p: currentPlayers){
-            draws.addToStack(p.drawsOneCard());
+        for (Player p: players){
+            if (p.hasCards()){
+            draws.addToStack(p.drawsOneCard());}
         }
         return(draws); //this is the drawpool.
     }
 
+
+    /**
+     *
+     * @param drawPool the CardStack of drawn cards.
+     * @param roundPlayers players involved in the round.
+     * @return roundwinners, an ArrayList containing player(s) that who drew highest card(s) in the pool.
+     */
+
     //the reason i am returning players is so i can award them a point or if there's a tie, start war between the two.
-    public ArrayList<Player> whoWinsRound(CardStack drawPool) { //drawpool is cards TAKEN.
+    public ArrayList<Player> whoWinsRound(CardStack drawPool, ArrayList<Player> roundPlayers) { //drawpool is cards TAKEN.
 
         CardStack winningdraws = drawPool.highestCardsinStack(); //if two players, that's one card
         ArrayList<Player> roundwinners = new ArrayList<>();
@@ -75,105 +90,129 @@ public class HighCardGame {
         for(int i = 0; i < winningdraws.getNumberOfCards(); i++){ //will only run once.
             for(Card c: drawPool.getCards()){
                 if(winningdraws.getCardAt(i) == c){
-                    roundwinners.add(currentPlayers.get(drawPool.indexOf(c)));
-                    currentPlayers.get(drawPool.indexOf(c)).incScore();
+                    roundwinners.add(roundPlayers.get(drawPool.indexOf(c)));
                 }
             }
         }
         return(roundwinners);
     }
 
-    //this should always just be a one-item array
+    /**
+     * adds cards to winning player's hand.
+     * @param winningplayer - should only contain one item, as the
+     * function should only be called if there's one winner.
+     * @param drawPool - cards that were involved in the draw.
+     */
+
     public void giveWinnerCards(ArrayList<Player> winningplayer , CardStack drawPool){
         winningplayer.getFirst().addToHand(drawPool);
     }
 
-    //determines whether a tie occurred depending on length of array
-    // representing holders of round's highest cards.
-    public boolean isTie(Player[] roundwinners) {
-        return ((roundwinners.length) > 1);
-    }
 
-    public boolean isGameOver() {
-        return ((currentPlayers.size() == 1));
-    }
-
-    //kind of a cleanup function ??
-    public void eliminateCardlessPlayers() {
-        for (Player p : currentPlayers) {
-            if (p.getScore() == 0) {
-                currentPlayers.remove(p);
-
-            }
+    /**creates a new ArrayList, adding all current players that have 1+
+     cards. reassigns the game's currentPlayers variable to the updated list.
+     sort of a cleanup function to ensure that cardless players are
+     never included in a draw.
+     *
+     */
+    public void updateActivePlayers(){
+      ArrayList<Player>  updatedPlayerList =  new ArrayList<>();
+    for (Player p: currentPlayers){
+        if(p.hasCards()){
+            updatedPlayerList.add(p);
         }
     }
-
-
-//this is just for my testing purposes!
-public void printEveryonesHand(){
-
-        for(Player p: currentPlayers){
-            System.out.println(p.toString()+ " -> " + p.hand);
-        }
+    this.currentPlayers = updatedPlayerList;
     }
 
-
-    public String getStatusMsg(){
-
+    /**
+     * building a string for game status.
+     * @return string with information on the players' statuses.
+     */
+    public String getPlayerStatusMsg(){
         StringBuilder stringBuilder = new StringBuilder();
         for(Player p: startingPlayers){
+            if(p.hasCards()){
             stringBuilder.append(p.toString())
                     .append(" -> ")
                     .append(p.getScore())
                     .append(" rounds won, ")
-                    .append(p.hand.getNumberOfCards())
-                    .append(" cards in hand.\n");
+                    .append(p.getPlayerHand().getNumberOfCards())
+                    .append(" cards in hand.\n");}
+            else{
+                stringBuilder.append(p.toString())
+                        .append("was eliminated and is no longer participating.");
+            }
         }
         return(stringBuilder.toString());
     }
 
-    public boolean somebodyWonTheGame(){
+    /**
+     * checks if anyone has won (if there's only one player remaining)
+     * @return boolean representing whether somebody has won the game.
+     */
 
-        for(Player p: currentPlayers){
-            if( p.hand.getNumberOfCards() == startingPlayers.length*26 ){
-                break;
-            }
+    public boolean somebodyWonTheGame() {
+        return(currentPlayers.size()==1); }
 
-            else{return(false);
-            }
+
+    /**
+     * sort of a preparation for war, using this mainly to access
+     * the war-draw information in the main program.
+     * @param tiedPlayers
+     * @return cardstack of the cards drawn by players for war.
+     */
+    public CardStack getWarDraw(ArrayList<Player> tiedPlayers) {
+    //checking if players can draw another card.
+    CardStack warPool = new CardStack();
+    for (Player p : tiedPlayers) {
+        if (p.hasCards()) {
+            warPool.addToStack(p.drawsOneCard());
+        }
+
     }
-        return(true);
-}
+    return (warPool);}
 
+    //in main, check if it's got anything in it.
+    // yes, actually call war.
+    //if not, oops. they don't have anymore cards, so update players and move on.
 
-public boolean everyoneHasCards(ArrayList<Player> players) {
+    /**
+     * checks for winners.
+     * @param warPool
+     * @param initialPool
+     * @param tiedPlayers
+     * @return arraylist containing players which won the war.
+     */
+       public ArrayList<Player> War(CardStack warPool, CardStack initialPool, ArrayList<Player> tiedPlayers) {
 
-        for(Player p: players){
-            if (!(p.hasCards())){
-                return(false);
+            var winners = whoWinsRound(warPool, tiedPlayers);
+            initialPool.addToStack(warPool);
+
+            //checking to see if ONE player won the war,
+            //giving them the cards if so.
+
+            if (winners.size()==1) {
+                giveWinnerCards(winners, initialPool);
+                winners.getFirst().incScore();
+                return(winners);
             }
+          //no secondary war. nobody recieves a point in the case of no war winners.
+
+            updateActivePlayers();
+            return(winners);
         }
-        return(true);
+
+
+
+public ArrayList<Player> getCurrentPlayers(){
+return this.currentPlayers;
 }
 
-public void War(CardStack pool, ArrayList<Player> players) {
-
-        if (everyoneHasCards(players))  {
-            var newpool = (everybodyDraws(players));
-            var winners = whoWinsRound(newpool);
-            pool.addToStack(newpool);
-            if (winners.size()>1) {
-                System.out.println("more than one winner.");
-                War(pool,players);
-            }
-            else {
-                giveWinnerCards(winners, pool);
-                printEveryonesHand();
-
-            }
-        }
-    System.out.println("AAAAAAAAAAAAAAAAh");
+public Player[] getStartingPlayers(){
+        return this.startingPlayers;
 }
+
 
 }
 
