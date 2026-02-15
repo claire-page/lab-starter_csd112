@@ -24,7 +24,7 @@ public class Main {
 
             ui.Console.println("POOL: " + drawPool.toString());
             var winners = game.whoWinsRound(drawPool, activePlayers);
-            
+
             if (winners.size() > 1) {
                 announceWar(winners);
 
@@ -101,15 +101,14 @@ public class Main {
             return (Console.promptForNInputs("Enter your name! -> \n", numberOfPlayers));
         }
 
-
     /**helper function
      * prints status msg retrieved from game status.
      * @param game = instance of a HighCard game.
      */
     public void printPlayerStatus (HighCardGame game){
-            ui.Console.println(game.getPlayerStatusMsg());
-        }
 
+        ui.Console.println(game.getPlayerStatusMsg());
+        }
 
         /**helper function used to announce war between players.
          * @param tiedPlayers = ArrayList of players that "tied" (all in winners list).
