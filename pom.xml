@@ -30,6 +30,11 @@
         <version>5.5.1</version>
         <scope>compile</scope>
     </dependency>
+    <dependency>
+        <groupId>ca.saultcollege</groupId>
+        <artifactId>lab-starter</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
 
 </dependencies>
 

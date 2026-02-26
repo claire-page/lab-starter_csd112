@@ -5,12 +5,15 @@ import java.util.Scanner;
 
 import tictactoe.game.Board;
 import tictactoe.game.Position;
+import com.diogonunes.jcolor.*;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
+
 
 /**
  * Helper methods for doing console-based user interaction
  */
 public class Console {
-
 
     public static void println(String message) {
         IO.println(message);
@@ -33,7 +36,8 @@ public class Console {
      * @param message The message to display
      */
     public static void printAlert(String message) {
-        IO.println(message);
+        AnsiFormat alertFormat = new AnsiFormat(Attribute.RED_TEXT());
+                IO.println(colorize(message, alertFormat));
     }
 
     /**

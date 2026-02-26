@@ -3,6 +3,7 @@ package tictactoe;
 import tictactoe.game.TicTacToeGame;
 import tictactoe.game.Position;
 import tictactoe.ui.Console;
+import com.diogonunes.jcolor.*;
 
 import static tictactoe.game.TicTacToeGame.Status.*;
 
