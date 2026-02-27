@@ -35,7 +35,7 @@ public class Board {
     }
 
     /**
-     * Initialize a new board with the given state (useful for testing)
+     * Initialize a new board with the given state (useful for testing) ...
      * @param b A string representation of the board state.
      *          The string should be 3 lines long, with each line containing 3 characters,
      *          or one 9 character string.
@@ -105,7 +105,7 @@ public class Board {
         if (board[0][0] != null && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
             return Optional.of(board[0][0]);
         }
-        if (board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[1][0]) {
+        if (board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
             return Optional.of(board[0][2]);
         }
         return Optional.empty();

@@ -51,6 +51,10 @@ public class testBoard {
     }
 
     @Test
-    public void testisWinner();
+    public void testisWinner(){
+        Board board = new Board(---------);
+    }
+
+
 
 }
