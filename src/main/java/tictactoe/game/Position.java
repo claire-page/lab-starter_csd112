@@ -12,7 +12,8 @@ public record Position(Row row, Col col) {
     /**
      * Parses a string representation of a position on a TicTacToe board and returns the corresponding Position object.
      * <ul>
-     * <li>The string representation can be in various formats, including numeric and various abbreviated forms for rows and columns.
+     * <li>The string representation can be in various formats, including numeric and various abbreviated forms for rows and columns
+     * .
      *     (See the {@link Col#parse} and {@link Row#parse} methods for valid row and column string representations.)
      * <li>The position string can be in the form of two characters, where the first character represents the row
      *     and the second character represents the column. For example, "tl" or "11" represents the top-left position,

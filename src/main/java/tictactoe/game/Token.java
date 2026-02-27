@@ -1,6 +1,5 @@
 package tictactoe.game;
 
-import com.diogonunes.jcolor.AnsiFormat;
 import com.diogonunes.jcolor.Attribute;
 
 import static com.diogonunes.jcolor.Ansi.colorize;

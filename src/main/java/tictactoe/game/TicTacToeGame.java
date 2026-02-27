@@ -1,5 +1,9 @@
 package tictactoe.game;
 
+import com.diogonunes.jcolor.Attribute;
+
+import javax.swing.text.html.HTML;
+
 /**
  * Represents the current state of a tictactoe game, including which player's turn it is,
  * and the current state of the game board
@@ -30,8 +34,8 @@ public class TicTacToeGame {
      * @param playerOName The O player name
      */
     public TicTacToeGame(String playerXName, String playerOName) {
-        this.playerX = new Player(playerXName, Token.X);
-        this.playerO = new Player(playerOName, Token.O);
+        this.playerX = new Player(playerXName, Token.X, Attribute.TEXT_COLOR(200));
+        this.playerO = new Player(playerOName, Token.O, Attribute.TEXT_COLOR(25));
 
         this.whoseTurn = playerX;
     }
