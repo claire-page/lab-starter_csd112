@@ -92,7 +92,7 @@ public class TestPositionParse {
     ParseException exception5 = assertThrows(
             ParseException.class,
             () -> Position.parse("  "),
-            "Expected  empty string to throw a ParseException, but it did not."
+            "Expected empty string to throw a ParseException, but it did not."
     );
 
         NullPointerException exception6 = assertThrows(
