@@ -1,16 +1,13 @@
 package tictactoe;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions.*;
 import tictactoe.game.Col;
-import tictactoe.game.Position;
 import tictactoe.game.Position;
 import tictactoe.game.Row;
 
 import java.text.ParseException;
 
-import static java.lang.invoke.MethodHandles.throwException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,6 +38,7 @@ public class TestPositionParse {
         //caps and lowercase
         try { Position pos = Position.parse("ml");
             Position pos2 = Position.parse("ML");
+
             assertTrue(pos.equals(pos2), ("The upper and lower-case positions should be equal but they're not. \nExpected: 'ml' = Position[row=Top, col=Left], 'ML'= Position[row=Middle, col=Left]\nActual: 'ml' = %s, 'ML' = %s").formatted(pos, pos2));
         }
         catch (ParseException e) {
