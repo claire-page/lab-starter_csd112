@@ -55,8 +55,7 @@ public class testBoard {
         testboard.place(filledXposition, tokenX);
 
         assertFalse(testboard.isEmptyAt(filledXposition), "Bottom left should not be empty when X token is placed there.");
-        assertFalse(testboard.isEmptyAt(blankposition), "Bottom middle should be empty but is not.");
-
+        assertTrue(testboard.isEmptyAt(blankposition), "Bottom middle should be empty but is not.");
         testboard.place(filledOPosition, tokenO);
 
         assertFalse(testboard.isEmptyAt(filledOPosition), "Bottom left should not be empty when O is placed there");

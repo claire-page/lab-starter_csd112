@@ -13,8 +13,8 @@ class PositionTest {
         try {
             Position pos = (Position.parse("12"));
 
-            assertTrue(pos.row() == Row.Top);
-            assertTrue(pos.col() == Col.Middle);
+            assertTrue(pos.row() == Row.Top, "row for string 12 should be parsed as Top.");
+            assertTrue(pos.col() == Col.Middle, "col for string 12 should be parsed as Middle");
 
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -22,12 +22,21 @@ class PositionTest {
 
         try {
             Position pos2 = (Position.parse("2,3"));
-            assertTrue(pos2.row() == Row.Middle);
-            assertTrue(pos2.col() == Col.Right);
+            assertTrue(pos2.row() == Row.Middle, "row for String 2,3 should be parsed as Middle.");
+            assertTrue(pos2.col() == Col.Right, "column for String 2,3 should be parsed as Right");
 
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            Position pos2 = (Position.parse("3 1"));
+            assertTrue(pos2.row() == Row.Bottom, "row for String 3 1 should be parsed as Bottom.");
+            assertTrue(pos2.col() == Col.Left, "column for String 3 1 should be parsed as Left");
+        }
+     catch (ParseException e) {
+        throw new RuntimeException(e);
+    }
     }
 
     @Test
@@ -36,19 +45,18 @@ class PositionTest {
 
         try {
 
+            assertEquals(Position.parse("ml"), middleLeft, "ml should be parsed as Middle Left.");
+            assertEquals(Position.parse("mL"), middleLeft, "mL should be parsed as Middle Left.");
 
-            assertEquals(Position.parse("ml"), middleLeft);
-            assertEquals(Position.parse("mL"), middleLeft);
 
-
-            assertEquals(Position.parse("ML"), middleLeft);
-            assertEquals(Position.parse("Middle Left"), middleLeft);
-            assertEquals(Position.parse("mIDdlE LEft"), middleLeft);
-            assertEquals(Position.parse("middle;left"), middleLeft);
-
-            assertEquals(Position.parse("21"), middleLeft);
-            assertEquals(Position.parse("2,1"), middleLeft);
-            assertEquals(Position.parse("2;1"), middleLeft);
+            assertEquals(Position.parse("ML"), middleLeft, "middleLeft should be parsed as Middle Left.");
+            assertEquals(Position.parse("Middle Left"), middleLeft, "Middle Left should be parsed as Middle Left");
+            assertEquals(Position.parse("mIDdlE LEft"), middleLeft, "mIDdlE LEft should be parsed as Middle Left");
+            assertEquals(Position.parse("middle;left"), middleLeft, "middle;left should be parsed as Middle Left");
+            assertEquals(Position.parse("mid left"), middleLeft, "mid left should be parsed as Middle Left");
+            assertEquals(Position.parse("21"), middleLeft, "21 should be parsed as Middle Left");
+            assertEquals(Position.parse("2,1"), middleLeft, "2,1 should be parsed as Middle Left");
+            assertEquals(Position.parse("2;1"), middleLeft,"2;1 should be parsed as Middle Left");
 
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -107,6 +115,17 @@ class PositionTest {
         );
     }
 
+
+    @Test
+    public void assertExceptionThrownByGibberish(){
+
+        ParseException exception5 = assertThrows(
+                ParseException.class,
+                () -> Position.parse("#$j?..-=++_{2"),
+                "Expected unparseable string to throw a ParseException, but it did not."
+        );
+
+    }
 
     @Test
     public void assertExceptionThrownByNull() {
