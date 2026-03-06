@@ -48,7 +48,6 @@ class PositionTest {
             assertEquals(Position.parse("ml"), middleLeft, "ml should be parsed as Middle Left.");
             assertEquals(Position.parse("mL"), middleLeft, "mL should be parsed as Middle Left.");
 
-
             assertEquals(Position.parse("ML"), middleLeft, "middleLeft should be parsed as Middle Left.");
             assertEquals(Position.parse("Middle Left"), middleLeft, "Middle Left should be parsed as Middle Left");
             assertEquals(Position.parse("mIDdlE LEft"), middleLeft, "mIDdlE LEft should be parsed as Middle Left");
