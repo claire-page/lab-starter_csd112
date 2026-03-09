@@ -5,8 +5,9 @@ Place here your answers to the reflection questions in the lab instructions.
 ## Question 1
 Why *can* you change the type of the returned **value** in `promptForPlayer` without changing the return **type** in the function signature?
 ### Answer
-Your answer here
-
+This works because of subtype polymorphism - a HumanPlayer instance is also a Player instance through inheritance, and can be treated as such. From what I understand this is one of the reasons subtype polymorphism is so useful. 
+If I replace HumanPlayer with another value to be returned, the compiler does not let that slide! Yay for polymorphism!
+![img.png](img.png)
 ## Question 2
 Explain why the call to `getNextMove` initially causes an error until you add the abstract method to the `Player` class. Your answer should involve a discussion of static (compile-time) vs dynamic (run-time) types. (HINT: What is the compile-time vs run-time type of the `player` variable in `TicTacToeGame.doNextTurn`?)
 ### Answer

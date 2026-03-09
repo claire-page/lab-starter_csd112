@@ -16,7 +16,7 @@ public class HumanPlayer extends Player {
     @Override
     public Position getNextMove(Board board) {
         while (true) {
-            var prompt = "%s's turn (%s). Enter your move (row column): ".formatted(this.getName(), this.getToken();
+            var prompt = "%s's turn (%s). Enter your move (row column): ".formatted(this.getName(), this.getToken());
             var pos = Console.promptForPosition(prompt, board);
 
             if (board.isEmptyAt(pos)) {
