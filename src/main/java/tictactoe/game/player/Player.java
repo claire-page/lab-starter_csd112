@@ -10,7 +10,20 @@ public abstract class Player {
      String name;
      Token token;
 
+     protected Player(String name, Token token){
+         this.name = name;
+         this.token = token;
+     }
+
     public abstract Position getNextMove(Board b);
+
+    public String getName(){
+        return(this.name);
+    }
+
+    public Token getToken(){
+        return(this.token);
+    }
 
 
 

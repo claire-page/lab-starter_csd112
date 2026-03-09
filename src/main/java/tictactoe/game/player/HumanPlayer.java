@@ -9,15 +9,14 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(String name , Token token){
 
-        this.name = name;
-        this.token = token;
+    super(name, token);
 
     }
 
     @Override
     public Position getNextMove(Board board) {
         while (true) {
-            var prompt = "%s's turn (%s). Enter your move (row column): ".formatted(this.name(), this.token());
+            var prompt = "%s's turn (%s). Enter your move (row column): ".formatted(this.getName(), this.getToken();
             var pos = Console.promptForPosition(prompt, board);
 
             if (board.isEmptyAt(pos)) {
