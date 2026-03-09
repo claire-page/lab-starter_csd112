@@ -14,7 +14,7 @@ public class TicTacToeGame {
      * @param positionPlayed The position on the board where the player placed their token
      * @param newBoardState The resulting board after the player's turn
      */
-    public record TurnData(Player whoseTurn, Position positionPlayed, Board newBoardState) {}
+    public record TurnData(Player whoseTurn, Position positionPlayed, Board newBoardState) {};
 
     /**
      * Represents the high-level status of the game
