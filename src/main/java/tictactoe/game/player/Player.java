@@ -5,7 +5,6 @@ import tictactoe.game.Position;
 import tictactoe.game.Token;
 import tictactoe.ui.Console;
 
-//turned Player into a class..
 public abstract class Player {
      String name;
      Token token;
@@ -16,7 +15,6 @@ public abstract class Player {
          this.token = token;
      }
 
-    public abstract Position getNextMove(Board b);
 
     public String getName(){
         return(this.name);
@@ -27,5 +25,16 @@ public abstract class Player {
     }
 
 
+    public Token opponentToken(){
+
+        if (this.token == Token.X) {
+            return(Token.O);
+        }
+        else{
+            return(Token.X);
+        }
+    }
+
+    public abstract Position getNextMove(Board board);
 
 }

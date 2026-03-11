@@ -127,6 +127,20 @@ public class Board {
         return true;
     }
 
+
+    //made this bc i am lazy.
+    public boolean isEmpty() {
+
+            for (var row : board) {
+                for (var cell : row) {
+                    if (cell != null) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
     /**
      * @param pos A game board position
      * @return true if the given board position is empty; false otherwise

@@ -33,7 +33,7 @@ public class TicTacToeGame {
     private final Board board = new Board();
 
     private Player whoseTurn;
-
+    //here whoseTurn is declared, and its static type is Player.
     /**
      * Initialize a new TicTacToe game with the given players
      * @param playerX The X player name
@@ -43,7 +43,11 @@ public class TicTacToeGame {
         this.playerX = playerX;
         this.playerO = playerO;
 
-        this.whoseTurn = playerX;
+        this.whoseTurn = playerX;   //note bc i was confused -- this is initializing a game and also whose turn it is.
+                                    // "whose turn" is a property of the game at the specific moment of checking.
+                                    // that will be changed and re-changed within a Game object's lifecycle
+                                    // at first it seemed weird logically to me to categorize "whose turn it is" as an aspect of a game object
+                                    // but since it represents the game's State (at a given time) that makes total sense. oop.
     }
 
     /**
