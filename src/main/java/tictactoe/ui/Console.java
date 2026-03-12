@@ -2,11 +2,7 @@ package tictactoe.ui;
 
 import tictactoe.game.*;
 import com.diogonunes.jcolor.AnsiFormat;
-import tictactoe.game.player.HumanPlayer;
-import tictactoe.game.player.Circe;
-
-import tictactoe.game.player.Omola;
-import tictactoe.game.player.Player;
+import tictactoe.game.player.*;
 
 import java.text.ParseException;
 
@@ -82,11 +78,14 @@ public class Console {
                 switch ( input ) {
                     case "circe" : {
 
-                        System.out.println("ITS CIRCE TIMEEE"); //delete this.
                         return new Circe(whichPlayer);}
                     case "omola" : {
-                        System.out.println("ITS OMOLA HOUR"); //delete this.
                         return new Omola(whichPlayer);}
+
+//                    case "optimus" : {
+//                        System.out.println("ITS OPTIMUS PRIME"); //delete this.
+//                        return new Optimus(whichPlayer);
+//                    }
 
                     default :{ printAlert(helpMessage);}
                 }

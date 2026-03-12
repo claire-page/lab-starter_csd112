@@ -14,6 +14,8 @@ public class Omola extends Player{
     public Omola(Token token) {
         super("Omola", token);
     }
+
+
     @Override
     public Position getNextMove(Board board) {
 
@@ -28,8 +30,7 @@ public class Omola extends Player{
             if (winner.equals(Optional.of(this.token))){
                return(p); //return immediately, a win is a win
             }
-
-            //try same position with the enemy. somehow find it slightly weird logically.
+            //try same position with the enemy. somehow find it weird logically but i didn't want two for loops. seemed weird.
             copyBoard.place(p, this.opponentToken());
             System.out.println(copyBoard);
 
@@ -38,7 +39,6 @@ public class Omola extends Player{
 
             if (winner2.equals(Optional.of(this.opponentToken()))) {
                 blockingmoves.add(p); //so stash it.
-
             }
             copyBoard.place(p, null); //"cleaning up"!
     }
@@ -48,7 +48,7 @@ public class Omola extends Player{
             int randomnumber = rand.nextInt(board.getEmptyCells().size());
             return board.getEmptyCells().get(randomnumber); //random guaranteed empty cell.
 
-        } else { //any blocking move is fine, if there's multiple you're screwed anyways...
+        } else { //any blocking move is fine, if there's multiple you're screwed anyways.
 
            return(blockingmoves.get(0));
         }
