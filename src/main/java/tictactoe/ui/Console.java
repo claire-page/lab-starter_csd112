@@ -72,7 +72,6 @@ public class Console {
 
             // function here is bugging.
             if ( input.startsWith("@") ) {
-                System.out.println("WHOASUHAUODHUJ");
                 input = input.substring(1).toLowerCase(); // remove the '@' prefix
 
                 switch ( input ) {
@@ -82,10 +81,9 @@ public class Console {
                     case "omola" : {
                         return new Omola(whichPlayer);}
 
-//                    case "optimus" : {
-//                        System.out.println("ITS OPTIMUS PRIME"); //delete this.
-//                        return new Optimus(whichPlayer);
-//                    }
+                    case "optimus" : {
+                        return new Optimus(whichPlayer);
+                    }
 
                     default :{ printAlert(helpMessage);}
                 }

@@ -15,7 +15,11 @@ public class Omola extends Player{
         super("Omola", token);
     }
 
-
+    /**
+     *
+     * @param board
+     * @return a Position determined by One move look ahead algorithm.
+     */
     @Override
     public Position getNextMove(Board board) {
 
