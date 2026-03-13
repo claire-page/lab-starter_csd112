@@ -27,21 +27,23 @@ class OptimusTest {
     void testOptimusBlocksCols() {
 
         //row blocks
-        Board blockable_1 = new Board("X--" +
+        Board blockable_1 = new Board(
+                "X--" +
                 "O-O" +
                 "---");
-        assertEquals(midMid, Ooppy.getNextMove(blockable_1), "Optimus should have chosen to block this row w/the middle-middle cell but did not.");
+        assertEquals(midMid, Ooppy.getNextMove(blockable_1), "Optimus (O) should have chosen to block this row w/the middle-middle cell but did not.");
 
-        Board blockable_2 = new Board("X.X" +
+        Board blockable_2 = new Board(
+                "X.X" +
                 ".O." +
                 "...");
-        assertEquals(topMid, Xoppy.getNextMove(blockable_2), "Optimus should have chosen to block this row w/the top-middle cell but did not.");
+        assertEquals(topMid, Xoppy.getNextMove(blockable_2), "Optimus (X) should have chosen to block this row w/the top-middle cell but did not.");
 
 
         Board blockable_3 = new Board("..." +
                 ".X-" +
                 "O.O");
-        assertEquals(botMid, (Ooppy.getNextMove(blockable_3)), "Optimus should have chosen to block this row w/the bottom-middle cell but did not.");
+        assertEquals(botMid, (Ooppy.getNextMove(blockable_3)), "Optimus (O) should have chosen to block this row w/the bottom-middle cell but did not.");
     }
 
     @Test
@@ -50,17 +52,17 @@ class OptimusTest {
         Board blockable_4 = new Board("X--" +
                 ".O." +
                 "X--");
-        assertEquals(midLeft, Xoppy.getNextMove(blockable_4), "Optimus should have chosen to block the middle-left cell but did not.");
+        assertEquals(midLeft, Xoppy.getNextMove(blockable_4), "Optimus (X) should have chosen to block the middle-left cell but did not.");
 
         Board blockable_5 = new Board("-OX" +
                 "-O-" +
                 "---");
-        assertEquals(botMid, Ooppy.getNextMove(blockable_5), "Optimus should have chosen to block the bottom-middle cell but did not.");
+        assertEquals(botMid, Ooppy.getNextMove(blockable_5), "Optimus (O) should have chosen to block the bottom-middle cell but did not.");
 
         Board blockable_6 = new Board("O--" +
                 "--X" +
                 "-OX");
-        assertEquals(topRight, Xoppy.getNextMove(blockable_6), "Optimus should have chosen to block the top-right cell but did not.");
+        assertEquals(topRight, Xoppy.getNextMove(blockable_6), "Optimus (X) should have chosen to block the top-right cell but did not.");
     }
 
 
@@ -68,10 +70,11 @@ class OptimusTest {
     void testOptimusBlocksDiagonals() {
 
         //diagonal blocks
-        Board blockable_7 = new Board("---" +
+        Board blockable_7 = new Board(
+                "---" +
                 "-X-" +
                 "O-X");
-        assertEquals(topLeft, Xoppy.getNextMove(blockable_7), "Optimus should have chosen to block the top-left cell but did not.");
+        assertEquals(topLeft, Xoppy.getNextMove(blockable_7), "Optimus () should have chosen to block the top-left cell but did not.");
 
         Board blockable_8 = new Board("O--" +
                 "-O-" +
@@ -137,7 +140,8 @@ class OptimusTest {
             var result5 = TicTacToeGameTest.testGame(new Optimus(Token.O), new Optimus(Token.X));
             assertTrue(result5.equals(TicTacToeGame.Status.Draw),
                     "Every Optimus game should result in a tie.");
-        }}
+        }
+    }
 
         @Test
         void testOptimusPicksWinOverBlocking() {
@@ -145,16 +149,26 @@ class OptimusTest {
             Board winorblock1 = new Board("O--" +
                                              "X-X" +
                                              "-OO");
-            assertEquals(midMid, Xoppy.getNextMove(winorblock1), "Optimus(X) should pick middle middle, as it's a winning move.");
+
+            var move1 = Xoppy.getNextMove(winorblock1);
+            assertEquals(midMid, move1, "Optimus(X) should pick middle middle, as it's a winning move.");
+            assertFalse(move1.equals(botLeft), "Optimus(X) should not block at bottom left!");
 
             Board winorblock2 = new Board("--X" +
                                              "O-X" +
                                              "O--");
-            assertEquals(botRight, Ooppy.getNextMove(winorblock2), "Optimus(O) should pick bottom right, as it's the winning move, but it blocked instead.");
+            var move2 = Ooppy.getNextMove(winorblock2);
+            assertEquals(botRight, move2, "Optimus(O) should pick bottom right, as it's the winning move, but it blocked instead.");
+            assertFalse(move2.equals(topLeft), "Optimus(O) should not block at top left!");
 
-            Board winorblock4 = new Board("XOX" +
-                                             "X-O" +
+
+
+            Board winorblock4 = new Board("X-O" +
+                                             "XO-" +
                                              "---");
-            assertEquals(botLeft, Xoppy.getNextMove(winorblock4), "Optimus(x) should pick bottom Left, as it's the winning move, but it blocked instead.");
+            var move3 = Xoppy.getNextMove(winorblock4);
+            assertEquals(botLeft, move3, "Optimus(X) should pick bottom Left, as it's the winning move");
+            assertFalse(move3.equals(botRight), "Optimus(O) should not block at bottom right!");
+
         }
     }
