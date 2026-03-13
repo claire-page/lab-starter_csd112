@@ -14,7 +14,6 @@ public class Omola extends Player{
     public Omola(Token token) {
         super("Omola", token);
     }
-
     /**
      *
      * @param board
@@ -42,7 +41,7 @@ public class Omola extends Player{
             if (winner2.equals(Optional.of(this.opponentToken()))) {
                 blockingmoves.add(p); //so stash it.
             }
-            copyBoard.place(p, null); //"cleaning up"!
+            copyBoard.place(p, null); //"cleaning up"
     }
         if (blockingmoves.isEmpty()) { //if all the positions have been tried, and there's no wins AND there's no blocks...
 
@@ -50,7 +49,7 @@ public class Omola extends Player{
             int randomnumber = rand.nextInt(board.getEmptyCells().size());
             return board.getEmptyCells().get(randomnumber); //random guaranteed empty cell.
 
-        } else { //any blocking move is fine, if there's multiple you're screwed anyways.
+        } else { //any blocking move is fine, if there's multiple you're guaranteed a lose so any one of them is ok.
            return(blockingmoves.get(0));
         }
     }
