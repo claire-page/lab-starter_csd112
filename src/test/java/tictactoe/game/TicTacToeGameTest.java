@@ -12,7 +12,7 @@ public class TicTacToeGameTest {
         while (game.getStatus() == InProgress) {
             game.doNextTurn();
         }
-        return(game.getStatus());
+        return (game.getStatus());
     }
 
 }
