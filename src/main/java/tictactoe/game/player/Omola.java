@@ -18,7 +18,7 @@ public class Omola extends Player{
     /**
      *
      * @param board
-     * @return a Position determined by One move look ahead algorithm.
+     * @return a Position determined by the One-Move-LookAhead algorithm.
      */
     @Override
     public Position getNextMove(Board board) {
@@ -36,10 +36,8 @@ public class Omola extends Player{
             }
             //try same position with the enemy. somehow find it weird logically but i didn't want two for loops. seemed weird.
             copyBoard.place(p, this.opponentToken());
-            System.out.println(copyBoard);
 
             var winner2 = copyBoard.getWinner();
-            System.out.println(winner2);
 
             if (winner2.equals(Optional.of(this.opponentToken()))) {
                 blockingmoves.add(p); //so stash it.
@@ -53,7 +51,6 @@ public class Omola extends Player{
             return board.getEmptyCells().get(randomnumber); //random guaranteed empty cell.
 
         } else { //any blocking move is fine, if there's multiple you're screwed anyways.
-
            return(blockingmoves.get(0));
         }
     }
