@@ -25,20 +25,15 @@ class CirceTest {
         Position midLeft = new Position(Row.Middle, Col.Left);
         Position topLeft = new Position(Row.Top, Col.Left);
 
-
         assertEquals(midMid, XCirce.getNextMove(empty));
 
-        Board midfree1 = new Board(
-                "XXO" +
-                "X-X" +
-                "OXX");
+        Board midfree1 = new Board("XOX----XX");
         assertEquals(midMid, OCirce.getNextMove(midfree1), "Circe should have picked the middle cell.");
-
 
         Board topRightNext = new Board ("XO--O----");
         assertEquals(topRight, XCirce.getNextMove(topRightNext), "Circe should have picked the top left cell");
 
-        Board midRightNext = new Board ("XOX-X----");
+        Board midRightNext = new Board ("-OXOX----");
         assertEquals(midRight, OCirce.getNextMove(midRightNext), "Circe should have picked the middle right cell");
 
         Board botRightNext = new Board ("XOXOOX---");
@@ -53,7 +48,6 @@ class CirceTest {
         Board midLeftNext = new Board ("-OX-XOXOX");
         assertEquals(midLeft, OCirce.getNextMove(midLeftNext), "Circe should have picked the middle left cell");
 
-
         Board topLeftNext = new Board ("-OXOXOXOX");
         assertEquals(topLeft, XCirce.getNextMove(topLeftNext), "Circe should have picked the top left cell");
 
@@ -64,6 +58,12 @@ class CirceTest {
 
         Board random2 = new Board("-X-OOOXX-");
         assertEquals(topRight, XCirce.getNextMove(random2), "Circe should have picked the top right cell");
+
+        Board random3 = new Board("X.X.OO..O");
+        assertEquals(topMid, XCirce.getNextMove(random3), "Circe should have picked the top middle cell");
+
+
+
     }
 
 
