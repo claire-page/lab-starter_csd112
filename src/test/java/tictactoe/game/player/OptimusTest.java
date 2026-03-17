@@ -139,7 +139,7 @@ class OptimusTest {
         for (int n = 0; n < 99; n++) {
             var result5 = TicTacToeGameTest.testGame(new Optimus(Token.O), new Optimus(Token.X));
             assertTrue(result5.equals(TicTacToeGame.Status.Draw),
-                    "Every Optimus game should result in a tie.");
+                    "Every Optimus v Optimus game should result in a tie.");
         }
     }
 

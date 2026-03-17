@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.Optional;
 import java.util.Random;
 
+//TODO: try using ternary whateveritscalled and simpler conditional statements??
 
 public class Optimus extends Player {
 
@@ -72,7 +73,7 @@ public class Optimus extends Player {
                         copycurrent2.place(p, t);
 
                         var val = minMax(copycurrent2, t.opp(), currentdepth + 1);
-                        if ((val.score == bestcase2.score && val.depth < bestcase2.depth)||(val.score < bestcase2.score)){ //equal score + beter depth OR just better score.
+                        if ((val.score == bestcase2.score && val.depth < bestcase2.depth)||(val.score < bestcase2.score)){ //equal score + better depth OR just better score.
                             bestcase2 = new Retval(val.score, p, val.depth);
                         }
                         copycurrent2.place(p, null); //cleaning up.

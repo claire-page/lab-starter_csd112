@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Random;
 
 public class Omola extends Player{
-
+ //maybe 2 for loops would have been better...
     public Omola(Token token) {
         super("Omola", token);
     }
@@ -27,30 +27,29 @@ public class Omola extends Player{
 
         for (Position p: copyBoard.getEmptyCells()) {
 
-            copyBoard.place(p,this.token);
+            copyBoard.place(p, this.token);
             var winner = copyBoard.getWinner();
 
-            if (winner.equals(Optional.of(this.token))){
-               return(p); //return immediately, a win is a win
+            if (winner.equals(Optional.of(this.token))) {
+                return (p); //return immediately, a win is a win
             }
-            //try same position with the enemy. somehow find it weird logically but i didn't want two for loops. seemed weird.
-            copyBoard.place(p, this.opponentToken());
+            copyBoard.place(p, null); //cleanup to keep going..
+        }
 
+        for (Position p: copyBoard.getEmptyCells()) {
+
+            copyBoard.place(p, this.opponentToken());
             var winner2 = copyBoard.getWinner();
 
             if (winner2.equals(Optional.of(this.opponentToken()))) {
-                blockingmoves.add(p); //so stash it.
+               return (p);
             }
-            copyBoard.place(p, null); //"cleaning up"
+            copyBoard.place(p, null); //cleanup
     }
-        if (blockingmoves.isEmpty()) { //if all the positions have been tried, and there's no wins AND there's no blocks...
 
+        //should only get here if no wins or blocks.
             Random rand = new Random();
             int randomnumber = rand.nextInt(board.getEmptyCells().size());
-            return board.getEmptyCells().get(randomnumber); //random guaranteed empty cell.
-
-        } else { //any blocking move is fine, if there's multiple you're guaranteed a lose so any one of them is ok.
-           return(blockingmoves.get(0));
-        }
-    }
+            return (board.getEmptyCells().get(randomnumber)); //random guaranteed empty cell.
+}
 }
