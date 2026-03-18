@@ -96,11 +96,11 @@ public class CardStack {
      */
 
     public void addToStack(CardStack cStack) {
-
-        while (cStack.getNumberOfCards() > 0) {
-            this.addToStack(cStack.cards.removeFirst());
+            this.cards.addAll(cStack.cards); //appends all.
+            cStack.cards = null; //setting this cardstack to empty.
         }
-    }
+
+
 
     /**
      *

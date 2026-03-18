@@ -8,7 +8,6 @@
  */
 package core;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,18 +90,19 @@ public class HighCardGame {
     //the reason i am returning players is so i can award them a point or if there's a tie, start war between the two.
     public ArrayList<Player> whoWinsRound(CardStack drawPool, ArrayList<Player> roundPlayers) { //drawpool is cards TAKEN.
 
-        CardStack winningdraws = drawPool.highestCardsinStack(); //if two players, that's one card
+        var winningRank = drawPool.highestCardsinStack().getCardAt(0).getCardValue(); //if two players, that's one card
         ArrayList<Player> roundwinners = new ArrayList<>();
 
-        for(int i = 0; i < winningdraws.getNumberOfCards(); i++){ //will only run once.
+       int i = 0;
             for(Card c: drawPool.getCards()){
-                if(winningdraws.getCardAt(i) == c){
-                    roundwinners.add(roundPlayers.get(drawPool.indexOf(c)));
+                if(c.getCardValue() == winningRank){
+                    roundwinners.add(roundPlayers.get(i));
                 }
+                i += 1;
             }
+        return(roundwinners); //
         }
-        return(roundwinners);
-    }
+
 
     /**
      * adds cards to winning player's hand.

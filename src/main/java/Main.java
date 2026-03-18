@@ -106,19 +106,18 @@ public class Main {
      * @param game = instance of a HighCard game.
      */
     public void printPlayerStatus (HighCardGame game){
-
         ui.Console.println(game.getPlayerStatusMsg());
-        }
+    }
 
-        /**helper function used to announce war between players.
-         * @param tiedPlayers = ArrayList of players that "tied" (all in winners list).
-        //prints msg to let user know a tie has occured, and informs of players involved in war.*/
-        public void announceWar(ArrayList<Player> tiedPlayers ) {
+
+    /**helper function used to announce war between players.
+    * @param tiedPlayers = ArrayList of players that "tied" (all in winners list).
+    //prints msg to let user know a tie has occured, and informs of players involved in war.*/
+    public void announceWar(ArrayList<Player> tiedPlayers ) {
             StringBuilder stringBuilder = new StringBuilder("Tie between players ");
             stringBuilder.append(tiedPlayers.toString());
             stringBuilder.append("--time for a war!");
             Console.println(stringBuilder.toString());
-
         }
 
 
