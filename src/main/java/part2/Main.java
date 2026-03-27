@@ -25,17 +25,10 @@ public class Main {
         // TODO: Calculate the average USD price of BigMacs in 2022 over all countries
 
     }
-
     public static List<BigMac> loadData() {
         try(var lines = Files.lines(Path.of("BigMacPrices.csv"))) {
-            return lines.map(
-                    // TODO: replace this ENTIRE lambda expression with a function reference that parses the line from the file
-                    //       (see the parseCsvLine method below)
-                    line -> {
-
-                        return new BigMac(1, "CAD", "ca", 1.0, 1.0, 1.0);
-                    })
-                    .toList();
+            var list = (lines.map(Main::parseCsvLine).toList());
+            return(list);
 
         } catch (Exception e) {
             throw new RuntimeException(e);

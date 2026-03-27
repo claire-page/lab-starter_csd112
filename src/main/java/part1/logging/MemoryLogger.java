@@ -9,14 +9,12 @@ import java.util.List;
 public class MemoryLogger extends ConsoleLogger implements Exportable {
     List<String> memoryList;
 
-
     public MemoryLogger(){
         this.memoryList = new ArrayList<String>();
     }
     @Override
     public void log(String msg, LogLevel logLevel){
         this.memoryList.add(formatMsg(msg, logLevel)+"\n");
-
     }
 
     @Override
