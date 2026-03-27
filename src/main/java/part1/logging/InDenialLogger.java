@@ -1,0 +1,25 @@
+package part1.logging;
+
+import java.time.Instant;
+import java.util.Random;
+
+public class InDenialLogger extends ConsoleLogger {
+    @Override
+    public void log(String message, LogLevel level) { //ignores the level I'm assuming.
+        Random rand = new Random();
+        int randomint = rand.nextInt(0, 9);
+        String[] denialMsgs = {" *Crashing noise* Don't worry about that, haha. it's supposed to do that, I think...",
+                            " Hey, uh...I think that maybe...ahhhh, never mind.",
+                            " PAH! My grandpa never caught exceptions and he did just fine...",
+                            " I know you probably think an error happened. But it didn't. And if it did, it wasn't my fault.",
+                            " *Explosion noise* yeah no I'm definitely keeping an eye out for errors...I'd tell you if something went wrong, *more explosion noises* so dooooon't even worry about it.",
+                            " Something happened, but, uh, it might be above my pay grade... I'll let you figure it out. Since you're so capable.",
+                            " Clean up on file...somewhere.",
+                            " OOPS! I mean...it's not like anyone is actually going to use this software.",
+                            " Shhh...just tell them it's a feature.",
+                            " ...huuh? what? I was asleep, did something happen?"
+        };
+
+        System.out.println(Instant.now().toString() + denialMsgs[randomint]);
+    }
+}
