@@ -29,18 +29,18 @@ public class Main {
 
 //            run(logger, 10);
             // TODO: Implement MemoryLogger
-//            MemoryLogger logger = new MemoryLogger();
+            MemoryLogger logger = new MemoryLogger();
 //            run(logger, 10);
 
             // TODO: (Optional) Implement a JDBC logger
-            Logger logger = new JdbcLogger("jdbc:sqlite:log.db");
-            run(logger, 3);
+//            Logger logger = new JdbcLogger("jdbc:sqlite:log.db");
+//            run(logger, 3);
             // TODO: you can change the first argument here to one of the loggers above,
             //       or to a different constructor call based on the examples above.
 //            run(new ConsoleLogger(), 50);
 
             // TODO: uncomment this while you are trying out your MemoryLogger
-//             export(logger, System.out);  // OR try System.out as the second parameter!
+             export(logger, System.out);  // OR try System.out as the second parameter!
 
         } catch (Exception e) {
             IO.println("Could not create log file: " + e.getMessage());

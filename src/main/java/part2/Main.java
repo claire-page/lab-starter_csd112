@@ -2,8 +2,12 @@ package part2;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -11,24 +15,77 @@ public class Main {
     static void main(String[] args) {
         var bigMacs = loadData();
 
-        // TODO: Find the BigMac entry for Canada in the year 2022
+        // the BigMac entry for Canada in the year 2022
 
-        // TODO: Create a list containing only the data for Canada
+        bigMacs.stream()
+                .filter(b -> b.country().equals("Canada")&& b.year()==2022)
+                .forEach(System.out::println);
+        // a list containing only the data for Canada
 
+        ArrayList<BigMac> canData= new ArrayList<>();
+        bigMacs.stream()
+                .filter(b -> b.country().equals("Canada"))
+                .peek(b -> canData.add(b)).collect(Collectors.toList()); //what is happening???
+
+        canData.forEach(System.out::println);
+        System.out.println("__________________________________________________________________");
         // TODO: Create a list containing strings of the format "<country>: <currency>" (e.g. "Canada: CAD")
         //       There must be no duplicates, and the items must be sorted alphabetically
 
+        ArrayList<String> countryCurrency = new ArrayList<>();
+
+        bigMacs.stream()
+                .map(b -> b.country() + " : " +b.currency()) //mapping every BigMac to a string containing its country and currency
+                .distinct() //only unique elements
+                .sorted() //default is alphabetical.
+                .collect(Collectors.toList())
+                .forEach(System.out::println);
+        System.out.println("__________________________________________________________________");
+
         // TODO: Print the most recent 5 years of data for Canada
 
+
+
+        bigMacs.stream()
+                .filter(b -> //i hate this, will probably fix
+                                (b.year() > (bigMacs.stream() //building the predicate from another stream
+                                            .map(BigMac::year)//map every bigmac to their year, which returns a Stream of java.lang.Integer....
+                                            .mapToInt(Integer::intValue) //mapping the Integers to integers...
+                                            .max() //returns OptionalInt...what even
+                                            .getAsInt()-5 //getting the int value of said OptionalInt (aka MOST RECENT YEAR)!, subtracting 5.
+                                                                ) && b.country().equals("Canada"))) //aaaaaaaaaaand country is canada.
+                                                                                                     .forEach(System.out::println);
+        System.out.println("__________________________________________________________________");
         // TODO: Print the data for countries with a 2022 BigMac price less than $2 USD
+
+        bigMacs.stream().filter( b1 -> ( bigMacs.stream()
+                                                                .filter(b -> b.usdPrice() < 2 && b.year()==2022) //burger price is less than 2, year is 2022
+                                                                .map(b2 -> b2.country()) //map to country
+                                                                .distinct()//distinct
+                                                                .toList()) //turn it into a list
+                                                                .contains(b1.country()) ) //end of predicate, here we're filtering the initial BigMac stream to get the data points whose country is present in the generated list above.
+                                                                                        .forEach(System.out::println);
+        System.out.println("__________________________________________________________________");
 
         // TODO: Calculate the average USD price of BigMacs in 2022 over all countries
 
+        System.out.println("Average USD price of BigMacs in 2022 was $" + bigMacs.stream().
+                                                                        filter(b -> b.year()==2022)
+                                                                        .map(b -> b.usdPrice()) //get all bigmac prices from this set
+                                                                        .mapToDouble(Double::doubleValue) //turns the Stream<Double> into a DoubleStream
+                                                                        .average() //gets the average of the DoubleStream (as Optional)
+                                                                        .getAsDouble()); //gets the Double value of the Optional (if there is one)
+
+
     }
+
+    //returns one list of bigmac.
     public static List<BigMac> loadData() {
         try(var lines = Files.lines(Path.of("BigMacPrices.csv"))) {
             var list = (lines.map(Main::parseCsvLine).toList());
+//            System.out.println(list);
             return(list);
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -51,4 +108,7 @@ public class Main {
                 Double.parseDouble(values[4]),
                 Double.parseDouble(values[5]));
     }
+
+
+
 }

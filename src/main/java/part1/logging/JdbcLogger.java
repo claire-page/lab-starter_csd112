@@ -36,12 +36,7 @@ public class JdbcLogger extends ConsoleLogger {
         //ideally will get column names and table names from the database info.
         //just testing to see if it works in the first place.
 
-        try {
-            var v = this.connection.getMetaData();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
         try {
             PreparedStatement s = connection.prepareStatement(
