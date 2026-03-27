@@ -16,17 +16,18 @@ public class Main {
 
             /* === Easy loggers === */
             // TODO: Implementnt AT LEAST one of these
-            Logger logger = new ColorLogger();
+//            Logger logger = new ColorLogger();
 //            Logger logger = new InDenialLogger();
 //            Logger logger = new LoudLogger();
-            run(logger, 10);
+//            run(logger, 10);
             /* === Medium loggers === */
             // TODO: Implement at least one of these
 //            Logger logger = new CensoriousLogger(List.of("hungrish", "drabblex", "clorphed", "snorvish", "grumblet", "flonky", "blarfish"));
-//            Logger logger = new MultiLogger(List.of(new ConsoleLogger(), new StreamLogger(new FileOutputStream("log.txt"))));
+            Logger logger = new MultiLogger(List.of(new ConsoleLogger(), new ColorLogger(), new LoudLogger()));
 //            Logger logger = new StreamLogger(System.out);                      // Using System.out as the destination
 //            Logger logger = new StreamLogger(new FileOutputStream("log.txt")); // Using a file as the destination
 
+            run(logger, 10);
             // TODO: Implement MemoryLogger
 //            MemoryLogger logger = new MemoryLogger();
 
