@@ -24,12 +24,13 @@ public class Main {
             // TODO: Implement at least one of these
 //            Logger logger = new CensoriousLogger(List.of("hungrish", "drabblex", "clorphed", "snorvish", "grumblet", "flonky", "blarfish"));
 //            Logger logger = new MultiLogger(List.of(new InDenialLogger(), new ColorLogger(), new LoudLogger()));
-            Logger logger = new StreamLogger(System.out);                      // Using System.out as the destination
+//            Logger logger = new StreamLogger(System.out);                      // Using System.out as the destination
 //            Logger logger = new StreamLogger(new FileOutputStream("log.txt")); // Using a file as the destination..WORKS.
 
-            run(logger, 10);
+//            run(logger, 10);
             // TODO: Implement MemoryLogger
-//            MemoryLogger logger = new MemoryLogger();
+            MemoryLogger logger = new MemoryLogger();
+            run(logger, 10);
 
             // TODO: (Optional) Implement a JDBC logger
 //            Logger logger = new JdbcLogger("jdbc:sqlite:log.db");
@@ -39,7 +40,7 @@ public class Main {
 //            run(new ConsoleLogger(), 50);
 
             // TODO: uncomment this while you are trying out your MemoryLogger
-            // export(logger, new FileOutputStream("logs.txt"));  // OR try System.out as the second parameter!
+             export(logger, System.out);  // OR try System.out as the second parameter!
 
         } catch (Exception e) {
             IO.println("Could not create log file: " + e.getMessage());
