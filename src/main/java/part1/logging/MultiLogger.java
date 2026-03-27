@@ -16,11 +16,15 @@ public class MultiLogger extends ConsoleLogger{
 //did not read the instructions but when i did decided to pass the loggers as an instance variable.
     //which preserved the identity of the log function so I could override it.
 
+//    @Override
+//    public void log(String msg, LogLevel logLevel) {
+//     for(ConsoleLogger l: this.loggers){
+//         l.log(msg, logLevel);
+//     }
+//    }
+//
     @Override
-    public void log(String msg, LogLevel logLevel) {
-        var loggerspassed = this.loggers;
-
-        loggerspassed.forEach(logger ->{ log(msg, logLevel);});
+    public void log (String msg, LogLevel logLevel){
+        this.loggers.forEach(l-> l.log(msg, logLevel));
     }
-
 }

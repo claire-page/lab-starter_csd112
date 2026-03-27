@@ -23,9 +23,9 @@ public class Main {
             /* === Medium loggers === */
             // TODO: Implement at least one of these
 //            Logger logger = new CensoriousLogger(List.of("hungrish", "drabblex", "clorphed", "snorvish", "grumblet", "flonky", "blarfish"));
-            Logger logger = new MultiLogger(List.of(new ConsoleLogger(), new ColorLogger(), new LoudLogger()));
-//            Logger logger = new StreamLogger(System.out);                      // Using System.out as the destination
-//            Logger logger = new StreamLogger(new FileOutputStream("log.txt")); // Using a file as the destination
+//            Logger logger = new MultiLogger(List.of(new InDenialLogger(), new ColorLogger(), new LoudLogger()));
+            Logger logger = new StreamLogger(System.out);                      // Using System.out as the destination
+//            Logger logger = new StreamLogger(new FileOutputStream("log.txt")); // Using a file as the destination..WORKS.
 
             run(logger, 10);
             // TODO: Implement MemoryLogger
@@ -36,7 +36,7 @@ public class Main {
 
             // TODO: you can change the first argument here to one of the loggers above,
             //       or to a different constructor call based on the examples above.
-            run(new ConsoleLogger(), 50);
+//            run(new ConsoleLogger(), 50);
 
             // TODO: uncomment this while you are trying out your MemoryLogger
             // export(logger, new FileOutputStream("logs.txt"));  // OR try System.out as the second parameter!
