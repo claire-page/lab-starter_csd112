@@ -13,8 +13,11 @@ public class StreamLogger extends ConsoleLogger{
     this.dest = outputStream;
    }
 
-
-
+    /**
+     * Writes error data to output stream provided in constructor.
+     * @param message error message to be logged
+     * @param level of error to be logged
+     */
     @Override
     public void log(String message, LogLevel level) {
 
