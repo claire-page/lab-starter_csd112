@@ -3,7 +3,12 @@ package part1.logging;
 import java.time.Instant;
 import java.util.Random;
 
+
 public class InDenialLogger extends ConsoleLogger {
+    /** Prints a random in-denial message to the console. *
+     * @param message is ignored
+     * @param level is also ignored
+     */
     @Override
     public void log(String message, LogLevel level) {
         //ignores the level I'm assuming.

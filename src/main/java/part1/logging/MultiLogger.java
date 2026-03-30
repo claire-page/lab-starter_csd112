@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class MultiLogger extends ConsoleLogger{
-    //needs a constructor lol.
     public List<ConsoleLogger> loggers;
 
     public MultiLogger(List<ConsoleLogger> consoleLoggers) {
@@ -12,17 +11,11 @@ public class MultiLogger extends ConsoleLogger{
         this.loggers = consoleLoggers;
     }
 
-//gonna try and do this the crazy functional way...
-//did not read the instructions but when i did decided to pass the loggers as an instance variable.
-    //which preserved the identity of the log function so I could override it.
 
-//    @Override
-//    public void log(String msg, LogLevel logLevel) {
-//     for(ConsoleLogger l: this.loggers){
-//         l.log(msg, logLevel);
-//     }
-//    }
-//
+    /** Logs the same error with every Logger provided to the constructor
+     * @param msg error message to be logged
+     * @param logLevel level of error to be logged
+     */
     @Override
     public void log (String msg, LogLevel logLevel){
         this.loggers.forEach(l-> l.log(msg, logLevel));

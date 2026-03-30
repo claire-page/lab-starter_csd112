@@ -15,13 +15,17 @@ public class MemoryLogger extends ConsoleLogger implements Exportable {
     @Override
     public void log(String msg, LogLevel logLevel){
         this.memoryList.add(formatMsg(msg, logLevel)+"\n");
-    }
+    } //added newlines for clearer output to console / files.
 
+    /** writes log data stored in the MemoryLogger's memorylist to
+     * the given output stream.
+     * @param out The OutputStream to write to...
+     */
     @Override
     public void exportTo(OutputStream out) {
-        for (String msg: this.memoryList){
+        for (String errorData: this.memoryList){
             try {
-                out.write(msg.getBytes());
+                out.write(errorData.getBytes());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
