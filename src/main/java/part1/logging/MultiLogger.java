@@ -13,8 +13,8 @@ public class MultiLogger extends ConsoleLogger{
 
 
     /** Logs the same error with every Logger provided to the constructor
-     * @param msg error message to be logged
-     * @param logLevel level of error to be logged
+     * @param msg info message of error to be logged
+     * @param logLevel level of error to be logged (info, warning, error)
      */
     @Override
     public void log (String msg, LogLevel logLevel){

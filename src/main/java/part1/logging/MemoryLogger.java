@@ -12,6 +12,14 @@ public class MemoryLogger extends ConsoleLogger implements Exportable {
     public MemoryLogger(){
         this.memoryList = new ArrayList<String>();
     }
+
+    /**
+     * adds error message, loglevel, and log time to
+     * a List that serves as the Logger's 'memory'.
+     * @param msg error info-msg to be logged
+     * @param logLevel level of error to be logged (info, warning, error)
+     */
+
     @Override
     public void log(String msg, LogLevel logLevel){
         this.memoryList.add(formatMsg(msg, logLevel)+"\n");

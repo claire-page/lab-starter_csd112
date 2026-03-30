@@ -23,8 +23,8 @@ public class JdbcLogger extends ConsoleLogger {
     /**Logs details of an error message to provided database, log.db
      * via formatted SQL insert statement.
      * logs the message, level, and timestamp into the appropriate columns.
-     * @param message error msg to be logged (details)
-     * @param logLevel type of error
+     * @param message string info- msg to be logged (details)
+     * @param logLevel type of error (info, warning, error)
      */
 
     @Override

@@ -7,22 +7,23 @@ import java.io.OutputStream;
 
 public class StreamLogger extends ConsoleLogger{
 
-    public OutputStream dest;
+    public OutputStream out;
 
    public StreamLogger(OutputStream outputStream){
-    this.dest = outputStream;
+    this.out = outputStream;
    }
 
     /**
-     * Writes error data to output stream provided in constructor.
-     * @param message error message to be logged
-     * @param level of error to be logged
+     * Writes error data (message String, LogLevel, and current time)
+     * to output stream provided in constructor.
+     * @param message error info message to be logged
+     * @param level of error to be logged (info, warning, error)
      */
     @Override
     public void log(String message, LogLevel level) {
 
         try { //writing to destination, added newline at the end of each message for consistency.
-            this.dest.write(((formatMsg(message, level))+"\n").getBytes());
+            this.out.write(((formatMsg(message, level))+"\n").getBytes());
 
         } catch (IOException e) {
             throw new RuntimeException(e);
