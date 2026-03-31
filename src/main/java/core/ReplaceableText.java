@@ -1,22 +1,29 @@
 package core;
+import javafx.scene.text.Text;
+
 import java.util.regex.Pattern;
 import java.util.stream.*;
 import java.awt.*;
 import java.util.regex.Pattern.*;
 
-public class ReplaceableText extends javafx.scene.control.TextArea {
+public class ReplaceableText extends Text {
 
-   private String[] splitTxt; //this is the under-text array. private and mayyyy make it final. dont want it to be modified externally.
+
+    private String[] splitTxt; //this is the under-text array. private and mayyyy make it final. dont want it to be modified externally
 
    String[] splitUserTxt; //this is whatever the user enters.
 
    private int idx; //will mainly be used to move caret around..... hopefully this is fast...
-
-    private int wordCount; // to be used for data later.
+   private int wordCount; // to be used for data later.
    //constructor from string.
  public ReplaceableText(String text){
     this.splitTxt = text.split("");
-    this.splitUserTxt = new String[splitTxt.length]; //same length as first array but initially empty!
+
+    this.splitUserTxt = new String[splitTxt.length];  //same length as that first array but initially empty bc yeah. not even sure i need that.
+    this.wordCount = splitTxt.length;
+    //setting properties relating to the textArea
+//     this.setWrapText(true);
+
  }
 
  public String charAt(int i){
@@ -73,4 +80,9 @@ public class ReplaceableText extends javafx.scene.control.TextArea {
        return(String.join(", ", this.splitTxt));
    }
 //maybe I
+
+    public int getWordCount(){
+       return(this.wordCount);
+    }
+
 }

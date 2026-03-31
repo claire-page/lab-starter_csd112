@@ -12,10 +12,10 @@ import java.io.IOException;
 import static javafx.application.Application.launch;
 
 public class Main{
-
-    public static void main (String[] args){
-        Application.launch(Qwerty.class, args);
-    }
+//
+//    public static void main (String[] args) throws Exception {
+//        Application.launch(Qwerty.class);
+//    }
 
 }
 
