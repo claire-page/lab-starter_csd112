@@ -1,4 +1,6 @@
 package ui;
+import core.QChar;
+import core.ReplaceableText;
 import javafx.scene.paint.*;
 public enum  TxtColour  {
 
@@ -12,5 +14,15 @@ public enum  TxtColour  {
         this.paintString = value;
 
     };
+    //initializes colour of text.
+    public static void initColor(ReplaceableText replaceableText){
+        for (QChar q : replaceableText.getChars()){
+            q.setFill(Paint.valueOf(Gray.paintString));
+        }
+    }
+
+    public static void changeColor(QChar qChar, TxtColour txtColour){
+        qChar.setFill(Paint.valueOf(txtColour.paintString));
+    }
 
 }

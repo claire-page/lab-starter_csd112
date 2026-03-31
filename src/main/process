@@ -26,3 +26,11 @@ once
   maybe I don't even need a second text. Maybe just the text is updated based on input.
 
   //at the end of round...show rankings. you typed better than...profile for winston. lol.
+
+
+god. my brain hurts. how does this get displayed?
+text is a shape. do i just display it as an array of chars instead?
+OKAY!!!
+so.
+i can change individual characters if they are an independent Text item. time to change how the class works.
+

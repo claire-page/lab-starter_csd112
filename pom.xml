@@ -26,6 +26,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
         </dependency>
+
     </dependencies>
 
 
