@@ -2,6 +2,7 @@ package ui;
 
 import com.sun.javafx.property.adapter.PropertyDescriptor;
 import controllers.Controller;
+import core.ReplaceableText;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -10,8 +11,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import javafx.scene.control.TextArea;
 import java.util.EventListener;
 
 public class Qwerty extends Application {
@@ -24,12 +26,10 @@ public Qwerty(){
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/qwerty0.fxml"));
         Parent root = fxmlLoader.load();
-        stage.setScene(new Scene(root));
-        stage.getScene().
-        stage.addEventHandler(new EventType<>(),
-                (EventHandler<KeyEvent>) event -> Controller.replaceText(event));
-        stage.show();
+        var s = (new Scene(root));
 
+        TextArea txt = new ReplaceableText("ABCDEFG HIJ BLAH BLAH");
+        VBox v = new VBox(txt);
 
     }
 
