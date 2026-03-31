@@ -3,7 +3,6 @@ package core;
 import javafx.scene.text.Text;
 //every QChar is a text object. it also has a property of typed.
 
-
 public class QChar extends Text {
 
     private boolean typed;
@@ -27,6 +26,15 @@ public class QChar extends Text {
 
     public String valueOf(){
         return(this.value);
+    }
+
+    public void toggleTyped(){
+        if (this.typed) {
+            this.typed= false;
+        }
+        else {
+            this.typed= true;
+        }
     }
 
 }

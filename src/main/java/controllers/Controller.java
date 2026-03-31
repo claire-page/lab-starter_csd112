@@ -14,46 +14,51 @@ public class Controller {
 
     public EventHandler<KeyEvent> handler ;
 
+
+
+    //deals with handling the key events.
     public static void typeText(KeyEvent e, ReplaceableText text) {
 
         int index = text.getIdx();
-        //where we currently are.
-
-        //compare next in line.
 
         var current = text.charAt(index).getText();
 
-        var entered = e.getText();
-
-       if (entered.matches("[A-Za-z]")){
-
-         if (entered.equals(current)){
-
-            TxtColour.changeColor(text.charAt(index), TxtColour.Black);
-            text.incIndex();
+        if (e.getEventType().equals(KeyEvent.KEY_PRESSED)&&(e.getCode().equals(KeyCode.BACK_SPACE))) {
             e.consume();
-        }
-        else{
-            TxtColour.changeColor(text.charAt(index), TxtColour.Red);
-            text.incIndex();
-            text.setCharAt(index,entered);
-            e.consume();
-             System.out.println("not a match");
-        }
+                if (index != 0) {
+                    text.revertCharAt(index-1);
+                    TxtColour.changeColor(text.charAt(index-1), TxtColour.Gray);
+                    text.decIndex();
+                  }
+            text.charAt(index).toggleTyped();
 
         }
-        if (e.getCode().equals(KeyCode.BACK_SPACE)) {
-            text.revertCharAt(index-1);
-            TxtColour.changeColor(text.charAt(index-1), TxtColour.Gray);
-            if (index!=0) {
-                text.decIndex();
+
+        var entered = e.getCharacter();
+        boolean boo = entered.matches("[a-zA-Z |\\p{P}]");
+
+        if (e.getEventType().equals(KeyEvent.KEY_TYPED)&& boo ) {
+            e.consume(); //yum
+
+            if (entered.equals(current)) {
+                    TxtColour.changeColor(text.charAt(index), TxtColour.Black);
+                    text.incIndex();
+                    text.charAt(index).toggleTyped();
+
+                } else if (entered.equals(" ")) { //if you spaced over a character, still want it to be noticeable.
+                text.incIndex();
+                TxtColour.changeColor(text.charAt(index), TxtColour.Gray);
+                }
+            else {
+                TxtColour.changeColor(text.charAt(index), TxtColour.Red);
+                text.incIndex();
+                text.setCharAt(index, entered);
+                System.out.println("not a match");
             }
-            e.consume();
 
+            }
+        e.consume(); //consuming any key event not meeting the conditions.
         }
-
-
     }
 
-}
 //key combination : capitalize

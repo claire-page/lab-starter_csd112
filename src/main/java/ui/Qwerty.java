@@ -19,12 +19,13 @@ public class Qwerty extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        var txt = new ReplaceableText("abcdefg");
+        var txt = new ReplaceableText("Welcome to this type test! Isn't this cool?");
 
         HBox p = new HBox();
+        Font font = new Font("Lucida Console", 40);
         TxtColour.initColor(txt); //initializing all to gray.
         for (Text q: txt.getChars()){
-            q.setFont(new Font(40));
+            q.setFont(font);
             p.getChildren().add(q);
         }
         p.setLayoutX(100);
@@ -33,8 +34,8 @@ public class Qwerty extends javafx.application.Application {
         p.setPrefSize(700, 700);
         Scene s = new Scene(p, 800, 800);
         EventHandler<KeyEvent> handler = event -> typeText(event, txt);
-        s.addEventFilter(KeyEvent.KEY_PRESSED, handler);
-//        s.addEventFilter(KeyEvent.K);
+        s.addEventFilter(KeyEvent.ANY, handler);
+//        s.addEventFilter(KeyEvent.KEY_PRESSED, handler2);
         stage.setScene(s);
         stage.show();
 
