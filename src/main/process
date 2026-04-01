@@ -1,6 +1,7 @@
-this is just for my own thinking purposes.
+this is just for my own thinking purposes, thought vomiting etc
 
-step 0-
+MAIN FUNCTIONALITY
+big task 1-
 displaying the filling-in-of-the-text.
 couple of options here that i can think of... One involves an alterable textfield over an unalterable one in a lighter color.
     Whenever a key is hit:
@@ -14,23 +15,17 @@ the other one involves altering a text field as you provide input, so different 
 
 - if key entered char after caret, it can be turned to black.
 - if not a match, the characters within the bounds of the word are turned to red.
-once
 
-   modes:
-  - standard just gives you an arbitrary x-amount of character paragraph to type. Might want to call that word API thing from last semester's final project.
-
-  - hardcore just goes on and on and on and on and on and on and on and on and on. once you make a mistake it then calculates ur stuff.
-
-  display is updated depending on where you are in the word. Halfway through...
-
-  maybe I don't even need a second text. Maybe just the text is updated based on input.
-
-  //at the end of round...show rankings. you typed better than...profile for winston. lol.
-
+wait maybe I don't even need a second text to overlay. Maybe just the text is updated based on input.
 
 god. my brain hurts. how does this get displayed?
 text is a shape. do i just display it as an array of chars instead?
 OKAY!!!
 so.
 i can change individual characters if they are an independent Text item. time to change how the class works.
+gave each qchar a property where it preserves its initial text state as a constant.
+seemingly was the only way to do so, because text nodes cannot be nested within one another.
 
+big task 2- wrapping the text. I kind of figured this would be a problem but I got distracted.
+I do want to have resizeable text in a settings tab so I'm thinking will end up doing some format function based on the settings to make things wrap by word.
+thinking of just having each line in a container. will need to do some calculations to split it.

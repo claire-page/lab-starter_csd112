@@ -1,12 +1,12 @@
-package core;
+package ui;
 
 import javafx.scene.text.Text;
-//every QChar is a text object. it also has a property of typed.
 
+import java.awt.*;
 public class QChar extends Text {
 
     private boolean typed;
-    final String value;
+    private final String value;
 
     public boolean isTyped() {
         return typed;
@@ -37,7 +37,12 @@ public class QChar extends Text {
         }
     }
 
+    public void revertTxt(){
+        this.setText(this.valueOf());
+    }
+
+
 }
-
-
-//want the incorrect character to be displayed...hmm.
+//new process:
+//1- array of Qchar
+//2-

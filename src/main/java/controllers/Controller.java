@@ -5,60 +5,61 @@ import core.ReplaceableText;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import ui.TxtColour;
-
-import java.security.Key;
+import ui.Preferences;
+import ui.QChar;
+import ui.TxtColourScheme;
 
 public class Controller {
 
-
     public EventHandler<KeyEvent> handler ;
 
-
-
     //deals with handling the key events.
-    public static void typeText(KeyEvent e, ReplaceableText text) {
+    //if you're at the last key, do nothing.
+    public static void typeText(KeyEvent e, ReplaceableText text, Preferences pref ,QChar[] qChars) {
 
-        int index = text.getIdx();
+        //text displayed? call ui.
 
-        var current = text.charAt(index).getText();
+        int index = text.getIdx(); //where are we?
 
+        String currentString = String.valueOf(text.getText().charAt(index));
+        var currentQChar = qChars[index];
+
+        if (currentString.equals("\n")){
+            System.out.println("found a new line...");
+        }
         if (e.getEventType().equals(KeyEvent.KEY_PRESSED)&&(e.getCode().equals(KeyCode.BACK_SPACE))) {
             e.consume();
                 if (index != 0) {
-                    text.revertCharAt(index-1);
-                    TxtColour.changeColor(text.charAt(index-1), TxtColour.Gray);
+                    qChars[index-1].revertTxt();
+                    TxtColourScheme.changeColor(qChars[index-1],pref.colours().getBlankTextColour());
                     text.decIndex();
                   }
-            text.charAt(index).toggleTyped();
-
+            qChars[index].toggleTyped();
         }
 
         var entered = e.getCharacter();
-        boolean boo = entered.matches("[a-zA-Z |\\p{P}]");
+        boolean isValidText = entered.matches("[a-zA-Z |\\p{P}]");
 
-        if (e.getEventType().equals(KeyEvent.KEY_TYPED)&& boo ) {
+        if (e.getEventType().equals(KeyEvent.KEY_TYPED)&& isValidText) {
             e.consume(); //yum
 
-            if (entered.equals(current)) {
-                    TxtColour.changeColor(text.charAt(index), TxtColour.Black);
+            if (entered.equals(currentString)) {
+                    TxtColourScheme.changeColor(qChars[index], pref.colours().getFilledInColour());
                     text.incIndex();
-                    text.charAt(index).toggleTyped();
+                    qChars[index].toggleTyped();
 
                 } else if (entered.equals(" ")) { //if you spaced over a character, still want it to be noticeable.
                 text.incIndex();
-                TxtColour.changeColor(text.charAt(index), TxtColour.Gray);
+                TxtColourScheme.changeColor(qChars[index-1], pref.colours().getBlankTextColour());
+                System.out.println("space bar pressed");
                 }
-            else {
-                TxtColour.changeColor(text.charAt(index), TxtColour.Red);
+            else { //if it's not a match or a space.
+                TxtColourScheme.changeColor(qChars[index], pref.colours().getMistakeColour());
                 text.incIndex();
-                text.setCharAt(index, entered);
+                qChars[index].setText(entered);
                 System.out.println("not a match");
             }
-
             }
         e.consume(); //consuming any key event not meeting the conditions.
         }
     }
-
-//key combination : capitalize
