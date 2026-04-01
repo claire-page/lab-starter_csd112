@@ -6,11 +6,16 @@ import javafx.event.EventHandler;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
@@ -26,8 +31,7 @@ public class Qwerty extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-         //will take these out.
-
+//TODO: HAVE A FUNCTION THAT RETRIEVES USER PREFERENCES.
 
         Font DEFAULT_FONT = new Font("Courier New", 20);
 
@@ -38,9 +42,7 @@ public class Qwerty extends javafx.application.Application {
 
 
         this.pref = new Preferences(DEFAULT_FONT, DEFAULT_SCHEME);
-
-        //addQChars method.
-        ReplaceableText text = new ReplaceableText("Welcome to this type test! Isn't this cool? Blah blah blahhh, blah de blah de blah......yeah. i need a caret thing mayhaps kahsdjgfa;wga kjahf ajhdfhksgfkg akegfhgsrglrehgtlerwagtersjg");
+        ReplaceableText text = new ReplaceableText("Welcome to this type test! Lorem ipsum blah blah blah...texty texty texty....ajgflweafljewbfaerjhferwlafhere!");
        QChar[] qChars = new QChar[text.getText().length()];
 
        var splitText = text.getText().split("");
@@ -49,10 +51,25 @@ public class Qwerty extends javafx.application.Application {
            qChars[i] = new QChar(splitText[i]);
        }
        var pane = initPane(qChars, text, pref );
-
         pane.setFocusTraversable(true);
 
-        Scene s = new Scene(pane, 900, 900);
+        VBox v = new VBox();
+        Button newGame = new Button("Play");
+        newGame.setPadding(new Insets(5));
+        Button settings = new Button("Settings");
+        settings.setPadding(new Insets(5));
+        Button about = new Button("About");
+        about.setPadding(new Insets(5));
+
+        v.getChildren().add(newGame);
+        v.getChildren().add(settings);
+        v.getChildren().add(about);
+        v.setPrefHeight(Defaults.DEFAULT_SCENEHEIGHT);
+        v.setPadding(new Insets(10));
+        v.setSpacing(100);
+        HBox h = new HBox();
+        h.getChildren().addAll(v, pane);
+        Scene s = new Scene(h, 900, 900);
         EventHandler<KeyEvent> handler = event -> typeText(event, text, pref, qChars);
         s.addEventFilter(KeyEvent.ANY, handler);
 
@@ -74,7 +91,7 @@ public class Qwerty extends javafx.application.Application {
     public FlowPane initPane( QChar[] chars, ReplaceableText rt, Preferences pref){
 
         FlowPane p = new FlowPane();
-        p.setPadding(new Insets(100));
+        p.setPadding(new Insets(70));
         p.setPrefSize(500, 500);
         HBox [] holder = new HBox[rt.getWordCount()];
         for (int i = 0; i< holder.length; i++) {
@@ -91,6 +108,8 @@ public class Qwerty extends javafx.application.Application {
                 j+=1;
             }
         }
+
+
 
         return(p);
     }
