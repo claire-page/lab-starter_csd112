@@ -12,9 +12,8 @@ public class ReplaceableText {
 
  public ReplaceableText(String text){
      this.text = text;
-     this.wordCount = text.split(" ").length;
+     this.wordCount = text.split("[ \\p{P}]*").length;
  }
-
  public String getText(){
      return(text);
  }

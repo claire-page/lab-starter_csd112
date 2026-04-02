@@ -8,7 +8,7 @@ public class Defaults {
     public static final int DEFAULT_SCENEWIDTH = 800;
     public static final int DEFAULT_SCENEHEIGHT = 800;
     public static final int DEFAULT_PANEHEIGHT = 600;
-    public static final int DEFAULT_PANEWIDTH = 550;
+    public static final int DEFAULT_PANEWIDTH = 250;
 
 //
 //    public final Font DEFAULT_FONT = new Font("Courier New", 20);

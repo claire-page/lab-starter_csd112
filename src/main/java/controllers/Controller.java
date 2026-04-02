@@ -13,9 +13,8 @@ public class Controller {
 
     public EventHandler<KeyEvent> handler ;
 
-    //deals with handling the key events.
-    //if you're at the last key, do nothing.
-    public static void typeText(KeyEvent e, ReplaceableText text, Preferences pref ,QChar[] qChars) {
+    //deals with the replacing of qchars/styling.
+    public static void typeText(KeyEvent e, ReplaceableText text, Preferences pref , QChar[] qChars) {
 
         //text displayed? call ui.
 
@@ -38,7 +37,7 @@ public class Controller {
         }
 
         var entered = e.getCharacter();
-        boolean isValidText = entered.matches("[a-zA-Z |\\p{P}]");
+        boolean isValidText = entered.matches("[a-zA-Z |\\p{P}]");//alphabetical or punct.
 
         if (e.getEventType().equals(KeyEvent.KEY_TYPED)&& isValidText) {
             e.consume(); //yum
@@ -62,4 +61,5 @@ public class Controller {
             }
         e.consume(); //consuming any key event not meeting the conditions.
         }
+
     }
