@@ -27,13 +27,12 @@
             <artifactId>javafx-graphics</artifactId>
         </dependency>
         <!-- Source: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        //TODO: WHY IS THE VERSION RED LOL
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.20.0</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-lang3</artifactId>-->
+<!--            <version>3.20.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
 
