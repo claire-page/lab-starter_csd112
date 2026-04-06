@@ -7,12 +7,13 @@ import java.awt.*;
 public class ReplaceableText {
     private String text;
    private int idx; //will mainly be used to move caret around..... hopefully this is fast...
-   private int end;
    private int wordCount; // to be used for data later.
 
  public ReplaceableText(String text){
      this.text = text;
      this.wordCount = text.split("[ \\p{P}]*").length;
+     this.idx = 0;
+
  }
  public String getText(){
      return(text);
