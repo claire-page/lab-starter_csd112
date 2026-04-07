@@ -1,8 +1,10 @@
 package ui;
 
+import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.util.Builder;
 import javafx.event.EventHandler;
 import java.awt.*;
@@ -13,7 +15,7 @@ import javafx.scene.control.Button;
 public class MenuBuilder implements Builder<Region> {
 
    final Button[] buttons;
-
+   final Runnable[] runnables;
     /**
      * constructor makes menubuilder object based on recieved titles.
      * @param buttonTitles
@@ -26,9 +28,8 @@ public class MenuBuilder implements Builder<Region> {
 
         for (int i = 0; i < buttonTitles.length; i++){
             buttons[i] = new Button(buttonTitles[i]);
-            int finalI = i; //making it final so we can do this.
-            buttons[i].setOnAction(e -> runnables[finalI].run());
         }
+        this.runnables = runnables;
 
     }
 
@@ -37,8 +38,16 @@ public class MenuBuilder implements Builder<Region> {
 
         VBox left = new VBox();
 
-        for (Button b: this.buttons){
-        left.getChildren().add(b);}
+        for (int i2 = 0; i2< buttons.length; i2++){
+
+            int finalI = i2; //bc lambda.
+
+            buttons[i2].setOnAction(e -> runnables[finalI].run());
+            buttons[i2].setPadding(new Insets(50, 20, 50, 10));
+            buttons[i2].setBackground(Background.EMPTY);
+            buttons[i2].setFont(Font.font("Consolas", 24));
+
+        left.getChildren().add(buttons[i2]);}
 
         left.setBackground(Background.fill(Style.menuBkgrndPaint));
         left.setPrefHeight(Style.DEFAULT_SCENEHEIGHT);

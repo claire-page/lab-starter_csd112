@@ -4,7 +4,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import static javafx.scene.text.Font.font;
-//want dyslexic font,.
+//want dyslexic font,
 //namespace class.
 public class Style {
 

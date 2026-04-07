@@ -2,15 +2,16 @@ package ui;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
+//this is a big fat maybe class for building the right content pane.
 
-public class ContentPaneBuilder implements Builder<Region> {
+public class ContentPaneBuilder implements Builder<Parent> {
 
     Node[] nodesToAdd;
-
 
     public ContentPaneBuilder(Node[] nodes){
         this.nodesToAdd = nodes;

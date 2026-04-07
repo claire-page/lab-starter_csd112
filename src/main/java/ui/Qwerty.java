@@ -13,18 +13,19 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.w3c.dom.Node;
 import controllers.UtilityFunctions.*;
-public class Qwerty extends javafx.application.Application {
+public class Qwerty extends Application {
 
     private Preferences pref; //will access db for this.
 
     private Node homeScreen;
     private Node settingScreen;
-    private Node gameScene;
+    private Parent gameScreen;
 
     private Stage mainStage;
 
     @Override
     public void start(Stage stage) throws Exception {
+
 
         this.mainStage = stage;
         Font DEFAULT_FONT = new Font("Consolata", 30);
@@ -35,12 +36,22 @@ public class Qwerty extends javafx.application.Application {
                 "rgb(175, 64, 53)");
 
 
-        stage.setScene(new Scene(new BasicLayoutBuilder().build()));
+        Parent homeScreen = new HomeScreenBuilder(() -> stage.getScene().setRoot(gameScreen)).build();
+        gameScreen = new GameScreenBuilder(()-> stage.getScene().setRoot(homeScreen), ()-> System.out.println("blablabla")).build();
+
+        Scene starterScene = new Scene(homeScreen, Style.DEFAULT_SCENEWIDTH, Style.DEFAULT_SCENEHEIGHT);
+        stage.setScene(starterScene);
         stage.show();
+
     }
 
     public static void main(String[] args) throws Exception {
         Application.launch(Qwerty.class);
+    }
+
+
+    public void swapRoot(Node n){
+
     }
 }
 

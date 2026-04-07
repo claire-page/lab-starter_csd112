@@ -30,9 +30,7 @@ public class UtilityFunctions {
     }
 
 
-    public static void swapToScreen(Node n){
 
-    }
 
     public static void checkSettings(){
         System.out.println("SETTINGS CLICKED");

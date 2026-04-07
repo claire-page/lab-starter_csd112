@@ -13,27 +13,21 @@ import controllers.UtilityFunctions;
 //TODO- TEST!!!
 public class BasicLayoutBuilder implements Builder<BorderPane> {
 
+    public Runnable toHome;
+    public Runnable toGame;
 
+    public BasicLayoutBuilder(Runnable toHome, Runnable toGame){
+        this.toHome = toHome;
+        this.toGame = toGame;
+    }
     @Override
     public BorderPane build() {
 
         BorderPane bp = new BorderPane();
 
-        String[] HomeMenuOptions = {"PRESS THIS", "DO NOT PRESS THIS"};
+        String[] HomeMenuOptions = {"home", "game"};
 
-        Runnable[] Runnables = {new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("BLAH! you pressed it!");
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("thou shouldst not have pressed it...");
-
-            }
-        }
-        };
+        Runnable[] Runnables = { toHome, toGame};
 
         Region left = new MenuBuilder(HomeMenuOptions, Runnables).build();
         var replaceableText = new ReplaceableTextPane("blah blah blah...wonder if this will work.");
