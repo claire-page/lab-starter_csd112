@@ -2,6 +2,7 @@ package ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,21 +11,21 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.util.Builder;
 
 import static javafx.scene.text.Font.font;
 
-public class HomeScreen {
+public class HomeScreen implements Builder<Node>{
 
-    BorderPane layout;
     ReplaceableTextPane textpane;
-    Button quitBtn;
+
+    Button aboutBtn;
     Button playBtn;
     Button settingsBtn;
     Scene scene;
     ReplaceableTextPane txtPane;
 
-
-    public Scene InitializeHomeScene(){
+    public BorderPane InitializeHomePane(){
 
         //INITIALIZING LEFT SIDE OF SCREEN... (MENU)
 
@@ -32,7 +33,6 @@ public class HomeScreen {
         this.playBtn = new Button("_Play");
         playBtn.setPadding(new Insets(100, 5, 5, 25));
         playBtn.setFont(font("Consolas", FontWeight.BOLD, 24));
-
         playBtn.setTextFill(Style.textBkgrndPaint);
         playBtn.setBackground(Background.fill(Style.menuBkgrndPaint));
 
@@ -42,15 +42,16 @@ public class HomeScreen {
         settingsBtn.setTextFill(Style.textBkgrndPaint);
         settingsBtn.setBackground(Background.fill(Style.menuBkgrndPaint));
 
-        Button about = new Button("_About");
-        about.setPadding(new Insets(5, 5, 5, 20));
-        about.setFont(Style.DEFAULT_MENU_FONT);
-        about.setTextFill(Style.textBkgrndPaint);
-        about.setBackground(Background.fill(Style.menuBkgrndPaint));
+        aboutBtn = new Button("_About");
+        aboutBtn.setPadding(new Insets(5, 5, 5, 20));
+        aboutBtn.setFont(Style.DEFAULT_MENU_FONT);
+        aboutBtn.setTextFill(Style.textBkgrndPaint);
+        aboutBtn.setBackground(Background.fill(Style.menuBkgrndPaint));
+
 
         v.getChildren().add(playBtn);
         v.getChildren().add(settingsBtn);
-        v.getChildren().add(about);
+        v.getChildren().add(aboutBtn);
         v.setPrefHeight(Style.DEFAULT_SCENEHEIGHT);
         v.setPrefWidth(200);
         v.setMaxWidth(200);
@@ -75,8 +76,7 @@ public class HomeScreen {
         bottomtitle.setPrefHeight(40);
 
         //SETTING UP REPLACEABLE TEXT (ALWAYS THE SAME FOR HOME SCREEN.)
-       String s = ("Welcome to this type test! Lorem ipsum blah blah blah...texty texty texty....ajgflweafljewbfaerjhferwlafhere! More text, even more text. Words and nouns and adjectives. TEXTYDSYTUFGIUHIHDIHLISD");
-
+       String s = ("Bottom text");
         var txtpane = new ReplaceableTextPane(s);
         this.textpane = txtpane;
 
@@ -87,15 +87,29 @@ public class HomeScreen {
         rightpane.setPadding(new Insets(0, 40, 0, 40));
 
         //PUTTING IT ALL IN A BORDERPANE.
-        BorderPane borderPane = new BorderPane();
-        borderPane.setLeft(v);
-        BorderPane.setAlignment(titletext,Pos.BASELINE_LEFT);
-        borderPane.setCenter(rightpane);
-        borderPane.setBackground(Background.fill((Style.mainBkgrndPaint)));
-        this.scene = new Scene(borderPane, 1000, 670);
-        return(scene);
+//        BorderPane borderPane = new BorderPane();
+
+
+        BorderPane bp = new BorderPane();
+        bp.setLeft(v);
+        bp.setAlignment(titletext,Pos.BASELINE_LEFT);
+        bp.setCenter(rightpane);
+        bp.setBackground(Background.fill((Style.mainBkgrndPaint)));
+
+       return(bp);
     }
 
+//TODO: eventually move this function to the main controller class -> pass a list of buttons ??????? idk.
+    public void passToButtons(Runnable settingsAction, Runnable playAction, Runnable aboutAction ){
+        this.settingsBtn.setOnAction(e -> settingsAction.run());
+        this.playBtn.setOnAction(e -> playAction.run());
+        this.aboutBtn.setOnAction( _ -> aboutAction.run());
+    }
+
+    @Override
+    public Node build() {
+        return(InitializeHomePane());
+    }
 }
 
 
