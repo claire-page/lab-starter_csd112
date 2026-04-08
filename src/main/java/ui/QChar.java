@@ -9,7 +9,7 @@ public class QChar extends Text {
     private final String value;
 
     public boolean isTyped() {
-        return typed;
+        return this.typed;
     }
 
     public QChar(){
@@ -29,18 +29,31 @@ public class QChar extends Text {
     }
 
     public void toggleTyped(){
+
         if (this.typed) {
-            this.typed= false;
+            this.typed = false;
         }
         else {
             this.typed= true;
         }
     }
 
+    public void setTyped(boolean b){
+        this.typed = b;
+    }
+
     public void revertTxt(){
         this.setText(this.valueOf());
     }
 
+    public boolean getCompletionStatus(QChar[] qchars){
+        for (QChar q: qchars){
+            if (!q.isTyped()){
+                return(false);
+            }
+        }
+        return(true);
+    }
 
 }
 //new process:

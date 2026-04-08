@@ -29,3 +29,26 @@ seemingly was the only way to do so, because text nodes cannot be nested within 
 big task 2- wrapping the text. I kind of figured this would be a problem but I got distracted.
 I do want to have resizeable text in a settings tab so I'm thinking will end up doing some format function based on the settings to make things wrap by word.
 thinking of just having each line in a container. will need to do some calculations to split it.
+
+
+big task 3- that was the scene swapping functionality. Might tweak it to be all in one place again, but for now I want to bang out...
+
+
+big task 4- the timing/data stuff.
+what needs to happen:
+
+
+
+on first key stroke, timer.start().
+start recording every keystroke.
+
+a completed run can be summed up with a boolean:
+(replaceabletext.getIdx() is PAST the length of the text && all characters are correct). at which point timer.stop();
+
+things I think are important:
+-this only interaction with UI is the display of the live-timer.
+
+return a rundata record once done.
+have a time out function after
+-I already have a function that delegates keyevents and a listener used to update the view.
+... can I just add the checking there? it's in a controller class...

@@ -1,36 +1,40 @@
 package ui;
 
-import controllers.UtilityFunctions;
+import controllers.HelperFunctions;
+import core.RunTracker;
+import javafx.animation.AnimationTimer;
+
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
 
-import java.awt.*;
+import static controllers.HelperFunctions.*;
 
 public class GameScreenBuilder implements Builder<Parent> {
 
     Runnable quitBtn;
     Runnable restartBtn;
 
-    public GameScreenBuilder(Runnable quit, Runnable restart) {
+    public GameScreenBuilder(Runnable quit, Runnable restart ) {
         this.quitBtn = quit;
         this.restartBtn = restart;
-
     }
 
+    //initializes Game Scene.
     @Override
     public Parent build() {
 
-        var pane = new ReplaceableTextPane("'There's no use,' she said. 'I already sent the maids to clean up her room. All of her effects have been incinerated.' She seemed mildly irked that we were even asking about it, and eager to get on with the rest of her day. Before any of us could react, Therese thanked her and grabbed us by the arm, dragging us sputtering down the marble hall and back into the sunlight.I blinked in the harsh light and rubbed my arm gingerly. I kept forgetting how strong her grip was.'So what now?'");
+        RunTracker tracker = new RunTracker(); //so we can track what happens during the run.
+
+        var pane = new ReplaceableTextPane("'So what now?'"); //getting text pane...
         pane.setPrefSize(300, 300);
+
         var ButtonTitles = new String[]{"Quit"};
         Runnable[] runnables = {quitBtn, restartBtn};
         Region left = new MenuBuilder(ButtonTitles, runnables).build();
@@ -38,16 +42,52 @@ public class GameScreenBuilder implements Builder<Parent> {
         Label timerDisplay = new Label("TIMER IS HERE");
         timerDisplay.setPadding(new Insets(50));
 
-        //TODO: GET TIMER TO DISPLAY ACCURATE VALUE...
+        //getting the timer set up.
+        AnimationTimer timer = new AnimationTimer() {
+
+            private long startStamp = -1; //initializing at -1.
+
+            @Override
+            public void handle(long l) {
+                if (startStamp ==-1){ //if first time being called, update to last time.
+                    startStamp = l;}
+                    var elapsed = (l- startStamp )/1000000000.0;
+                    timerDisplay.setText(elapsed + "s".formatted());
+            }
+        };
 
         VBox right = new VBox();
         right.getChildren().addAll(timerDisplay,pane);
 
+        //put it all into a pane.
         BorderPane bp = new BorderPane();
         bp.setLeft(left);
         bp.setCenter(right);
-        bp.addEventFilter(KeyEvent.ANY, e -> UtilityFunctions.delegateKeyEvents(e, pane));
 
+
+        //--PANE-LEVEL EVENT FILTERS--
+        //setting up listener to be triggered on first key press (to start the timer), which will then remove itself,
+        //ensuring its handler is only triggered once.
+        bp.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                timer.start();
+                System.out.println("timer started");
+                bp.removeEventFilter(KeyEvent.KEY_PRESSED, this); //"self-destructs" after one key click.
+                //not consuming the event, still want the keystroke to be picked up by the other handler.
+            }});
+
+        bp.addEventFilter(KeyEvent.ANY, e -> delegateKeyEvents(e, pane, tracker, timer));
+
+        //adding a listener to the boolean property
+//        var isGameOver = new SimpleBooleanProperty(pane.getCompletionStatus());
+//        isGameOver.addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+//
+//            }
+//        });
+//        }
         return(bp);
     }
 

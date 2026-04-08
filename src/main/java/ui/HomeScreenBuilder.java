@@ -1,12 +1,9 @@
 package ui;
 
-import controllers.UtilityFunctions;
+import controllers.HelperFunctions;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -14,8 +11,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.util.Builder;
+
+import java.beans.EventHandler;
 
 import static javafx.scene.text.Font.font;
 
@@ -25,14 +23,12 @@ public class HomeScreenBuilder implements Builder<Parent>{
 //    Runnable onSettings;
 
 
-
     public HomeScreenBuilder (Runnable onGame ){
 
         this.onGamePressed = onGame;
 //        this.onSettings = onSettings;
 
     }
-
 
     @Override
     public Parent build() {
@@ -74,7 +70,10 @@ public class HomeScreenBuilder implements Builder<Parent>{
         bp.setAlignment(titletext,Pos.BASELINE_LEFT);
         bp.setCenter(rightpane);
         bp.setBackground(Background.fill((Style.mainBkgrndPaint)));
-        bp.addEventFilter(KeyEvent.ANY, e -> UtilityFunctions.delegateKeyEvents(e, txtpane));
+        bp.addEventFilter(KeyEvent.ANY, e -> HelperFunctions.delegateKeyEvents(e, txtpane));
+
+    //TODO- when game is over: end screen showing run data pops up, option to save as name.
+
 
         return(bp);
     }

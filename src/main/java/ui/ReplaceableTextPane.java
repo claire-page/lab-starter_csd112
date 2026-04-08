@@ -2,8 +2,6 @@ package ui;
 
 import core.ReplaceableText;
 import javafx.geometry.Insets;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -12,6 +10,7 @@ public class ReplaceableTextPane extends FlowPane {
 
     ReplaceableText replaceableText;
     final QChar[] chars;
+    boolean isActive;
 
     public ReplaceableTextPane(String string){
 
@@ -22,11 +21,13 @@ public class ReplaceableTextPane extends FlowPane {
         for (int i= 0; i< string.length(); i++){
             chars[i] = new QChar(splitString[i]);
         }
+        this.isActive = false;
 
         this.replaceableText = new ReplaceableText(string);
 
             this.setPrefSize(200, 300);
             this.setPadding(new Insets(20));
+
 
             HBox[] holder = new HBox[replaceableText.getWordCount()];
             for (int i = 0; i < holder.length; i++) {
@@ -45,9 +46,11 @@ public class ReplaceableTextPane extends FlowPane {
 
                 }
             }
+
             this.setFocusTraversable(true);
             this.setBackground(Background.fill(Style.textBkgrndPaint));
             this.setVisible(true);
+            this.isActive = true;
         }
 
 
@@ -55,26 +58,35 @@ public class ReplaceableTextPane extends FlowPane {
         return replaceableText;
     }
 
+
     /**
      * to be called when backspace key is entered
      *
      */
-    public void backSpace(){
-        System.out.println("backspace entered.");
-       var idx = this.replaceableText.getIdx();
-            if (idx != 0) {
-                this.chars[idx-1].revertTxt();
-                TxtColourScheme.changeColor(chars[idx-1],Style.blankTextPaint);
+    public void backSpace() {
+        if (this.isActive) {
+
+
+            var idx = this.replaceableText.getIdx();
+            System.out.println("index" + idx);
+            if (idx != 0) { ///if we CAN backspace.
+                this.chars[idx - 1].revertTxt(); //make the character before its original character
+                TxtColourScheme.changeColor(chars[idx - 1], Style.blankTextPaint);
+                this.chars[idx-1].setTyped(false);
                 replaceableText.decIndex();
             }
-            chars[idx].toggleTyped();
+            //otherwise we just do nothing lol
         }
 
+    }
     /**
      * to be called when any other key is entered (type event.)
      * @param entered
      */
     public void updateForKeyTyped(String entered){
+
+        if (this.isActive) {
+
         System.out.println("key entered");
         var rtxt = this.getReplaceableText();
         var text = rtxt.getText();
@@ -83,10 +95,10 @@ public class ReplaceableTextPane extends FlowPane {
 
         String currentString = String.valueOf(text.charAt(index));
 
-            if (entered.equals(currentString)) {
+            if (entered.equals(currentString)) { //if correct
                 TxtColourScheme.changeColor(qChars[index], Style.filledTextPaint);
                 rtxt.incIndex();
-                qChars[index].toggleTyped();
+                qChars[index].setTyped(true);
 
             } else if (entered.equals(" ")) { //if you spaced over a character, still want it to be noticeable.
                 rtxt.incIndex();
@@ -99,6 +111,28 @@ public class ReplaceableTextPane extends FlowPane {
                 qChars[index].setText(entered);
                 System.out.println("not a match");
             }
+         }
+
+        }
+
+        public boolean getStatus(){
+            return(this.isActive);
+        }
+
+        public boolean getCompletionStatus(){
+            for(QChar q: this.chars){
+                if (!q.isTyped()){
+                    return(false);
+                }
+            }
+            return(true);
+        }
+
+
+        //deactivates pane and prevents it from being overrwritten.
+
+        public void deactivate(){
+        this.isActive = false;
         }
 }
 

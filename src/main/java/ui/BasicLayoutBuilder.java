@@ -1,14 +1,11 @@
 package ui;
 
-import core.ReplaceableText;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Builder;
-import controllers.UtilityFunctions;
+import controllers.HelperFunctions;
 
 //TODO- TEST!!!
 public class BasicLayoutBuilder implements Builder<BorderPane> {
@@ -20,6 +17,7 @@ public class BasicLayoutBuilder implements Builder<BorderPane> {
         this.toHome = toHome;
         this.toGame = toGame;
     }
+
     @Override
     public BorderPane build() {
 
@@ -37,7 +35,7 @@ public class BasicLayoutBuilder implements Builder<BorderPane> {
 
         bp.setLeft(left);
         bp.setRight(right);
-        bp.addEventFilter(KeyEvent.ANY,  e -> UtilityFunctions.delegateKeyEvents(e, replaceableText));
+        bp.addEventFilter(KeyEvent.ANY,  e -> HelperFunctions.delegateKeyEvents(e, replaceableText));
         return(bp);
     }
 

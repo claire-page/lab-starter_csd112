@@ -5,14 +5,11 @@ import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-
 import javafx.scene.text.Font;
 
 import javafx.stage.Stage;
 import org.w3c.dom.Node;
-import controllers.UtilityFunctions.*;
+
 public class Qwerty extends Application {
 
     private Preferences pref; //will access db for this.
