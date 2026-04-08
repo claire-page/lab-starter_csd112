@@ -24,9 +24,8 @@ public class HomeScreenBuilder implements Builder<Parent>{
 
 
     public HomeScreenBuilder (Runnable onGame ){
-
         this.onGamePressed = onGame;
-//        this.onSettings = onSettings;
+//       this.onSettings = onSettings;
 
     }
 
@@ -72,7 +71,7 @@ public class HomeScreenBuilder implements Builder<Parent>{
         bp.setBackground(Background.fill((Style.mainBkgrndPaint)));
         bp.addEventFilter(KeyEvent.ANY, e -> HelperFunctions.delegateKeyEvents(e, txtpane));
 
-    //TODO- when game is over: end screen showing run data pops up, option to save as name.
+    //TODO- when game is over: end screen showing run data pops up, can save with name (default provided).
 
 
         return(bp);
@@ -82,3 +81,4 @@ public class HomeScreenBuilder implements Builder<Parent>{
 
 
 
+//showpane()

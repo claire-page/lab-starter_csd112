@@ -3,7 +3,7 @@ import core.ReplaceableText;
 import javafx.scene.paint.*;
 
 import java.util.Arrays;
-
+/// this will be a record.
 public class TxtColourScheme {
 
     private Paint blankTextColour;

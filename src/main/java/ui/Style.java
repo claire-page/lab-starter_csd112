@@ -5,7 +5,8 @@ import javafx.scene.text.Font;
 
 import static javafx.scene.text.Font.font;
 //want dyslexic font,
-//namespace class.
+//deals with the font/colouring for components.
+
 public class Style {
 
     public static  final int DEFAULT_SCENEWIDTH = 1000;
@@ -29,7 +30,7 @@ public class Style {
     public static  Paint accentPaint = Paint.valueOf("rgb(134, 41, 52)"); //for dark red
     public static Paint textAccentPaint =  Paint.valueOf("rgb(176, 79, 90)"); //for smaller text
 
-    public static Font textFont = new Font("Courier New", 20);
+    public static Font textFont = new Font("OpenDyslexic", 20);
 
     public Preferences pref;
 

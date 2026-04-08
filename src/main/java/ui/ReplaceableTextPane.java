@@ -66,7 +66,6 @@ public class ReplaceableTextPane extends FlowPane {
     public void backSpace() {
         if (this.isActive) {
 
-
             var idx = this.replaceableText.getIdx();
             System.out.println("index" + idx);
             if (idx != 0) { ///if we CAN backspace.
@@ -77,8 +76,8 @@ public class ReplaceableTextPane extends FlowPane {
             }
             //otherwise we just do nothing lol
         }
-
     }
+
     /**
      * to be called when any other key is entered (type event.)
      * @param entered

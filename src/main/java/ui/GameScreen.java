@@ -1,6 +1,7 @@
 package ui;
 
 import controllers.HelperFunctions;
+import core.RunData;
 import core.RunTracker;
 import javafx.animation.AnimationTimer;
 
@@ -14,20 +15,22 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
 
+import java.util.function.Consumer;
+
 import static controllers.HelperFunctions.*;
 
-public class GameScreenBuilder implements Builder<Parent> {
+public class GameScreen {
 
     Runnable quitBtn;
     Runnable restartBtn;
+    Consumer<RunData> onDone; //will try and use a callback to get popup when game is done????? idk.
 
-    public GameScreenBuilder(Runnable quit, Runnable restart ) {
+    public GameScreen(Runnable quit, Runnable restart ) {
         this.quitBtn = quit;
         this.restartBtn = restart;
     }
 
     //initializes Game Scene.
-    @Override
     public Parent build() {
 
         RunTracker tracker = new RunTracker(); //so we can track what happens during the run.
@@ -64,7 +67,6 @@ public class GameScreenBuilder implements Builder<Parent> {
         bp.setLeft(left);
         bp.setCenter(right);
 
-
         //--PANE-LEVEL EVENT FILTERS--
         //setting up listener to be triggered on first key press (to start the timer), which will then remove itself,
         //ensuring its handler is only triggered once.
@@ -78,18 +80,26 @@ public class GameScreenBuilder implements Builder<Parent> {
             }});
 
         bp.addEventFilter(KeyEvent.ANY, e -> delegateKeyEvents(e, pane, tracker, timer));
-
-        //adding a listener to the boolean property
-//        var isGameOver = new SimpleBooleanProperty(pane.getCompletionStatus());
-//        isGameOver.addListener(new ChangeListener<Boolean>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-//
-//            }
-//        });
-//        }
         return(bp);
     }
+
+    //maybe have a runtracker in here?????
+    //checks the runtracker.:
+    //pass a tracker.
+    //while it's active{
+    // do nothing.
+    // }{
+    // show the popup with tracker data.
+    // button to send data off.
+    //here's where we should probably start to think about database saving.
+    //
+    // }
+
+    //todo- some questions.. pick whichever ones seems urgent?
+    ///menu? this ok?
+    ///how to handle game? pro tips?
+    ///
+
 
 
     }

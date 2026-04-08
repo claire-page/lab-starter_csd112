@@ -1,8 +1,18 @@
 package core;
 
 import javafx.animation.AnimationTimer;
-
+//TODO: hm. this is modifiable.
 public class RunTracker {
+
+//this only keeps tracks of the backtracks and keystrokes.
+    //maybe move this and make a whole class for a Run?
+    //DATA:
+    //active (boolean).
+    //time.
+    //update time when called
+    //use animationtimer in ui to grab this.
+    //would send keyevents, too...
+    //ask for help honestly I am a bit confused.
 
     private int backtracks;
     private int keystrokes;
@@ -18,6 +28,5 @@ public class RunTracker {
         this.keystrokes+=1;
 
     }
-
 
 }
