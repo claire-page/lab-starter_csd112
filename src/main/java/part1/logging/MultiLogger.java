@@ -3,11 +3,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class MultiLogger extends ConsoleLogger{
+public class MultiLogger implements Logger {
     public List<ConsoleLogger> loggers;
 
     public MultiLogger(List<ConsoleLogger> consoleLoggers) {
-        super();
         this.loggers = consoleLoggers;
     }
 

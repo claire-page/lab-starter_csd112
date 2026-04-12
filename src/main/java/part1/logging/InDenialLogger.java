@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Random;
 
 
-public class InDenialLogger extends ConsoleLogger {
+public class InDenialLogger extends ConsoleLogger implements Logger{
     /** Prints a random in-denial message to the console. *
      * @param message is ignored
      * @param level is also ignored

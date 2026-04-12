@@ -3,7 +3,7 @@ package part1.logging;
 import java.sql.*;
 import java.time.Instant;
 
-public class JdbcLogger extends ConsoleLogger {
+public class JdbcLogger implements Logger {
 
    private static String dbUrlString;
    Connection connection;

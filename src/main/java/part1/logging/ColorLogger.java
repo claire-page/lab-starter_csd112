@@ -5,24 +5,25 @@ import javax.swing.*;
 import java.awt.*;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
+import static part1.logging.LogLevel.*;
 
-public class ColorLogger extends ConsoleLogger{
+public class ColorLogger implements Logger{
 
     /**
      * Returns a string in the appropriate color for the type of
      * error (blue for info, yellow for warning, red for error).
-     * @param msg info-msg of error to be logged.
-     * @param logLevel level of error message to be logged (info, warning, error)
-     * @return colorized version of the correctly formatted error-msg String.
-     */
-    @Override
-    public String formatMsg(String msg, LogLevel logLevel){
+     * @param message info-msg of error to be logged.
+     * @param loglvl level of error message to be logged (info, warning, error)**/
 
-        Attribute msgColor = switch(logLevel){
+    @Override
+    public void log(String message, LogLevel loglvl) {
+
+        Attribute msgColor = switch(loglvl){
             case INFO -> Attribute.BLUE_TEXT();
             case WARNING -> Attribute.BRIGHT_YELLOW_TEXT();
             case ERROR -> Attribute.RED_TEXT();
         };
-        return(colorize(super.formatMsg(msg, logLevel), msgColor));
+        System.out.println(colorize(formatMsg(message, loglvl), msgColor));
     }
+
 }
