@@ -1,32 +1,35 @@
 package core;
 
 import javafx.animation.AnimationTimer;
-//TODO: hm. this is modifiable.
+
+/// keeps track of the state of the run.
+///
 public class RunTracker {
 
-//this only keeps tracks of the backtracks and keystrokes.
-    //maybe move this and make a whole class for a Run?
-    //DATA:
-    //active (boolean).
-    //time.
-    //update time when called
-    //use animationtimer in ui to grab this.
-    //would send keyevents, too...
-    //ask for help honestly I am a bit confused.
+    int backtracks;
+    int keystrokes;
+    public String actual;
+    public String expected;
 
-    private int backtracks;
-    private int keystrokes;
 
-    //no constructor provided because everything gets initialized to zero anyway.
+    public RunTracker() {
+        this.actual= "";
+    }
 
-    public void incBackTracks(){
+    public void logBackspace(){
         this.backtracks+=1;
-
     }
 
-    public void incKeyStrokes(){
-        this.keystrokes+=1;
-
+    public void logKeyStroke(){
+        this.keystrokes +=1;
     }
 
+    public String getActual() {
+        return actual;
+    }
+
+    public int getKeystrokes() {
+        return keystrokes;
+    }
 }
+

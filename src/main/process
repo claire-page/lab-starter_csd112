@@ -52,3 +52,11 @@ return a rundata record once done.
 have a time out function after
 -I already have a function that delegates keyevents and a listener used to update the view.
 ... can I just add the checking there? it's in a controller class...
+
+////////////////reworking.//////////////////////////////////////
+
+what confused me for a bit was the use of a record for the typechar.
+Somehow making a new record every time was perplexing to me because I was viewing the text as its own object.
+but what's neat about this approach is that the text isn't really an object.
+
+

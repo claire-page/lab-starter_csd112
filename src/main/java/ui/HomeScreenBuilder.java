@@ -1,19 +1,15 @@
 package ui;
 
-import controllers.HelperFunctions;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Builder;
-
-import java.beans.EventHandler;
 
 import static javafx.scene.text.Font.font;
 
@@ -54,12 +50,11 @@ public class HomeScreenBuilder implements Builder<Parent>{
 
         //SETTING UP REPLACEABLE TEXT (ALWAYS THE SAME FOR HOME SCREEN.)
         String s = ("Bottom text");
-        var txtpane = new ReplaceableTextPane(s);
 
         VBox rightpane = new VBox();
         rightpane.setSpacing(20);
         rightpane.setPrefHeight(Style.DEFAULT_SCENEHEIGHT);
-        rightpane.getChildren().addAll(titletext, bottomtitle, txtpane);
+        rightpane.getChildren().addAll(titletext, bottomtitle);
         rightpane.setPadding(new Insets(0, 40, 0, 40));
 
 //put it all in a borderpane...
@@ -69,7 +64,6 @@ public class HomeScreenBuilder implements Builder<Parent>{
         bp.setAlignment(titletext,Pos.BASELINE_LEFT);
         bp.setCenter(rightpane);
         bp.setBackground(Background.fill((Style.mainBkgrndPaint)));
-        bp.addEventFilter(KeyEvent.ANY, e -> HelperFunctions.delegateKeyEvents(e, txtpane));
 
     //TODO- when game is over: end screen showing run data pops up, can save with name (default provided).
 

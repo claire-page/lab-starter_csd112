@@ -1,65 +1,53 @@
 package ui;
 
-import controllers.HelperFunctions;
-import core.RunData;
-import core.RunTracker;
-import javafx.animation.AnimationTimer;
+import controllers.Control;
+import core.TypeChar;
 
-import javafx.event.EventHandler;
+import core.TypedStatus;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.util.Builder;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
-import java.util.function.Consumer;
+import java.text.DecimalFormat;
+import java.util.List;
 
-import static controllers.HelperFunctions.*;
+
 
 public class GameScreen {
 
     Runnable quitBtn;
     Runnable restartBtn;
-    Consumer<RunData> onDone; //will try and use a callback to get popup when game is done????? idk.
+    FlowPane pane;
+    Label timerDisplay;
+    Runnable callbackPaneInit;
 
     public GameScreen(Runnable quit, Runnable restart ) {
         this.quitBtn = quit;
         this.restartBtn = restart;
     }
 
-    //initializes Game Scene.
     public Parent build() {
+        //just doing this to give controller access to the view
 
-        RunTracker tracker = new RunTracker(); //so we can track what happens during the run.
+        pane = new ReplaceableTextPane(); //getting text pane...
 
-        var pane = new ReplaceableTextPane("'So what now?'"); //getting text pane...
         pane.setPrefSize(300, 300);
 
         var ButtonTitles = new String[]{"Quit"};
         Runnable[] runnables = {quitBtn, restartBtn};
         Region left = new MenuBuilder(ButtonTitles, runnables).build();
 
-        Label timerDisplay = new Label("TIMER IS HERE");
+        timerDisplay = new Label("enter any key to begin.");
         timerDisplay.setPadding(new Insets(50));
 
         //getting the timer set up.
-        AnimationTimer timer = new AnimationTimer() {
-
-            private long startStamp = -1; //initializing at -1.
-
-            @Override
-            public void handle(long l) {
-                if (startStamp ==-1){ //if first time being called, update to last time.
-                    startStamp = l;}
-                    var elapsed = (l- startStamp )/1000000000.0;
-                    timerDisplay.setText(elapsed + "s".formatted());
-            }
-        };
 
         VBox right = new VBox();
+
         right.getChildren().addAll(timerDisplay,pane);
 
         //put it all into a pane.
@@ -70,38 +58,68 @@ public class GameScreen {
         //--PANE-LEVEL EVENT FILTERS--
         //setting up listener to be triggered on first key press (to start the timer), which will then remove itself,
         //ensuring its handler is only triggered once.
-        bp.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                timer.start();
-                System.out.println("timer started");
-                bp.removeEventFilter(KeyEvent.KEY_PRESSED, this); //"self-destructs" after one key click.
-                //not consuming the event, still want the keystroke to be picked up by the other handler.
-            }});
+        //this is some nastiness here
+        Control.initPane(this);
 
-        bp.addEventFilter(KeyEvent.ANY, e -> delegateKeyEvents(e, pane, tracker, timer));
+        bp.addEventFilter(KeyEvent.ANY, e -> Control.delegateKeyEvents(e, this));
         return(bp);
-    }
-
-    //maybe have a runtracker in here?????
-    //checks the runtracker.:
-    //pass a tracker.
-    //while it's active{
-    // do nothing.
-    // }{
-    // show the popup with tracker data.
-    // button to send data off.
-    //here's where we should probably start to think about database saving.
-    //
-    // }
-
-    //todo- some questions.. pick whichever ones seems urgent?
-    ///menu? this ok?
-    ///how to handle game? pro tips?
-    ///
-
-
 
     }
+    //making this part of the game scene because it deals with UI...I think that's fine.
+
+
+    public void updateTimeLabel(double d){
+        this.timerDisplay.setText(new DecimalFormat("0.00").format(d));
+    }
+
+    public void renderTextData(List<TypeChar> typeCharList, String template) {
+        //i think this needs to be here because I need to access the children to remove them.
+        // unless I access it through the game scene? I mean it is a part of the scene?
+        this.pane.getChildren().removeAll(pane.getChildren()); //clearing the pane of its hboxes, if it had any before.
+
+        //need as many Hboxes as we have words in the template...
+        HBox[] holder = new HBox[template.split(" ").length];
+        for (int i = 0; i < holder.length; i ++){
+            holder[i]= new HBox();
+        }
+
+        int h = 0;
+
+        for (int i = 0; i < typeCharList.size(); i++) {
+
+            var currentTypeChar = typeCharList.get(i);
+            var textFromChar = getColouredText(currentTypeChar);
+            holder[h].getChildren().add(textFromChar);
+
+            //checking to see if we're at the end or reached punctuation/space (need to add pane and move on to next hbox!)
+            if (i == typeCharList.size()-1 || String.valueOf(currentTypeChar.expected()).matches("\\p{P}\\s")) {
+                pane.getChildren().add(holder[h]);
+                h += 1;
+            }
+        }
+    }
+
+    private static Text getColouredText(TypeChar currentTypeChar) {
+        String strValue;
+
+        if (currentTypeChar.getStatus()== TypedStatus.INCORRECT){
+            strValue = String.valueOf(currentTypeChar.typed());
+        }
+        else{
+            strValue = String.valueOf(currentTypeChar.expected());
+        }
+
+        var textFromChar = new Text(strValue);
+
+        textFromChar.setFill(switch (currentTypeChar.getStatus()) {
+            case INCORRECT -> Style.mistakeTextPaint;
+            case CORRECT -> Style.filledTextPaint;
+            case UNREACHED -> Style.blankTextPaint;
+        });
+        textFromChar.setFont(Style.myFont);
+        return textFromChar;
+    }
+
+}
 
 
