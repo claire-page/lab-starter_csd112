@@ -1,63 +1,57 @@
 package controllers;
 
 import core.RunTracker;
-import javafx.animation.AnimationTimer;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import ui.GameScreen;
 import core.TypeChar;
+import ui.MainView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Control {
+    private final RunTracker run;
+    private  String expected ; //new one every time. How do I make that happen?
+    private  String actual;
 
-    private static RunTracker run = new RunTracker();
-    private static String expected = "blah blah blah";
-    private static String actual = "";
+    public Control(String s){
+        this.run = new RunTracker();
+        this.expected = s;
+        this.actual = "";
 
-
-    public static void initTimer(GameScreen g) {
-
-     AnimationTimer timer = new AnimationTimer() {
-
-        private long start = -1; //this is so the timer starts at 0...
-
-        @Override
-        public void handle(long l) { //this gets called very often.
-            if (start == -1) { //only useful for first time being called.
-                start = l; //
+    }
+    public void delegateKeyEvents(KeyEvent e) {
+        e.consume();
+        System.out.println("triggered");
+        if (e.getEventType().equals(KeyEvent.KEY_PRESSED)||e.getEventType().equals(KeyEvent.KEY_TYPED)) {
+            System.out.println("key pressed.");
+            if (run.getKeystrokes() == 0) {
+                run.logKeyStroke();
+                MainView.startTimer();
             }
-            var elapsed = (l - start) / 1000000000.0; //dividing to get value as a double.
-            g.updateTimeLabel(elapsed);
+
+            if (e.getCode().equals(KeyCode.BACK_SPACE)) {
+                System.out.println("backspace");
+                e.consume();
+                run.logBackspace();
+                run.logKeyStroke();
+                actual = (actual.length() == 0) ? "" : actual.substring(0, actual.length() - 1);
+
+            } else if (e.getCharacter().matches("[a-zA-Z|\\s|\\p{P}]")) {
+                actual += e.getCharacter();
+                run.logKeyStroke();
+            }
+            var data = generateTextData(expected, actual);
+            MainView.renderTextData(data, expected);
+
+            if (expected.equals(actual)){
+
+
+            }
         }
-    };
-}
-
-
-    public static void delegateKeyEvents(KeyEvent e, GameScreen g) {
-
-
-        if (run.getKeystrokes()==0){
-           initTimer(g);
-        }
-
-        if (e.getCode().equals(KeyCode.BACK_SPACE)) {
-            run.logBackspace();
-            run.logKeyStroke();
-            actual = (actual.length() ==0)? "": actual.substring(0, actual.length() - 1);
-
-
-        } else if (e.getCharacter().toString().matches("[a-zA-Z|\\s|\\p{P}]")) {
-            actual += e.getCharacter();
-            System.out.println(actual);
-            System.out.println(expected);
-            run.logKeyStroke();
-        }
-        var textData = generateTextData(expected, actual);
-        g.renderTextData(textData, expected);
-        System.out.println(actual);
-
     }
 
     public static List<TypeChar> generateTextData(String template, String actual) {
@@ -71,28 +65,20 @@ public class Control {
         return ((textInfo).stream().toList()); //listifying as per that one lecture to make it immutable.
     }
 
-    public static void startRun(GameScreen g) {
 
-        var timer = new AnimationTimer() {
-            private long start = -1; //this is so the timer starts at 0...
-
-            @Override
-            public void handle(long l) { //this gets called very often.
-                if (start == -1) { //only useful for first time being called.
-                    start = l; //
-                }
-                var elapsed = (l - start) / 1000000000.0; //dividing to get value as a double.
-                g.updateTimeLabel(elapsed);
-            }
-        };
-        timer.start();
-        System.out.println("started.");
+    public boolean isGameActive() {
+        return isGameOver;
     }
 
-public static void initPane(GameScreen g){
-    g.renderTextData(generateTextData(expected, actual), expected);
+    public void setGameActive(){
+        this.isGameOver = true;
+
+    }
+
+
 }
-}
+
+
 
 
 

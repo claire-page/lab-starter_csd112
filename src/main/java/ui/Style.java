@@ -13,8 +13,10 @@ import static javafx.scene.text.Font.loadFont;
 public class Style {
 
     public class FontFaces{
-        static final Font COURIER= (Font.font("Courier New", 20));
-        static final Font CONSOLAS = (Font.font("Consolas", 20));
+        public static final Font COURIER= (Font.font("Courier New", 15));
+        static final Font CONSOLAS = (Font.font("Consolas", 15));
+        static InputStream istr = Style.class.getResourceAsStream("main/resources/fonts/OpenDyslexic3-Regular.ttf");
+        static final Font myFont = Font.loadFont(istr, 50);
     };
 
     static InputStream istr = Style.class.getResourceAsStream("main/resources/fonts/OpenDyslexic3-Regular.ttf");
