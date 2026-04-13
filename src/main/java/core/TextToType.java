@@ -6,15 +6,19 @@ import java.util.Random;
 
 public class TextToType {
 
-    private static final String [] options = {("src/main/java/files/shelley.txt"), ("src/main/java/files/bronte.txt"), ("src/main/java/files/NGGUU.txt"), ("src/main/java/files/rodney.txt")};
+    private static final String [] options = {("src/main/java/files/shelley.txt"),("src/main/java/files/jordan.txt"), ("src/main/java/files/text.txt"), ("src/main/java/files/bronte.txt"), ("src/main/java/files/NGGUU.txt"), ("src/main/java/files/profmartin.txt")};
 
+    /**
+     *
+     * @return a String of text read from a random file.
+     */
     public static String getRandomtxt(){
         Random rand = new Random();
-        int random = rand.nextInt(4);
+        int random = rand.nextInt(6); //number of files we have.
         var chosen = options[random];
 
         try {
-            return(Files.readString(Paths.get(chosen))+ " ");
+            return(Files.readString(Paths.get(chosen)));
 
         } catch (IOException e) {
             throw new RuntimeException(e);

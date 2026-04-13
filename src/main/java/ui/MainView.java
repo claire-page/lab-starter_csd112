@@ -16,7 +16,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import static javafx.scene.text.Font.font;
-//this IS the right pane.
 
 public class MainView implements Builder<Region> {
     private static CustomTimer timer;
@@ -26,6 +25,9 @@ public class MainView implements Builder<Region> {
     private Runnable runRestarter;
     private Runnable runResetter;
 
+    //in the constructor for the main view (right side of screen)
+    //I'm passing it some runnables for its buttons and one function to initialize the pane.
+    //
     public MainView(Runnable paneInitializer, Runnable forButton1, Runnable forButton2) {
         this.timerDisplay = new Label("enter any key to begin.");
         this.paneInitializer = paneInitializer;
@@ -38,7 +40,7 @@ public class MainView implements Builder<Region> {
 
         Font bigFont = font("Courier New", 80);
         Label titletext = new Label("Q W E R T Y");
-        titletext.setTextFill(Style.accentPaint);
+        titletext.setTextFill(Style.darkred);
         titletext.setFont(bigFont);
         titletext.setPadding(new Insets(50, 0, 0, 10));
         titletext.setAlignment(Pos.BASELINE_LEFT);
@@ -62,8 +64,11 @@ public class MainView implements Builder<Region> {
 
         timer = new CustomTimer();
 
+        //buttons.
         Button b = new Button("RESTART THIS RUN");
+        b.setBackground(Background.fill(Style.lightred));
         Button b2 = new Button("GET NEW TEXT");
+        b2.setBackground(Background.fill(Style.lightred));
         b.setOnMouseClicked(e -> runRestarter.run());
         b2.setOnMouseClicked(e -> runResetter.run());
 
@@ -115,9 +120,9 @@ public class MainView implements Builder<Region> {
             textFromChar.setFont(Style.FontFaces.DYSLEXIC);
 
             holder[h].getChildren().add(textFromChar);
-            //checking to see if we're at the end or reached what's supposed to be punctuation/space
+            //checking to see if we're at the end or reached what's supposed to be space
             // (need to add pane and move on to next hbox!)
-            boolean needNextbox = (String.valueOf(currentTypeChar.expected()).matches("\\s"));
+            boolean needNextbox = (j == typeCharList.size()-1 || String.valueOf(currentTypeChar.expected()).matches("\\s"));
 
             if (needNextbox) {
                 pane.getChildren().add(holder[h]);
@@ -134,17 +139,10 @@ public class MainView implements Builder<Region> {
         timer.start();
     }
 
-    public static void stopTimer(){
-        timer.stop();
-    }
     public static double stopTimerandGetTime() {
         timer.stop();
         return(timer.getElapsed());
     };
-
-    public static void updateTime(Long elapsed) {
-        timerDisplay.setText(new DecimalFormat("0.0").format(elapsed));
-    }
 
     public static void resetTimer(){
         timer.resetStartTime();

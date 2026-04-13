@@ -1,23 +1,17 @@
 package controllers;
 
-import com.sun.tools.javac.Main;
 import core.RunData;
 import core.RunTracker;
 
 import core.TextToType;
 import database.DatabaseInteractor;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
+
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import core.TypeChar;
-import javafx.scene.layout.VBox;
 import ui.MainView;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.RecordComponent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +30,8 @@ public class Control {
         this.actual = "";
 
     }
-
+    /// ////I kind of view this as the switchboard for the game process. It triggers appropriate functions to change both the data
+    /// and the view in response to the view's event listeners.
     public void delegateKeyEvents(KeyEvent e) {
         e.consume();
 
@@ -57,8 +52,7 @@ public class Control {
                 actual += e.getCharacter();
                 run.logKeyStroke();
             }
-            var data = generateTextData(expected, actual);
-            MainView.renderTextData(data, expected);
+            drawPane();
 
             if (expected.equals(actual)) {
                 System.out.println("DONE");
@@ -66,8 +60,7 @@ public class Control {
                 var maybeString = promptToSend(finaltime);
                 endData = getDataToSend(finaltime, maybeString, run);
                 db.sendData(endData);
-                resetNewRun();
-
+                resetNewRun(); //so when the user gets back from the popup, they already have a new run loaded!
             }
         }
     }
@@ -83,7 +76,8 @@ public class Control {
         return ((textInfo).stream().toList()); //listifying as per that one lecture to make it immutable.
     }
 
-    /// /////////////////////////////////////////////end of game stuff///////////////////////////////////////////////
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////
+    /// these functions deal with interacting with a DatabaseInteractor object we use to access a database.
 
 
     public Optional<String> promptToSend(double time) {
@@ -101,8 +95,13 @@ public class Control {
         return (new RunData(time, name, tracker.getKeystrokes(), tracker.getBacktracks(), expected.split(" ").length, expected.length()));
     }
 
-    /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public void initPane() {
+    /** function for rendering the pane in the view based on the current state of the model.
+     * this is kind of a two-parter, which isn't ideal...but
+     * it also makes it reusable both as a runnable function during the
+     * initialization of the view.
+     * might not follow SRP??, but it abbreviates things and is easy to understand imo.
+     */
+    public void drawPane() {
         var data = generateTextData(expected, actual);
         MainView.renderTextData(data, expected);
     }
@@ -110,7 +109,7 @@ public class Control {
     public void resetSameRun() {
         run = new RunTracker();
         actual = "";
-        initPane();
+        drawPane();
         MainView.resetTimer();
     }
 
@@ -129,18 +128,19 @@ public class Control {
                 break;
             }
         }
-        initPane();
+        drawPane();
         MainView.resetTimer();
     }
 /// /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * provides formatted strings containing f
+     * provides formatted strings containing data displayed in the "table"
+     * in the Results View.
      * @return
      */
     public List<List<String>> getEntriesasStrings() {
 
-       var dbData = this.db.retrieveLastNEntries(5);
+       var dbData = this.db.retrieveLastNEntries(10); //number of rows comfortably supported by window size.
         var all = new ArrayList();
 
         for (RunData entry: dbData) {

@@ -33,7 +33,7 @@ public class ResultScreen implements Builder<Parent> {
         System.out.println("tried to build.");
             Font bigFont = font("Courier New", 80);
             Label titletext = new Label("YOUR RESULTS");
-            titletext.setTextFill(Style.accentPaint);
+            titletext.setTextFill(Style.darkred);
             titletext.setFont(bigFont);
             titletext.setPadding(new Insets(50, 0, 0, 30));
             titletext.setAlignment(Pos.BASELINE_LEFT);
@@ -67,6 +67,7 @@ public class ResultScreen implements Builder<Parent> {
         Button b = new Button();
 
             b.setText("BACK");
+            b.setBackground(Background.fill(Style.lightred));
             b.setOnMouseClicked( e -> backtoMain.run());
             table.setBackground((Background.fill(Style.textBkgrndPaint)));
             VBox v = new VBox(titletext, table, b);

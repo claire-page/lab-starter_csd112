@@ -29,7 +29,7 @@ public class BasicLayoutBuilder implements Builder<Parent> {
         Region left = new MenuBuilder(HomeMenuOptions, Runnables).build();
 
         StackPane stack = new StackPane();
-        this.main = new MainView(control::initPane, control::resetNewRun,  control::resetSameRun).build();
+        this.main = new MainView(control::drawPane, control::resetNewRun,  control::resetSameRun).build();
         this.results = new ResultScreen(control::getEntriesasStrings, BasicLayoutBuilder::showMain).build();
         stack.getChildren().addAll(results, main);
         bp.setLeft(left);
