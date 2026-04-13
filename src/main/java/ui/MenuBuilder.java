@@ -14,7 +14,6 @@ import javafx.scene.control.Button;
 
 //made this into a separate class to separate the passing of navigation (really all there is for the menu)from the other functionality.
 
-
 public class MenuBuilder implements Builder<Region> {
 
    final Button[] buttons;

@@ -1,12 +1,12 @@
 package ui;
 
-import controllers.Control;
+//import controllers.Control;
 import core.TypeChar;
 import core.TypedStatus;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -18,15 +18,13 @@ import java.util.List;
 import static javafx.scene.text.Font.font;
 
 public class MainView implements Builder<Region> {
-    private static AnimationTimer timer;
+    private static CustomTimer timer;
     private static FlowPane pane;
     private static Label timerDisplay;
-    private Control controlla;
 
-    public MainView(Control ctrl) {
-        this.controlla = ctrl;
+
+    public MainView() {
         this.timerDisplay = new Label("enter any key to begin.");
-
     }
 
     @Override
@@ -54,27 +52,13 @@ public class MainView implements Builder<Region> {
 
         pane.setPadding(new Insets(5));
         pane.setBackground(Background.fill(Style.textBkgrndPaint));//getting text pane...
-//        pane.setPrefSize(400, 300);
         pane.setPadding(new Insets(20, 40, 0, 40));
-
 
         timerDisplay.setPadding(new Insets(20));
         timerDisplay.setFont(Style.DEFAULT_MENU_FONT);
 
-        timer = new AnimationTimer() {
-            private long start = -1; //this is so the timer starts at 0...
+        timer = new CustomTimer();
 
-            @Override
-            public void handle(long l) { //this gets called very often.
-                if (start == -1) { //only useful for first time being called.
-                    start = l; //
-                }
-                var elapsed = (l - start) / 1000000000.0; //dividing to get value as a double.
-                timerDisplay.setText(new DecimalFormat("0.0").format(elapsed));
-            }
-
-        };
-        //getting the timer set up.
         VBox right = new VBox();
         right.getChildren().addAll(titletext, bottomtitle, timerDisplay, pane);
 
@@ -117,9 +101,9 @@ public class MainView implements Builder<Region> {
             holder[h].getChildren().add(textFromChar);
             //checking to see if we're at the end or reached what's supposed to be punctuation/space
             // (need to add pane and move on to next hbox!)
-            boolean needNext = (String.valueOf(currentTypeChar.expected()).matches("\\s"));
+            boolean needNextbox = (String.valueOf(currentTypeChar.expected()).matches("\\s"));
 
-            if (needNext) {
+            if (needNextbox) {
                 pane.getChildren().add(holder[h]);
                 if (h < holder.length - 1) {  //making sure we're still in range/
                     h += 1;
@@ -131,11 +115,35 @@ public class MainView implements Builder<Region> {
     }
 
     public static void startTimer(){
-    timer.start();
+        timer.start();
     }
-    public void stopTimerandGetTime(){
-        timer.stop();
 
+    public static double stopTimerandGetTime() {
+        timer.stop();
+        return(timer.getElapsed());
+    };
+
+    public void updateTime(Long elapsed) {
+        timerDisplay.setText(new DecimalFormat("0.0").format(elapsed));
+    }
+
+    public class CustomTimer extends AnimationTimer {
+        long start = -1;
+        double elapsed;
+
+        @Override
+        public void handle(long l) {
+
+            if (start == -1) { //only useful for first time being called.
+                start = l; //
+            }
+            elapsed = (l - start) / 1000000000.0; //dividing to get value as a double.
+            timerDisplay.setText(new DecimalFormat("0.0").format(elapsed));
+        }
+
+        public double getElapsed(){
+            return(this.elapsed);
+        }
     }
 
 

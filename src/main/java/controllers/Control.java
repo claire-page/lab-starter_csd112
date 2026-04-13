@@ -1,9 +1,11 @@
 package controllers;
 
+import com.sun.tools.javac.Main;
 import core.RunTracker;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import core.TypeChar;
@@ -14,7 +16,7 @@ import java.util.List;
 
 public class Control {
     private final RunTracker run;
-    private  String expected ; //new one every time. How do I make that happen?
+    private String expected ;
     private  String actual;
 
     public Control(String s){
@@ -25,12 +27,13 @@ public class Control {
     }
     public void delegateKeyEvents(KeyEvent e) {
         e.consume();
-        System.out.println("triggered");
+
         if (e.getEventType().equals(KeyEvent.KEY_PRESSED)||e.getEventType().equals(KeyEvent.KEY_TYPED)) {
-            System.out.println("key pressed.");
+
             if (run.getKeystrokes() == 0) {
                 run.logKeyStroke();
                 MainView.startTimer();
+
             }
 
             if (e.getCode().equals(KeyCode.BACK_SPACE)) {
@@ -46,9 +49,11 @@ public class Control {
             }
             var data = generateTextData(expected, actual);
             MainView.renderTextData(data, expected);
-
-            if (expected.equals(actual)){
-
+            System.out.println(expected+ "->"+ actual);
+            if (expected.equals(actual)) {
+                System.out.println("DONE");
+                var finaltime = MainView.stopTimerandGetTime();
+                showUserResults(finaltime);
 
             }
         }
@@ -65,16 +70,16 @@ public class Control {
         return ((textInfo).stream().toList()); //listifying as per that one lecture to make it immutable.
     }
 
+    public void showUserResults (double time){
+        ButtonType senddata = new ButtonType("AAAAAAAAAAAAAAA", ButtonBar.ButtonData.OK_DONE);
+        Dialog<String> d = new Dialog<>();
+        d.getDialogPane().getButtonTypes().add(senddata);
+        boolean disabled = false;
+        d.getDialogPane().lookupButton(senddata).setDisable(disabled);
+        d.setContentText("WOW UR DONE! and in only"+ String.valueOf(time) + "seconds...Wanna save your results to the database?");
+        d.showAndWait();
 
-    public boolean isGameActive() {
-        return isGameOver;
     }
-
-    public void setGameActive(){
-        this.isGameOver = true;
-
-    }
-
 
 }
 

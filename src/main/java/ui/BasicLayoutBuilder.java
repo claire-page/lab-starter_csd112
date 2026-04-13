@@ -30,8 +30,7 @@ public class BasicLayoutBuilder implements Builder<Parent> {
 
         Region left = new MenuBuilder(HomeMenuOptions, Runnables).build();
 
-
-        Region right = new MainView(control).build();
+        Region right = new MainView().build();
         bp.setLeft(left);
         bp.setRight(right);
         bp.addEventFilter(KeyEvent.ANY, e -> control.delegateKeyEvents(e));
