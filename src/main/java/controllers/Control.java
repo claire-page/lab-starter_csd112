@@ -1,43 +1,53 @@
 package controllers;
 
 import com.sun.tools.javac.Main;
+import core.RunData;
 import core.RunTracker;
 
+import core.TextToType;
+import database.DatabaseInteractor;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import core.TypeChar;
+import javafx.scene.layout.VBox;
 import ui.MainView;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.RecordComponent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Control {
-    private final RunTracker run;
-    private String expected ;
-    private  String actual;
+    private RunTracker run;
+    private String expected;
+    private String actual;
+    private RunData endData; //only exists if
+    private static final DatabaseInteractor db = new DatabaseInteractor("jdbc:mysql://localhost:3306/qwertydb");
 
-    public Control(String s){
+    public Control() {
         this.run = new RunTracker();
-        this.expected = s;
+        this.expected = TextToType.getRandomtxt();
         this.actual = "";
 
     }
+
     public void delegateKeyEvents(KeyEvent e) {
         e.consume();
 
-        if (e.getEventType().equals(KeyEvent.KEY_PRESSED)||e.getEventType().equals(KeyEvent.KEY_TYPED)) {
+        if (e.getEventType().equals(KeyEvent.KEY_PRESSED) || e.getEventType().equals(KeyEvent.KEY_TYPED)) {
 
             if (run.getKeystrokes() == 0) {
                 run.logKeyStroke();
                 MainView.startTimer();
-
             }
 
             if (e.getCode().equals(KeyCode.BACK_SPACE)) {
-                System.out.println("backspace");
                 e.consume();
                 run.logBackspace();
                 run.logKeyStroke();
@@ -49,11 +59,14 @@ public class Control {
             }
             var data = generateTextData(expected, actual);
             MainView.renderTextData(data, expected);
-            System.out.println(expected+ "->"+ actual);
+
             if (expected.equals(actual)) {
                 System.out.println("DONE");
                 var finaltime = MainView.stopTimerandGetTime();
-                showUserResults(finaltime);
+                var maybeString = promptToSend(finaltime);
+                endData = getDataToSend(finaltime, maybeString, run);
+                db.sendData(endData);
+                resetNewRun();
 
             }
         }
@@ -70,20 +83,83 @@ public class Control {
         return ((textInfo).stream().toList()); //listifying as per that one lecture to make it immutable.
     }
 
-    public void showUserResults (double time){
-        ButtonType senddata = new ButtonType("AAAAAAAAAAAAAAA", ButtonBar.ButtonData.OK_DONE);
-        Dialog<String> d = new Dialog<>();
-        d.getDialogPane().getButtonTypes().add(senddata);
-        boolean disabled = false;
-        d.getDialogPane().lookupButton(senddata).setDisable(disabled);
-        d.setContentText("WOW UR DONE! and in only"+ String.valueOf(time) + "seconds...Wanna save your results to the database?");
-        d.showAndWait();
+    /// /////////////////////////////////////////////end of game stuff///////////////////////////////////////////////
 
+
+    public Optional<String> promptToSend(double time) {
+
+        TextInputDialog d = new TextInputDialog("Milkshake");
+        d.setContentText("Whoa! You're done! And in only " + new DecimalFormat("0.00").format(time) + " seconds. Enter your name and register your run!");
+        Optional<String> maybeName = d.showAndWait();
+
+        return (maybeName);
     }
 
+    public RunData getDataToSend(double time, Optional<String> result, RunTracker tracker) {
+        String name = (result.isPresent()) ? result.get() : "Milkshake";
+
+        return (new RunData(time, name, tracker.getKeystrokes(), tracker.getBacktracks(), expected.split(" ").length, expected.length()));
+    }
+
+    /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void initPane() {
+        var data = generateTextData(expected, actual);
+        MainView.renderTextData(data, expected);
+    }
+
+    public void resetSameRun() {
+        run = new RunTracker();
+        actual = "";
+        initPane();
+        MainView.resetTimer();
+    }
+
+    public void resetNewRun() {
+        System.out.println("switch");
+        this.run = new RunTracker();
+        this.actual = "";
+        var oldtxt = this.expected;
+
+        while (true) {
+            //making sure the new text is different.
+            var newtxt = TextToType.getRandomtxt();
+
+            if (!oldtxt.equals(newtxt)) {
+                this.expected = newtxt;
+                break;
+            }
+        }
+        initPane();
+        MainView.resetTimer();
+    }
+/// /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * provides formatted strings containing f
+     * @return
+     */
+    public List<List<String>> getEntriesasStrings() {
+
+       var dbData = this.db.retrieveLastNEntries(5);
+        var all = new ArrayList();
+
+        for (RunData entry: dbData) {
+
+            ArrayList alist = new ArrayList<>();
+            alist.add(String.valueOf(Math.floor(entry.time())));
+            alist.add(entry.name());
+            alist.add(String.valueOf(entry.getWordsPerMinute()));
+            alist.add(String.valueOf(entry.getCharsPerSecond()));
+            alist.add(String.valueOf(entry.getFaults()));
+
+            all.add(alist.stream().toList());
+        }
+    return(all.stream().toList());
+    }
+
+
+
 }
-
-
 
 
 

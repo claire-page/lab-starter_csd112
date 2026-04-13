@@ -31,5 +31,9 @@ public class RunTracker {
     public int getKeystrokes() {
         return keystrokes;
     }
+
+    public int getBacktracks() {
+        return backtracks;
+    }
 }
 

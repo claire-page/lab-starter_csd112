@@ -12,12 +12,7 @@ import org.w3c.dom.Node;
 
 import java.awt.*;
 
-
 public class Qwerty extends Application {
-
-    private Node homeScreen;
-    private Node settingScreen;
-    private Parent mainScreen;
 
     private Stage mainStage;
 
@@ -25,12 +20,9 @@ public class Qwerty extends Application {
     public void start(Stage stage) throws Exception {
 
     //instantiating controller.
-
-        Control controller = new Control(new TextToType().getRandomtxt());
+        Control controller = new Control();
         this.mainStage = stage;
-
-        Parent homeScreen = new BasicLayoutBuilder(() -> System.out.println("tosettings!!"), controller).build();
-
+        Parent homeScreen = new BasicLayoutBuilder(controller).build();
         Scene starterScene = new Scene(homeScreen, Style.DEFAULT_SCENEWIDTH, Style.DEFAULT_SCENEHEIGHT);
         stage.setScene(starterScene);
         stage.show();

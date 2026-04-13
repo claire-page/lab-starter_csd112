@@ -2,6 +2,7 @@ package ui;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.io.InputStream;
 
@@ -14,20 +15,19 @@ public class Style {
 
     public class FontFaces{
         public static final Font COURIER= (Font.font("Courier New", 15));
-        static final Font CONSOLAS = (Font.font("Consolas", 15));
-        static InputStream istr = Style.class.getResourceAsStream("main/resources/fonts/OpenDyslexic3-Regular.ttf");
-        static final Font myFont = Font.loadFont(istr, 50);
+        public static final Font CONSOLAS = (Font.font("Consolas", 15));
+        public static final Font DYSLEXIC = Font.loadFont(Style.class.getResourceAsStream("/fonts/OpenDyslexic-Bold.otf"), 15);
+
     };
 
-    static InputStream istr = Style.class.getResourceAsStream("main/resources/fonts/OpenDyslexic3-Regular.ttf");
-    static Font myFont = Font.loadFont(istr, 50);
+    static Font myFont = Font.loadFont(Style.class.getResourceAsStream("file:resources/fonts/OpenDyslexic-Bold.otf"), 20);
     public static  final int DEFAULT_SCENEWIDTH = 1000;
     public static final int DEFAULT_SCENEHEIGHT = 670;
     public static final int DEFAULT_PANEHEIGHT = 600;
     public static final int DEFAULT_PANEWIDTH = 250;
 
     public static final Font DEFAULT_TITLE_FONT = new Font("Courier New", 80);
-    public static final  Font DEFAULT_MENU_FONT = (font("Consolas", 20));
+    public static final  Font DEFAULT_MENU_FONT = (font("Consolas",FontWeight.BOLD, 22));
 
     public static  Paint menuBkgrndPaint = Paint.valueOf("rgb(74, 111, 117)");
     public static  Paint mainBkgrndPaint = Paint.valueOf("rgb(178, 201, 209)");
@@ -41,6 +41,6 @@ public class Style {
     public static  Paint accentPaint = Paint.valueOf("rgb(134, 41, 52)"); //for dark red
     public static Paint textAccentPaint =  Paint.valueOf("rgb(176, 79, 90)"); //for smaller text
 
-
+/// /////////make instance variables. changeable.
 
 }

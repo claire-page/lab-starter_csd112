@@ -1,6 +1,5 @@
 package ui;
 
-//import controllers.Control;
 import core.TypeChar;
 import core.TypedStatus;
 import javafx.animation.AnimationTimer;
@@ -8,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Builder;
@@ -16,15 +16,21 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import static javafx.scene.text.Font.font;
+//this IS the right pane.
 
 public class MainView implements Builder<Region> {
     private static CustomTimer timer;
     private static FlowPane pane;
     private static Label timerDisplay;
+    private Runnable paneInitializer;
+    private Runnable runRestarter;
+    private Runnable runResetter;
 
-
-    public MainView() {
+    public MainView(Runnable paneInitializer, Runnable forButton1, Runnable forButton2) {
         this.timerDisplay = new Label("enter any key to begin.");
+        this.paneInitializer = paneInitializer;
+        this.runResetter = forButton1;
+        this.runRestarter = forButton2;
     }
 
     @Override
@@ -34,22 +40,19 @@ public class MainView implements Builder<Region> {
         Label titletext = new Label("Q W E R T Y");
         titletext.setTextFill(Style.accentPaint);
         titletext.setFont(bigFont);
-        titletext.setPadding(new Insets(50, 0, 0, 0));
+        titletext.setPadding(new Insets(50, 0, 0, 10));
         titletext.setAlignment(Pos.BASELINE_LEFT);
 
-        Label bottomtitle = new Label(" A JavaFX app for CSD112-26W");
-        bottomtitle.setBackground(Background.fill(Style.titleTextPaint));
-        bottomtitle.setFont(new Font("Consolas", 18));
-        bottomtitle.setTextFill(Style.accentPaint);
-        bottomtitle.setAlignment(Pos.BASELINE_LEFT);
-        bottomtitle.setPrefWidth(750);
-        bottomtitle.setPrefHeight(40);
-
-        //SETTING UP REPLACEABLE TEXT (ALWAYS THE SAME FOR HOME SCREEN.)
+        Label line = new Label("--------------------------------------------------------------------------------------------------------");
+        line.setBackground(Background.fill(Style.titleTextPaint));
+        line.setFont(new Font("Montserrat", 18));
+        line.setTextFill(Color.ANTIQUEWHITE);
+        line.setAlignment(Pos.BASELINE_LEFT);
+        line.setPrefWidth(750);
+        line.setPrefHeight(40);
 
         this.pane = new FlowPane();
         pane.setPrefSize(200, 300);
-
         pane.setPadding(new Insets(5));
         pane.setBackground(Background.fill(Style.textBkgrndPaint));//getting text pane...
         pane.setPadding(new Insets(20, 40, 0, 40));
@@ -59,10 +62,23 @@ public class MainView implements Builder<Region> {
 
         timer = new CustomTimer();
 
+        Button b = new Button("RESTART THIS RUN");
+        Button b2 = new Button("GET NEW TEXT");
+        b.setOnMouseClicked(e -> runRestarter.run());
+        b2.setOnMouseClicked(e -> runResetter.run());
+
+
+        HBox buttonarea = new HBox( b, b2);
+        buttonarea.setSpacing(20);
         VBox right = new VBox();
-        right.getChildren().addAll(titletext, bottomtitle, timerDisplay, pane);
+        right.setBackground(Background.fill(Color.WHITE));
+        right.getChildren().addAll(titletext, line, buttonarea, pane, timerDisplay);
+        right.setSpacing(20);
+
 
         right.requestFocus();
+        paneInitializer.run(); //this sets up the pane to display text.
+
         return (right);
 
     }
@@ -83,7 +99,7 @@ public class MainView implements Builder<Region> {
 
             var currentTypeChar = typeCharList.get(j);
             String strValue;
-            if (currentTypeChar.getStatus() == TypedStatus.INCORRECT) {
+            if (currentTypeChar.getStatus() == TypedStatus.INCORRECT && currentTypeChar.typed()!=(' ')) { //if it's a space we don't want to just slap a space over it
                 strValue = String.valueOf(currentTypeChar.typed());
             } else {
                 strValue = String.valueOf(currentTypeChar.expected());
@@ -96,7 +112,7 @@ public class MainView implements Builder<Region> {
                 case CORRECT -> Style.filledTextPaint;
                 case UNREACHED -> Style.blankTextPaint;
             });
-            textFromChar.setFont(Style.FontFaces.COURIER);
+            textFromChar.setFont(Style.FontFaces.DYSLEXIC);
 
             holder[h].getChildren().add(textFromChar);
             //checking to see if we're at the end or reached what's supposed to be punctuation/space
@@ -118,33 +134,49 @@ public class MainView implements Builder<Region> {
         timer.start();
     }
 
+    public static void stopTimer(){
+        timer.stop();
+    }
     public static double stopTimerandGetTime() {
         timer.stop();
         return(timer.getElapsed());
     };
 
-    public void updateTime(Long elapsed) {
+    public static void updateTime(Long elapsed) {
         timerDisplay.setText(new DecimalFormat("0.0").format(elapsed));
     }
 
+    public static void resetTimer(){
+        timer.resetStartTime();
+        timerDisplay.setText("enter any key to begin.");
+        timer.stop();
+    }
+
     public class CustomTimer extends AnimationTimer {
-        long start = -1;
+        private long startTime = -1;
         double elapsed;
 
         @Override
         public void handle(long l) {
 
-            if (start == -1) { //only useful for first time being called.
-                start = l; //
+            if (startTime == -1) { //only useful for first time being called.
+                startTime = l; //
             }
-            elapsed = (l - start) / 1000000000.0; //dividing to get value as a double.
+            elapsed = (l - startTime) / 1000000000.0; //dividing to get value as a double.
             timerDisplay.setText(new DecimalFormat("0.0").format(elapsed));
         }
 
         public double getElapsed(){
             return(this.elapsed);
         }
+
+        public void resetStartTime(){
+            this.startTime = -1;
+        }
+
     }
+
+
 
 
 }
