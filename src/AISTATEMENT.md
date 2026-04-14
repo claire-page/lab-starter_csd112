@@ -1,0 +1,3 @@
+no AI was used. unless you count google...
+i did use a lot of blog posts/stackoverflow stuff/ w3schools/ websites to help me figure things out. 
+the people are still maintaining their programming blogs from the 2010s are a godsend. 
