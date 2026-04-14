@@ -38,7 +38,6 @@ public class ResultScreen implements Builder<Parent> {
             titletext.setPadding(new Insets(50, 0, 0, 30));
             titletext.setAlignment(Pos.BASELINE_LEFT);
 
-
             var columns = new VBox[]{new VBox(new Label("time")),
                     new VBox(new Label("name")),
                     new VBox(new Label("words/min")),
@@ -75,6 +74,8 @@ public class ResultScreen implements Builder<Parent> {
             return(v);
 
         }
+
+
 
 
 

@@ -6,6 +6,7 @@ import core.RunTracker;
 import core.TextToType;
 import database.DatabaseInteractor;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -22,7 +23,7 @@ public class Control {
     private String expected;
     private String actual;
     private RunData endData; //only exists if
-    private static final DatabaseInteractor db = new DatabaseInteractor("jdbc:mysql://localhost:3306/qwertydb");
+    private static final DatabaseInteractor db = new DatabaseInteractor(Control::displayAlert);
 
     public Control() {
         this.run = new RunTracker();
@@ -76,10 +77,6 @@ public class Control {
         return ((textInfo).stream().toList()); //listifying as per that one lecture to make it immutable.
     }
 
-    /// //////////////////////////////////////////////////////////////////////////////////////////////////
-    /// these functions deal with interacting with a DatabaseInteractor object we use to access a database.
-
-
     public Optional<String> promptToSend(double time) {
 
         TextInputDialog d = new TextInputDialog("Milkshake");
@@ -88,12 +85,41 @@ public class Control {
 
         return (maybeName);
     }
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////
+    /// these functions deal with interacting with a DatabaseInteractor object we use to access a database.
+
 
     public RunData getDataToSend(double time, Optional<String> result, RunTracker tracker) {
         String name = (result.isPresent()) ? result.get() : "Milkshake";
 
         return (new RunData(time, name, tracker.getKeystrokes(), tracker.getBacktracks(), expected.split(" ").length, expected.length()));
     }
+
+
+    /**
+     * provides formatted strings containing data displayed in the "table"
+     * in the Results View.
+     * @return
+     */
+    public List<List<String>> getEntriesasStrings() {
+
+        var dbData = this.db.retrieveLastNEntries(10); //number of rows comfortably supported by window size.
+        var all = new ArrayList();
+
+        for (RunData entry: dbData) {
+
+            ArrayList alist = new ArrayList<>();
+            alist.add(String.valueOf(Math.floor(entry.time())));
+            alist.add(entry.name());
+            alist.add(String.valueOf(entry.getWordsPerMinute()));
+            alist.add(String.valueOf(entry.getCharsPerSecond()));
+            alist.add(String.valueOf(entry.getFaults()));
+
+            all.add(alist.stream().toList());
+        }
+        return(all.stream().toList());
+    }
+    /// //////////////////////////////////////////////////////////////////////////////////////////////
 
     /** function for rendering the pane in the view based on the current state of the model.
      * this is kind of a two-parter, which isn't ideal...but
@@ -133,30 +159,11 @@ public class Control {
     }
 /// /////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * provides formatted strings containing data displayed in the "table"
-     * in the Results View.
-     * @return
-     */
-    public List<List<String>> getEntriesasStrings() {
-
-       var dbData = this.db.retrieveLastNEntries(10); //number of rows comfortably supported by window size.
-        var all = new ArrayList();
-
-        for (RunData entry: dbData) {
-
-            ArrayList alist = new ArrayList<>();
-            alist.add(String.valueOf(Math.floor(entry.time())));
-            alist.add(entry.name());
-            alist.add(String.valueOf(entry.getWordsPerMinute()));
-            alist.add(String.valueOf(entry.getCharsPerSecond()));
-            alist.add(String.valueOf(entry.getFaults()));
-
-            all.add(alist.stream().toList());
-        }
-    return(all.stream().toList());
-    }
-
+public static void displayAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.contentTextProperty().set("error connecting to the database. try again...another time...maybe....");
+        alert.showAndWait();
+}
 
 
 }

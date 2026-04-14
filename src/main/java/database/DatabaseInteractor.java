@@ -1,24 +1,30 @@
 package database;
 
+import controllers.Control;
 import core.RunData;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class DatabaseInteractor {
 
-    private static String dbUrl;
-    Connection connection;
+   Connection connection;
+   Runnable onError;
+    public DatabaseInteractor(Runnable errorDisplay){
+        this.onError = errorDisplay;
 
-    public DatabaseInteractor(String url){
-        this.dbUrl = url;
+        Properties properties = new Properties();
         try {
-            this.connection = DriverManager.getConnection(this.dbUrl, "root", "Qs3al97-2ab");
+            properties.load(new FileInputStream("db.properties"));
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+             this.connection = DriverManager.getConnection( properties.getProperty("url"),  "root", properties.getProperty("password") );
+        } catch (IOException | SQLException e) {
+            errorDisplay.run();
         }
     }
 
@@ -29,7 +35,7 @@ public class DatabaseInteractor {
 
             PreparedStatement s = this.connection.prepareStatement(
 
-                    "INSERT INTO loggedruns (time, date, name, BACKTRACKS, KeyStrokes, charcount, wordcount)  VALUES " +
+                    "INSERT INTO laggedruns (time, date, name, BACKTRACKS, KeyStrokes, charcount, wordcount)  VALUES " +
                             "(?, ?, ?, ?, ?, ?, ?);"
             );
             s.setDouble(1, runData.time());
@@ -43,7 +49,7 @@ public class DatabaseInteractor {
             s.execute();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            onError.run();
         }
     }
 //gets the last 5 entries from the db.
@@ -54,11 +60,12 @@ public class DatabaseInteractor {
     public List<RunData> retrieveLastNEntries(int num){
 
         System.out.println("retrieving data");
+        ArrayList<RunData> arraylist = new ArrayList<>();
+
             try {
                 PreparedStatement s = this.connection.prepareStatement("SELECT * from loggedruns  ORDER BY runID DESC LIMIT "+ num +" ;");
                 ResultSet results = s.executeQuery();
 
-                ArrayList<RunData> arraylist = new ArrayList<>();
 
                 while (results.next()){
                     RunData entry = new RunData(results.getDouble("time"),
@@ -73,12 +80,11 @@ public class DatabaseInteractor {
 
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+
             }
 
-
+         return(arraylist.stream().toList());
     }
-
 
 
 }
