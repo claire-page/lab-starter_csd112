@@ -4,16 +4,14 @@ import core.RunData;
 import core.RunTracker;
 
 import core.TextToType;
-import database.DatabaseInteractor;
+import io.database.DatabaseInteractor;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import core.TypeChar;
 import ui.MainView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +21,7 @@ public class Control {
     private String expected;
     private String actual;
     private RunData endData; //only exists if
-    private static final DatabaseInteractor db = new DatabaseInteractor(Control::displayAlert);
+    private static final DatabaseInteractor db = new DatabaseInteractor(Control::displayDBAlert);
 
     public Control() {
         this.run = new RunTracker();
@@ -31,13 +29,21 @@ public class Control {
         this.actual = "";
 
     }
+
     /// ////I kind of view this as the switchboard for the game process. It triggers appropriate functions to change both the data
     /// and the view in response to the view's event listeners.
+    /**
+     *
+     * @param e Keyevent
+     */
     public void delegateKeyEvents(KeyEvent e) {
-        e.consume();
+        e.consume(); //consuming the event. yum.
 
+        //only dealing with key pressed + typed events to avoid duplicates, bc
+        //multiple events are triggered by a key press (pressed/typed/released),
         if (e.getEventType().equals(KeyEvent.KEY_PRESSED) || e.getEventType().equals(KeyEvent.KEY_TYPED)) {
 
+            //is this the first keystroke? if yes, start tracking + tell the view to start the timer!
             if (run.getKeystrokes() == 0) {
                 run.logKeyStroke();
                 MainView.startTimer();
@@ -47,24 +53,36 @@ public class Control {
                 e.consume();
                 run.logBackspace();
                 run.logKeyStroke();
+                //making sure we're not "going off the edge" before clipping the user string
                 actual = (actual.length() == 0) ? "" : actual.substring(0, actual.length() - 1);
 
-            } else if (e.getCharacter().matches("[a-zA-Z|\\s|\\p{P}]")) {
-                actual += e.getCharacter();
+                //is it a character/punctuation?
+            } else if (e.getEventType()==KeyEvent.KEY_TYPED && e.getCharacter().matches("[a-zA-Z\\s\\p{P}]")) {
+                actual += e.getCharacter(); //add character to the user string.
                 run.logKeyStroke();
             }
             drawPane();
 
+
             if (expected.equals(actual)) {
-                System.out.println("DONE");
+                drawPane();
                 var finaltime = MainView.stopTimerandGetTime();
-                var maybeString = promptToSend(finaltime);
-                endData = getDataToSend(finaltime, maybeString, run);
-                db.sendData(endData);
+                var maybeString = MainView.promptToSend(finaltime);
+                if (maybeString.isPresent()) { //if the user pressed continue.
+                    endData = getDataToSend(finaltime, maybeString, run); //gathering data.
+
+                    //testing if the connection is available to send data to..
+                    if (db.isConnectionValid()) {
+                        db.sendData(endData);
+                    } else {
+                        displayDBAlert();
+                    }
+                }
                 resetNewRun(); //so when the user gets back from the popup, they already have a new run loaded!
             }
         }
     }
+
 
     public static List<TypeChar> generateTextData(String template, String actual) {
         var textInfo = new ArrayList<TypeChar>(); //starting off as an ArrayList
@@ -77,14 +95,7 @@ public class Control {
         return ((textInfo).stream().toList()); //listifying as per that one lecture to make it immutable.
     }
 
-    public Optional<String> promptToSend(double time) {
 
-        TextInputDialog d = new TextInputDialog("Milkshake");
-        d.setContentText("Whoa! You're done! And in only " + new DecimalFormat("0.00").format(time) + " seconds. Enter your name and register your run!");
-        Optional<String> maybeName = d.showAndWait();
-
-        return (maybeName);
-    }
     /// //////////////////////////////////////////////////////////////////////////////////////////////////
     /// these functions deal with interacting with a DatabaseInteractor object we use to access a database.
 
@@ -109,7 +120,7 @@ public class Control {
         for (RunData entry: dbData) {
 
             ArrayList alist = new ArrayList<>();
-            alist.add(String.valueOf(Math.floor(entry.time())));
+            alist.add(String.valueOf(entry.time()));
             alist.add(entry.name());
             alist.add(String.valueOf(entry.getWordsPerMinute()));
             alist.add(String.valueOf(entry.getCharsPerSecond()));
@@ -119,6 +130,14 @@ public class Control {
         }
         return(all.stream().toList());
     }
+
+
+    public static void displayDBAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.contentTextProperty().set("error connecting to the database. try again...another time...maybe....");
+        alert.showAndWait();
+    }
+
     /// //////////////////////////////////////////////////////////////////////////////////////////////
 
     /** function for rendering the pane in the view based on the current state of the model.
@@ -140,7 +159,6 @@ public class Control {
     }
 
     public void resetNewRun() {
-        System.out.println("switch");
         this.run = new RunTracker();
         this.actual = "";
         var oldtxt = this.expected;
@@ -158,12 +176,6 @@ public class Control {
         MainView.resetTimer();
     }
 /// /////////////////////////////////////////////////////////////////////////////
-
-public static void displayAlert(){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.contentTextProperty().set("error connecting to the database. try again...another time...maybe....");
-        alert.showAndWait();
-}
 
 
 }

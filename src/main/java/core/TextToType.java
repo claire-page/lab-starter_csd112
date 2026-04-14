@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class TextToType {
 
-    private static final String [] options = {("src/main/java/files/shelley.txt"),("src/main/java/files/jordan.txt"), ("src/main/java/files/text.txt"), ("src/main/java/files/bronte.txt"), ("src/main/java/files/NGGUU.txt"), ("src/main/java/files/profmartin.txt"), ("src/main/java/files/test.txt")};
+    private static final String [] options = {("src/main/java/io/files/shelley.txt"),("src/main/java/io/files/jordan.txt"), ("src/main/java/io/files/text.txt"), ("src/main/java/io/files/bronte.txt"), ("src/main/java/io/files/NGGUU.txt"), ("src/main/java/io/files/profmartin.txt"), ("src/main/java/io/files/starwars.txt")};
 
     /**
      *

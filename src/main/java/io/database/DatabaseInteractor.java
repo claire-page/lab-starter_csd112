@@ -1,4 +1,4 @@
-package database;
+package io.database;
 
 import controllers.Control;
 import core.RunData;
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,9 +23,11 @@ public class DatabaseInteractor {
         try {
             properties.load(new FileInputStream("db.properties"));
 
-             this.connection = DriverManager.getConnection( properties.getProperty("url"),  "root", properties.getProperty("password") );
-        } catch (IOException | SQLException e) {
-            errorDisplay.run();
+                 this.connection = DriverManager.getConnection( properties.getProperty("url"),  "root", properties.getProperty("password") );
+            } catch (IOException | SQLException e) {
+
+                this.connection = null; //setting connection to null, so we can handle it.
+
         }
     }
 
@@ -35,7 +38,7 @@ public class DatabaseInteractor {
 
             PreparedStatement s = this.connection.prepareStatement(
 
-                    "INSERT INTO laggedruns (time, date, name, BACKTRACKS, KeyStrokes, charcount, wordcount)  VALUES " +
+                    "INSERT INTO loggedruns (time, date, name, BACKTRACKS, KeyStrokes, charcount, wordcount)  VALUES " +
                             "(?, ?, ?, ?, ?, ?, ?);"
             );
             s.setDouble(1, runData.time());
@@ -48,18 +51,17 @@ public class DatabaseInteractor {
 
             s.execute();
 
-        } catch (SQLException e) {
-            onError.run();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
         }
     }
-//gets the last 5 entries from the db.
+//gets the last ? entries from the db.
 
     /**
      * retrieves data from last N entries in the form of an array of arrays containing strings.
      */
     public List<RunData> retrieveLastNEntries(int num){
 
-        System.out.println("retrieving data");
         ArrayList<RunData> arraylist = new ArrayList<>();
 
             try {
@@ -78,12 +80,23 @@ public class DatabaseInteractor {
                 }
                 return(arraylist.stream().toList());
 
-
             } catch (SQLException e) {
-
+                onError.run();
             }
 
          return(arraylist.stream().toList());
+    }
+
+//to stop from asking to save to the db if connection isn't working.
+    public boolean isConnectionValid(){
+        try {
+            if (!(this.connection ==null) && !this.connection.isClosed()){
+                return(true);
+            }
+        } catch (SQLException e) {
+            return(false);
+        }
+        return(false); //we'd never get here but whatever
     }
 
 

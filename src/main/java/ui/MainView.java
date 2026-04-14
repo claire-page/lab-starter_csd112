@@ -14,6 +14,7 @@ import javafx.util.Builder;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 import static javafx.scene.text.Font.font;
 
@@ -26,8 +27,8 @@ public class MainView implements Builder<Region> {
     private Runnable runResetter;
 
     //in the constructor for the main view (right side of screen)
-    //I'm passing it some runnables for its buttons and one function to initialize the pane.
-    //
+    //I'm passing it some runnables for its buttons and one of the Controller's functions to initialize the text pane on the first load.
+
     public MainView(Runnable paneInitializer, Runnable forButton1, Runnable forButton2) {
         this.timerDisplay = new Label("enter any key to begin.");
         this.paneInitializer = paneInitializer;
@@ -35,6 +36,10 @@ public class MainView implements Builder<Region> {
         this.runRestarter = forButton2;
     }
 
+    /**
+     *
+     * @return a Region, in this case a borderPane, fully initialized.
+     */
     @Override
     public Region build() {
 
@@ -46,7 +51,7 @@ public class MainView implements Builder<Region> {
         titletext.setAlignment(Pos.BASELINE_LEFT);
 
         Label line = new Label("--------------------------------------------------------------------------------------------------------");
-        line.setBackground(Background.fill(Style.titleTextPaint));
+        line.setBackground(Background.fill(Style.lightred));
         line.setFont(new Font("Montserrat", 18));
         line.setTextFill(Color.ANTIQUEWHITE);
         line.setAlignment(Pos.BASELINE_LEFT);
@@ -61,14 +66,15 @@ public class MainView implements Builder<Region> {
 
         timerDisplay.setPadding(new Insets(20));
         timerDisplay.setFont(Style.DEFAULT_MENU_FONT);
+        timerDisplay.setTextFill(Style.lightred);
 
         timer = new CustomTimer();
 
         //buttons.
         Button b = new Button("RESTART THIS RUN");
-        b.setBackground(Background.fill(Style.lightred));
+        b.setBackground(Background.fill(Style.mainBkgrndPaint));
         Button b2 = new Button("GET NEW TEXT");
-        b2.setBackground(Background.fill(Style.lightred));
+        b2.setBackground(Background.fill(Style.mainBkgrndPaint));
         b.setOnMouseClicked(e -> runRestarter.run());
         b2.setOnMouseClicked(e -> runResetter.run());
 
@@ -81,13 +87,17 @@ public class MainView implements Builder<Region> {
         right.setSpacing(20);
 
 
-        right.requestFocus();
         paneInitializer.run(); //this sets up the pane to display text.
 
         return (right);
 
     }
 
+    /**
+     *
+     * @param typeCharList List of typeChars used to determine how to render the text pane.
+     * @param template the "template" string the user is trying to complete.
+     */
     public static void renderTextData(List<TypeChar> typeCharList, String template) {
 
         pane.getChildren().removeAll(pane.getChildren()); //clearing the pane of its hboxes, if it had any before.
@@ -168,12 +178,30 @@ public class MainView implements Builder<Region> {
             return(this.elapsed);
         }
 
+        //resets time to -1
         public void resetStartTime(){
             this.startTime = -1;
         }
 
     }
 
+    /**
+     * prompts user to enter name, displays time of run.
+     * @param time the time to display
+     * @return Optional of a string (name entered)
+     */
+    public static Optional<String> promptToSend(double time) {
+
+        TextInputDialog d = new TextInputDialog("Milkshake");
+        d.setGraphic(null);
+        d.setTitle("Run complete!");
+        d.setHeaderText("");
+        d.getDialogPane().setBackground(Background.fill(Style.mainBkgrndPaint));
+        d.setContentText("You're done! And in only " + new DecimalFormat("0.00").format(time) + " seconds. Enter your name and register your run!");
+        Optional<String> maybeName = d.showAndWait();
+
+        return (maybeName);
+    }
 
 
 

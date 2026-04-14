@@ -30,7 +30,6 @@ public class ResultScreen implements Builder<Parent> {
     }
     @Override
     public Region build() {
-        System.out.println("tried to build.");
             Font bigFont = font("Courier New", 80);
             Label titletext = new Label("YOUR RESULTS");
             titletext.setTextFill(Style.darkred);
@@ -46,8 +45,10 @@ public class ResultScreen implements Builder<Parent> {
 
             //loading data from the db connection.
 
+        HBox table = new HBox();
+        table.setSpacing(20);
+        try{
             var data = dataSupplier.get();
-
             for (List<String> e: data){
                 for (int i = 0; i < e.size(); i++){
                     String value = e.get(i);
@@ -56,12 +57,17 @@ public class ResultScreen implements Builder<Parent> {
                     columns[i].getChildren().add(l);
                 }
             }
+            Arrays.stream(columns).forEach(col -> {
+                table.getChildren().add(col);
+            });
 
-        HBox table = new HBox();
-            table.setSpacing(20);
-
-            //Adding columns to table.
-        Arrays.stream(columns).forEach(col -> {table.getChildren().add(col);});
+//if we can't get data, notify the user w/o crashing the app.
+        } catch (RuntimeException e) {
+            Label errorLabel = new Label("Whoops. Could not access the database to view results. Try again later?");
+            errorLabel.setTextFill(Style.lightred);
+            errorLabel.setFont(Style.FontFaces.CONSOLAS);
+            table.getChildren().add(errorLabel);
+        }
 
         Button b = new Button();
 
