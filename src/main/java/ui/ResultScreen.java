@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Builder;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -20,8 +21,9 @@ import static javafx.scene.text.Font.font;
 
 public class ResultScreen implements Builder<Parent> {
 
-    Supplier<List<List<String>>> dataSupplier;
-    Runnable backtoMain;
+    static Supplier<List<List<String>>> dataSupplier;
+    static Runnable backtoMain;
+    static HBox table;
 
     //this will initialize the screen. Note that I only want it available when game is done.
     public ResultScreen(Supplier<List<List<String>>> dataSupply, Runnable backtoMain){
@@ -37,37 +39,8 @@ public class ResultScreen implements Builder<Parent> {
             titletext.setPadding(new Insets(50, 0, 0, 30));
             titletext.setAlignment(Pos.BASELINE_LEFT);
 
-            var columns = new VBox[]{new VBox(new Label("time")),
-                    new VBox(new Label("name")),
-                    new VBox(new Label("words/min")),
-                    new VBox(new Label("keys typed/second")),
-                    new VBox(new Label("mistakes"))};
 
-            //loading data from the db connection.
-
-        HBox table = new HBox();
-        table.setSpacing(20);
-        try{
-            var data = dataSupplier.get();
-            for (List<String> e: data){
-                for (int i = 0; i < e.size(); i++){
-                    String value = e.get(i);
-                    Label l = new Label(value);
-                    l.setFont(Style.FontFaces.COURIER);
-                    columns[i].getChildren().add(l);
-                }
-            }
-            Arrays.stream(columns).forEach(col -> {
-                table.getChildren().add(col);
-            });
-
-//if we can't get data, notify the user w/o crashing the app.
-        } catch (RuntimeException e) {
-            Label errorLabel = new Label("Whoops. Could not access the database to view results. Try again later?");
-            errorLabel.setTextFill(Style.lightred);
-            errorLabel.setFont(Style.FontFaces.CONSOLAS);
-            table.getChildren().add(errorLabel);
-        }
+        updateTable();
 
         Button b = new Button();
 
@@ -77,12 +50,43 @@ public class ResultScreen implements Builder<Parent> {
             table.setBackground((Background.fill(Style.textBkgrndPaint)));
             VBox v = new VBox(titletext, table, b);
             v.setSpacing(20);
+            v.setPrefSize(400, 800);
+
             return(v);
 
         }
 
+        public static void updateTable(){
 
 
 
+        table = new HBox();
+            var columns = new VBox[]{new VBox(new Label("time")),
+                    new VBox(new Label("name")),
+                    new VBox(new Label("words/min")),
+                    new VBox(new Label("keys typed/second")),
+                    new VBox(new Label("mistakes"))};
+            try{
+                var data = dataSupplier.get();
+                for (List<String> e: data){
+                    for (int i = 0; i < e.size(); i++){
+                        String value = e.get(i);
+                        Label l = new Label(value);
+                        l.setFont(Style.FontFaces.COURIER);
+                        columns[i].getChildren().add(l);
+                    }
+                }
+                Arrays.stream(columns).forEach(col -> {
+                    table.getChildren().add(col);
+                    table.setSpacing(20);
+                });
 
+            } catch (RuntimeException e) {
+                Label errorLabel = new Label("Whoops. Could not access the database to view results. Try again later?");
+                errorLabel.setTextFill(Style.lightred);
+                errorLabel.setFont(Style.FontFaces.CONSOLAS);
+                table.getChildren().add(errorLabel);
+            }
+        }
 }
+

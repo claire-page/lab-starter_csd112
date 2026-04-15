@@ -6,6 +6,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
+import java.util.*;
 
 //TODO- TEST!!!
 public class BasicLayoutBuilder implements Builder<Parent> {
@@ -49,17 +50,18 @@ public class BasicLayoutBuilder implements Builder<Parent> {
         bp.setRight(stack);
         bp.addEventFilter(KeyEvent.ANY, e -> control.delegateKeyEvents(e));
         bp.setBackground(Background.fill(Color.WHITE));
+        bp.setPrefSize(Style.DEFAULT_SCENEWIDTH, Style.DEFAULT_SCENEHEIGHT);
         return(bp);
     }
 
-
+    //some functions to do with showing and hiding the screens.
     public static void hideMain(){
 
         if (main.isVisible()){
             main.setVisible(false);
             control.resetSameRun(); //making sure it's reset when the user returns.
-        }
 
+        }
     }
     public static void showMain(){
         if (!main.isVisible()){

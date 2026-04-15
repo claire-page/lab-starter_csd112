@@ -127,7 +127,7 @@ public class MainView implements Builder<Region> {
                 case CORRECT -> Style.filledTextPaint;
                 case UNREACHED -> Style.blankTextPaint;
             });
-            textFromChar.setFont(Style.FontFaces.DYSLEXIC);
+            textFromChar.setFont(Style.FontFaces.COURIER);
 
             holder[h].getChildren().add(textFromChar);
             //checking to see if we're at the end or reached what's supposed to be space
@@ -183,7 +183,9 @@ public class MainView implements Builder<Region> {
             this.startTime = -1;
         }
 
+
     }
+
 
     /**
      * prompts user to enter name, displays time of run.
@@ -202,7 +204,6 @@ public class MainView implements Builder<Region> {
 
         return (maybeName);
     }
-
 
 
 }

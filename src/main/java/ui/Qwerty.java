@@ -25,7 +25,7 @@ public class Qwerty extends Application {
         //woooo polymorphism!
 
         Parent homeScreen = new BasicLayoutBuilder(controller).build();
-        stage.setScene( new Scene(homeScreen, Style.DEFAULT_SCENEWIDTH, Style.DEFAULT_SCENEHEIGHT));
+        stage.setScene(new Scene(homeScreen, Style.DEFAULT_SCENEWIDTH, Style.DEFAULT_SCENEHEIGHT));
         stage.setResizable(false);
         stage.show();
     }

@@ -10,8 +10,7 @@ import java.util.List;
 public record RunData(Double time, String name, int keyStrokes, int backTracked, int wordCount, int characterCount ){
 
     public double getWordsPerMinute(){
-
-        return(Math.floor(this.wordCount()/this.time()*100)/100);
+        return(Math.floor(this.wordCount()/this.time()*100)/100)*60;
     }
 
     public double getCharsPerSecond(){

@@ -22,7 +22,7 @@ god. my brain hurts. how does this get displayed?
 text is a shape. do i just display it as an array of chars instead?
 OKAY!!!
 so.
-i can change individual characters if they are an independent Text item. time to change how the class works.
+i can change individual characters ONLY if they are an independent Text item. time to change how the class works.
 gave each qchar a property where it preserves its initial text state as a constant.
 seemingly was the only way to do so, because text nodes cannot be nested within one another.
 
@@ -60,3 +60,4 @@ Somehow making a new record every time was perplexing to me because I was viewin
 but what's neat about this approach is that the text isn't really an object.
 
 
+//insecure,

@@ -6,6 +6,7 @@ import core.RunData;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,11 +72,11 @@ public class DatabaseInteractor {
 
                 while (results.next()){
                     RunData entry = new RunData(results.getDouble("time"),
-                                                results.getString("name"),
-                                                results.getInt("KeyStrokes"),
-                                                results.getInt("BACKTRACKS"),
-                                                results.getInt("wordcount"),
-                                                results.getInt("charcount"));
+                            results.getString("name"),
+                            results.getInt("KeyStrokes"),
+                            results.getInt("BACKTRACKS"),
+                            results.getInt("wordcount"),
+                            results.getInt("charcount"));
                     arraylist.add(entry);
                 }
                 return(arraylist.stream().toList());
