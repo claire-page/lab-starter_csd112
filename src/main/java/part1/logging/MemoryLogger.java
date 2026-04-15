@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MemoryLogger extends ConsoleLogger implements Exportable {
+public class MemoryLogger implements Exportable, Logger {
     List<String> memoryList;
 
     public MemoryLogger(){

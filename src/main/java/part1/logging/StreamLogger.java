@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class StreamLogger extends ConsoleLogger{
+public class StreamLogger implements Logger{
 
     public OutputStream out;
 

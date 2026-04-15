@@ -7,7 +7,7 @@ import java.awt.*;
 import static com.diogonunes.jcolor.Ansi.colorize;
 import static part1.logging.LogLevel.*;
 
-public class ColorLogger implements Logger{
+public class ColorLogger extends ConsoleLogger implements Logger{
 
     /**
      * Returns a string in the appropriate color for the type of
