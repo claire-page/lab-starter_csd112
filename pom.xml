@@ -45,6 +45,13 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-jdbc</artifactId>
+            <version>9.6.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/lib/mysql-connector-j-9.6.0.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>25.0.2</version>
