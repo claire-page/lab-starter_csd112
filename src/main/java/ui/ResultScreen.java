@@ -1,5 +1,6 @@
 package ui;
 
+import controllers.Control;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -57,6 +58,7 @@ public class ResultScreen implements Builder<Parent> {
         }
 
         public static void updateTable(){
+            System.out.println("tabnle should be updated");
 
 
 
@@ -82,10 +84,7 @@ public class ResultScreen implements Builder<Parent> {
                 });
 
             } catch (RuntimeException e) {
-                Label errorLabel = new Label("Whoops. Could not access the database to view results. Try again later?");
-                errorLabel.setTextFill(Style.lightred);
-                errorLabel.setFont(Style.FontFaces.CONSOLAS);
-                table.getChildren().add(errorLabel);
+                Control.displayDBAlert();
             }
         }
 }

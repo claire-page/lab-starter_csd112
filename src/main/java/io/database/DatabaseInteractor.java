@@ -20,18 +20,17 @@ public class DatabaseInteractor {
     public DatabaseInteractor(Runnable errorDisplay){
         this.onError = errorDisplay;
 
-        Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("db.properties"));
+            this.connection = DriverManager.getConnection(System.getenv("url"),  "qwertyUser", System.getenv("password") );
+        } catch (SQLException e) {
 
-                 this.connection = DriverManager.getConnection( properties.getProperty("url"),  "root", properties.getProperty("password") );
-            } catch (IOException | SQLException e) {
-
-                this.connection = null; //setting connection to null, so we can handle it.
+            this.connection = null; //setting connection to null, so we can handle it.
 
         }
     }
-
+    /**
+     * sends data from a runData record to the database.
+     */
     public void sendData(RunData runData){
 
 
@@ -53,7 +52,7 @@ public class DatabaseInteractor {
             s.execute();
 
         } catch (SQLException e){
-            throw new RuntimeException(e);
+           onError.run();
         }
     }
 //gets the last ? entries from the db.
