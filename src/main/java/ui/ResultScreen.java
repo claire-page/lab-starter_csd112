@@ -6,14 +6,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Builder;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,6 +21,8 @@ public class ResultScreen implements Builder<Parent> {
     static Supplier<List<List<String>>> dataSupplier;
     static Runnable backtoMain;
     static HBox table;
+
+    static VBox vbox;
 
     //this will initialize the screen. Note that I only want it available when game is done.
     public ResultScreen(Supplier<List<List<String>>> dataSupply, Runnable backtoMain){
@@ -40,6 +38,8 @@ public class ResultScreen implements Builder<Parent> {
             titletext.setPadding(new Insets(50, 0, 0, 30));
             titletext.setAlignment(Pos.BASELINE_LEFT);
 
+            table = new HBox();
+
 
         updateTable();
 
@@ -52,17 +52,14 @@ public class ResultScreen implements Builder<Parent> {
             VBox v = new VBox(titletext, table, b);
             v.setSpacing(20);
             v.setPrefSize(400, 800);
-
+            this.vbox = v;
             return(v);
 
         }
 
         public static void updateTable(){
-            System.out.println("tabnle should be updated");
+        table.getChildren().removeAll(table.getChildren());
 
-
-
-        table = new HBox();
             var columns = new VBox[]{new VBox(new Label("time")),
                     new VBox(new Label("name")),
                     new VBox(new Label("words/min")),
@@ -72,6 +69,7 @@ public class ResultScreen implements Builder<Parent> {
                 var data = dataSupplier.get();
                 for (List<String> e: data){
                     for (int i = 0; i < e.size(); i++){
+
                         String value = e.get(i);
                         Label l = new Label(value);
                         l.setFont(Style.FontFaces.COURIER);

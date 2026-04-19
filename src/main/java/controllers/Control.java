@@ -74,17 +74,12 @@ public class Control {
                 //if the user pressed continue.
                 endData = getDataToSend(finaltime, maybeString, run); //gathering data.
 
-                //testing if the connection is available to send data to..
-                if (db.isConnectionValid()) {
-                    db.sendData(endData);
-                } else {
-                    displayDBAlert();
-                }
+                db.sendData(endData); //try to send data.
+
                 ResultScreen.updateTable();
                 resetNewRun();
                 //so when the user gets back from the popup, they already have a new run loaded!
             }
-
         }
     }
 
@@ -114,7 +109,7 @@ public class Control {
      * provides formatted strings containing data displayed in the "table"
      * in the Results View.
      *
-     * @return
+     * @return list of entries as Strings
      */
     public List<List<String>> getEntriesasStrings() {
 
@@ -136,6 +131,9 @@ public class Control {
     }
 
 
+    /**
+     * displays an alert to the user if an error occurs regarding connecting to the databas.e.
+     */
     public static void displayDBAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.contentTextProperty().set("error connecting to the database. try again...another time...maybe....");

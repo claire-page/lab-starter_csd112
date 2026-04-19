@@ -24,7 +24,6 @@ public class MenuBuilder implements Builder<Region> {
      * @param runnables
      */
     public MenuBuilder(String[] buttonTitles, Runnable[] runnables){
-        assert(buttonTitles.length==runnables.length); //there's gotta be a nicer way to do this.
 
         this.buttons = new Button[buttonTitles.length];
 
